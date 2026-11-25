@@ -1,0 +1,1224 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>深度学习题库 · 逐题练习</title>
+<style>
+:root{
+  --bg:#f3f5fa; --panel:#ffffff; --ink:#18202f; --muted:#6c7588; --faint:#98a1b3;
+  --line:#e2e7f1; --line-strong:#d3daea;
+  --accent:#3355c8; --accent-2:#5b78e8; --accent-soft:#edf1ff;
+  --green:#13795b; --green-soft:#e9f8f1; --green-line:#bfe8d8;
+  --red:#c2413b; --red-soft:#fdf1ef; --red-line:#f2cfca;
+  --amber:#a5661a; --amber-soft:#fdf6e8; --amber-line:#eeddb8;
+  --shadow:0 18px 44px -26px rgba(24,32,47,.32);
+  --radius:18px;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0; color:var(--ink); -webkit-font-smoothing:antialiased;
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;
+  background:
+    radial-gradient(1100px 560px at 88% -8%, #e7ecff 0%, rgba(231,236,255,0) 62%),
+    radial-gradient(900px 520px at -6% 2%, #eaf7f2 0%, rgba(234,247,242,0) 58%),
+    #f4f6fa;
+  min-height:100vh;
+}
+button{font-family:inherit}
+.wrap{width:100%;max-width:880px;margin:0 auto;padding:0 20px}
+.hidden{display:none!important}
+
+/* ===== 顶部 ===== */
+.site-head{background:rgba(255,255,255,.88);backdrop-filter:blur(14px);border-bottom:1px solid var(--line);position:relative;z-index:5}
+.head-row{display:flex;align-items:center;justify-content:space-between;gap:20px;padding:18px 0 14px}
+.brand{display:flex;align-items:center;gap:14px;min-width:0}
+.logo{width:44px;height:44px;border-radius:13px;background:linear-gradient(140deg,#3557d6,#6c87f0);color:#fff;display:grid;place-items:center;font-weight:800;font-size:15px;letter-spacing:.6px;box-shadow:0 10px 22px -10px rgba(53,87,214,.8);flex:0 0 auto}
+h1{font-size:20px;margin:0;letter-spacing:.3px;line-height:1.2}
+.sub{font-size:12.5px;color:var(--muted);margin:4px 0 0;letter-spacing:.2px}
+.head-stats{display:flex;align-items:center;gap:18px;flex:0 0 auto}
+.stat{text-align:right}
+.stat b{font-size:19px;font-weight:750;letter-spacing:-.2px;font-variant-numeric:tabular-nums;line-height:1.1;display:block}
+.stat span{display:block;font-size:10.5px;color:var(--faint);letter-spacing:.8px;margin-top:2px}
+.stat+.stat{padding-left:18px;border-left:1px solid var(--line)}
+.icon-btn{border:1px solid var(--line);background:#fff;color:var(--muted);border-radius:10px;padding:7px 12px;font-size:12px;cursor:pointer;transition:.16s}
+.icon-btn:hover{color:var(--ink);border-color:var(--line-strong)}
+.tabs{display:flex;gap:6px;padding-bottom:10px}
+.tab{border:0;background:transparent;padding:9px 16px;border-radius:11px;font-size:14px;font-weight:600;color:var(--muted);cursor:pointer;display:flex;align-items:center;gap:7px;transition:.18s;line-height:1.2}
+.tab:hover{background:#f3f5fa;color:var(--ink)}
+.tab.active{background:var(--ink);color:#fff;box-shadow:0 8px 18px -10px rgba(24,32,47,.6)}
+.badge-dot{min-width:18px;height:18px;padding:0 5px;border-radius:99px;background:var(--red);color:#fff;font-size:11px;display:inline-flex;align-items:center;justify-content:center;font-weight:700;line-height:1}
+.tab.active .badge-dot{background:#fff;color:var(--red)}
+
+main{padding-top:24px;padding-bottom:80px}
+
+/* ===== 练习模式 ===== */
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:16px 18px;box-shadow:0 14px 34px -30px rgba(24,32,47,.4)}
+.section-label{font-size:11px;letter-spacing:1.4px;color:var(--faint);font-weight:700;margin-bottom:10px}
+.mode-tabs{display:flex;flex-wrap:wrap;gap:8px}
+.mode-tabs button{border:1px solid var(--line);background:#fff;color:var(--muted);border-radius:10px;padding:9px 14px;font-size:13.5px;font-weight:600;cursor:pointer;transition:.16s}
+.mode-tabs button:hover{border-color:#c8d3ef;color:var(--ink)}
+.mode-tabs button.active{background:var(--accent-soft);border-color:#b9c7f5;color:var(--accent)}
+.chapter-picker{margin-top:14px;padding-top:14px;border-top:1px dashed var(--line);display:flex;flex-wrap:wrap;gap:8px}
+.chapter-current{display:flex;align-items:center;justify-content:space-between;gap:10px;width:100%;font-size:12.5px;color:var(--muted)}
+.chapter-current b{color:var(--ink);font-weight:600}
+.chapter-current button{border:1px solid var(--line);background:#fff;border-radius:8px;padding:6px 10px;font-size:11.5px;color:var(--muted);cursor:pointer}
+.chapter-current button:hover{border-color:#c9d3ec;color:var(--ink)}
+.chapter-hint{color:var(--faint);font-size:13px;padding:26px 4px;text-align:center}
+.chip{border:1px solid var(--line);background:#fff;border-radius:99px;padding:7px 12px;font-size:12.5px;color:var(--muted);cursor:pointer;display:inline-flex;gap:6px;align-items:center;transition:.15s}
+.chip:hover{border-color:#c8d3ef;color:var(--ink);background:#fbfcff}
+.chip.active{background:var(--accent);border-color:var(--accent);color:#fff}
+.chip em{font-style:normal;font-size:11px;opacity:.7}
+
+.roundbar{margin:18px 2px 12px}
+.roundinfo{display:flex;justify-content:space-between;align-items:center;font-size:12px;color:var(--muted);margin-bottom:8px;gap:12px}
+.roundinfo b{color:var(--ink);font-weight:600}
+.progress{height:5px;background:#e4e9f4;border-radius:99px;overflow:hidden}
+.progress i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--accent),#7b93f2);border-radius:99px;transition:width .3s}
+
+/* ===== 题目卡 ===== */
+.qcard{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:26px 28px 22px;box-shadow:var(--shadow)}
+.qmeta{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin-bottom:16px}
+.badge{font-size:11.5px;font-weight:600;padding:4px 9px;border-radius:6px;letter-spacing:.2px;line-height:1.4}
+.b-chapter{background:#f1f4fa;color:#5b6880}
+.b-single{background:#eef2ff;color:#3454c4}
+.b-multi{background:#f3edff;color:#6b45b5}
+.b-judge{background:#fff5e6;color:#9a6413}
+.b-fill{background:#e9f8f5;color:#167662}
+.qno{margin-left:auto;font-size:11px;color:var(--faint);font-variant-numeric:tabular-nums;letter-spacing:.5px}
+.stem{font-size:18px;line-height:1.85;color:var(--ink);font-weight:500;letter-spacing:.1px;text-wrap:pretty}
+.blank-slot{display:inline-flex;width:18px;height:18px;border-radius:50%;background:var(--accent-soft);color:var(--accent);font-size:11px;font-weight:700;align-items:center;justify-content:center;margin:0 3px;vertical-align:1px;line-height:1}
+.fill-fields{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:10px;margin-top:18px}
+.fill-field{display:flex;align-items:center;gap:9px;border:1px solid var(--line);background:#f8faff;border-radius:10px;padding:9px 11px;transition:.15s}
+.fill-field:focus-within{border-color:#b9c6ec;background:#fff;box-shadow:0 0 0 3px #eef2ff}
+.fill-label{font-size:10.5px;color:var(--faint);letter-spacing:.5px;white-space:nowrap}
+.fill-input{flex:1;min-width:0;border:0;background:transparent;outline:none;font:inherit;font-size:14.5px;font-weight:600;color:var(--accent);height:26px;padding:0}
+.fill-input::placeholder{color:#b3bccc;font-weight:400}
+.fill-input:disabled{cursor:default;opacity:1}
+.fill-field.ok{border-color:var(--green-line);background:var(--green-soft)}
+.fill-field.ok .fill-input{color:var(--green)}
+.fill-field.bad{border-color:var(--red-line);background:var(--red-soft)}
+.fill-field.bad .fill-input{color:var(--red)}
+
+.options{display:grid;gap:10px;margin-top:22px}
+.opt{display:flex;align-items:center;gap:14px;width:100%;text-align:left;background:#fff;border:1px solid var(--line);border-radius:12px;padding:13px 15px;font-size:15px;line-height:1.6;color:#303a4d;cursor:pointer;transition:border-color .15s,background .15s,transform .15s,box-shadow .15s}
+.opt:hover{border-color:#b9c6ec;background:#fafbff}
+.opt:active{transform:scale(.996)}
+.opt-key{flex:0 0 auto;width:30px;height:30px;border-radius:9px;background:#f1f4fa;color:#64708a;display:grid;place-items:center;font-size:13.5px;font-weight:700}
+.opt-txt{flex:1;min-width:0}
+.opt-mark{flex:0 0 auto;width:22px;height:22px;border-radius:50%;display:grid;place-items:center;font-size:12px;font-weight:800}
+.opt.is-selected{border-color:var(--accent);background:var(--accent-soft);box-shadow:inset 0 0 0 1px var(--accent)}
+.opt.is-selected .opt-key{background:var(--accent);color:#fff}
+.opt.is-correct{border-color:var(--green-line);background:var(--green-soft);box-shadow:inset 0 0 0 1px #7fcfb2}
+.opt.is-correct .opt-key{background:var(--green);color:#fff}
+.opt.is-correct .opt-mark{color:var(--green)}
+.opt.is-wrong{border-color:var(--red-line);background:var(--red-soft);box-shadow:inset 0 0 0 1px #e8a7a0}
+.opt.is-wrong .opt-key{background:var(--red);color:#fff}
+.opt.is-wrong .opt-mark{color:var(--red)}
+.options.locked .opt{cursor:default}
+.options.locked .opt:hover{border-color:var(--line);background:#fff}
+.options.locked .opt.is-correct:hover{background:var(--green-soft);border-color:var(--green-line)}
+.options.locked .opt.is-wrong:hover{background:var(--red-soft);border-color:var(--red-line)}
+
+.actions{display:flex;align-items:center;gap:10px;margin-top:24px;padding-top:18px;border-top:1px solid #eff2f8;flex-wrap:wrap}
+.btn{border:0;border-radius:11px;padding:11px 20px;font-size:14px;font-weight:600;cursor:pointer;transition:.16s;letter-spacing:.2px;line-height:1.2}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.btn.primary{background:var(--accent);color:#fff;box-shadow:0 8px 18px -10px rgba(51,85,200,.75)}
+.btn.primary:hover:not(:disabled){background:#2b49b8}
+.btn.ghost{background:#fff;border:1px solid var(--line);color:var(--muted)}
+.btn.ghost:hover:not(:disabled){border-color:#c9d3ec;color:var(--ink)}
+.btn.ok{background:var(--green);color:#fff;box-shadow:0 8px 18px -10px rgba(19,121,91,.6)}
+.btn.danger{background:#fff;border:1px solid var(--red-line);color:var(--red)}
+.btn.danger:hover{background:var(--red-soft)}
+.hint{font-size:12px;color:var(--faint);margin-left:auto}
+.spacer{flex:1}
+
+/* ===== 判分结果 ===== */
+.result{margin-top:20px;border:1px solid;border-radius:14px;padding:18px 20px;animation:rise .22s ease}
+@keyframes rise{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.result.ok{background:var(--green-soft);border-color:var(--green-line)}
+.result.bad{background:var(--red-soft);border-color:var(--red-line)}
+.result.manual{background:var(--amber-soft);border-color:var(--amber-line)}
+.result-head{display:flex;gap:12px;align-items:flex-start}
+.r-icon{width:38px;height:38px;border-radius:50%;display:grid;place-items:center;font-size:18px;font-weight:800;flex:0 0 auto;line-height:1}
+.result.ok .r-icon{background:#d3f3e4;color:var(--green)}
+.result.bad .r-icon{background:#fbe0dc;color:var(--red)}
+.result.manual .r-icon{background:#f7e9c9;color:var(--amber)}
+.result-head h3{margin:3px 0 2px;font-size:16px;line-height:1.4}
+.result-head p{margin:0;font-size:12.5px;color:var(--muted);line-height:1.6}
+.ans-row{display:flex;flex-wrap:wrap;gap:8px;margin-top:13px}
+.ans-pill{font-size:12.5px;padding:6px 10px;border-radius:8px;background:#fff;border:1px solid var(--line);font-variant-numeric:tabular-nums;line-height:1.5}
+.ans-pill b{font-weight:700}
+.ans-pill.ok{border-color:var(--green-line);color:var(--green)}
+.ans-pill.bad{border-color:var(--red-line);color:var(--red)}
+.explain{margin-top:14px;background:rgba(255,255,255,.68);border-radius:10px;padding:12px 14px;border-left:3px solid rgba(51,85,200,.22)}
+.ex-label{font-size:10.5px;font-weight:700;letter-spacing:1.2px;color:var(--faint);display:block;margin-bottom:5px}
+.explain p{margin:0;font-size:13.8px;line-height:1.8;color:#3d475c}
+
+/* ===== 本轮成绩 ===== */
+.summary{background:#fff;border:1px solid var(--line);border-radius:20px;padding:40px 28px;text-align:center;box-shadow:var(--shadow)}
+.summary h2{margin:0 0 6px;font-size:23px;letter-spacing:.2px}
+.summary .lead{color:var(--muted);font-size:13px;margin:0 0 26px;line-height:1.7}
+.ring{--p:0;width:148px;height:148px;border-radius:50%;margin:0 auto 26px;background:conic-gradient(var(--accent) calc(var(--p)*1%),#e7ecf7 0);padding:9px}
+.ring-in{width:100%;height:100%;border-radius:50%;background:#fff;display:grid;place-content:center;gap:3px}
+.ring-in b{font-size:32px;line-height:1;letter-spacing:-1px}
+.ring-in span{font-size:11px;color:var(--faint);letter-spacing:1px}
+.sum-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;max-width:420px;margin:0 auto 26px}
+.sum-stat{background:#f7f9fd;border:1px solid #e9edf6;border-radius:12px;padding:13px 8px}
+.sum-stat b{display:block;font-size:20px;font-variant-numeric:tabular-nums;line-height:1.2}
+.sum-stat span{font-size:11px;color:var(--muted)}
+.sum-actions{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+
+/* ===== 空状态 ===== */
+.empty{background:#fff;border:1px dashed #d8dfec;border-radius:18px;padding:52px 24px;text-align:center}
+.empty-ico{width:56px;height:56px;border-radius:50%;background:var(--accent-soft);color:var(--accent);display:grid;place-items:center;margin:0 auto 16px;font-size:24px;font-weight:700}
+.empty h3{margin:0 0 6px;font-size:18px}
+.empty p{margin:0 auto 20px;color:var(--muted);font-size:13px;line-height:1.7;max-width:400px}
+.empty .btn{display:inline-block}
+
+/* ===== 视图头 / 错题集 ===== */
+.view-head{display:flex;align-items:flex-end;justify-content:space-between;gap:14px;margin-bottom:16px;flex-wrap:wrap}
+.view-head h2{margin:0;font-size:20px}
+.view-head p{margin:5px 0 0;font-size:12.5px;color:var(--muted);line-height:1.6}
+.view-actions{display:flex;gap:8px;flex-wrap:wrap}
+.wrong-list{display:grid;gap:12px}
+.wrong-item{background:#fff;border:1px solid var(--line);border-radius:14px;padding:16px 18px;transition:.16s}
+.wrong-item:hover{border-color:#d3dbec}
+.wi-head{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:8px}
+.wi-no{font-size:11px;color:var(--faint);font-variant-numeric:tabular-nums}
+.wi-count{margin-left:auto;font-size:11px;color:var(--red);background:var(--red-soft);border-radius:99px;padding:3px 8px}
+.wi-stem{font-size:14.5px;line-height:1.7;margin:0;color:#303a4d}
+.wi-ans{display:flex;flex-wrap:wrap;gap:14px;margin-top:10px;font-size:12px;color:var(--muted)}
+.wi-ans b{font-weight:600}
+.wi-actions{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap}
+.mini{border:1px solid var(--line);background:#fff;color:var(--muted);border-radius:8px;padding:5px 10px;font-size:11.5px;cursor:pointer;transition:.15s}
+.mini:hover{color:var(--ink);border-color:#c9d3ec}
+.mini.danger{color:var(--red);border-color:var(--red-line)}
+.mini.danger:hover{background:var(--red-soft)}
+.wi-explain{margin-top:12px;padding-top:12px;border-top:1px dashed var(--line);font-size:13px;line-height:1.8;color:#465066}
+
+/* ===== 题库总览 ===== */
+.bank-panel{background:#fff;border:1px solid var(--line);border-radius:16px;padding:14px;display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.search{flex:1;min-width:220px;display:flex;align-items:center;gap:8px;border:1px solid var(--line);border-radius:10px;padding:9px 12px;background:#fbfcfe;transition:.15s}
+.search:focus-within{border-color:#b9c6ec;background:#fff;box-shadow:0 0 0 3px #eef2ff}
+.search span{color:var(--faint);font-size:14px;line-height:1}
+.search input{border:0;outline:0;background:transparent;width:100%;font:inherit;font-size:13.5px;color:var(--ink)}
+.search input::placeholder{color:var(--faint)}
+select{border:1px solid var(--line);border-radius:10px;padding:9px 11px;background:#fff;font:inherit;font-size:12.5px;color:var(--muted);outline:none;cursor:pointer}
+select:focus{border-color:#b9c6ec}
+.bank-count{font-size:12px;color:var(--faint);margin:14px 2px 10px}
+.bank-list{display:grid;gap:10px}
+.bank-item{background:#fff;border:1px solid var(--line);border-radius:12px;padding:14px 16px}
+.bi-head{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.bi-stem{font-size:14px;line-height:1.7;margin:8px 0 0;color:#303a4d}
+.bi-toggle{margin-top:10px;border:0;background:transparent;color:var(--accent);font-size:12px;font-weight:600;padding:0;cursor:pointer;display:inline-flex;align-items:center;gap:5px}
+.bi-toggle:hover{text-decoration:underline}
+.bi-body{margin-top:12px;padding-top:12px;border-top:1px dashed var(--line)}
+.bi-opt{font-size:13px;color:#49536a;line-height:1.85}
+.bi-opt b{color:#6c7588}
+.bi-ans{font-size:12.5px;margin:9px 0;color:var(--muted)}
+.bi-ans b{color:var(--green)}
+.bi-explain{font-size:12.8px;line-height:1.8;color:#576176;background:#f8fafd;border-radius:8px;padding:10px 12px}
+.pager{display:flex;justify-content:center;align-items:center;gap:6px;margin-top:20px;font-size:12px;color:var(--muted);flex-wrap:wrap}
+.pager button{border:1px solid var(--line);background:#fff;border-radius:8px;padding:6px 10px;font-size:11.5px;cursor:pointer;color:var(--muted)}
+.pager button:hover:not(:disabled){border-color:#c9d3ec;color:var(--ink)}
+.pager button:disabled{opacity:.4;cursor:not-allowed}
+.pager button.active{background:var(--accent);border-color:var(--accent);color:#fff}
+.pager .gap{padding:0 4px;color:var(--faint)}
+
+/* ===== 提示 ===== */
+.toast{position:fixed;left:50%;bottom:28px;transform:translate(-50%,20px);background:#1d2534;color:#fff;font-size:12.5px;padding:10px 18px;border-radius:99px;opacity:0;pointer-events:none;transition:.25s;z-index:50;box-shadow:0 12px 30px -10px rgba(0,0,0,.55);max-width:calc(100vw - 40px);text-align:center}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+
+footer{text-align:center;font-size:11px;color:var(--faint);padding:26px 0 10px;letter-spacing:.4px}
+
+@media(max-width:720px){
+  .wrap{padding:0 14px}
+  .head-row{padding:14px 0 10px;flex-wrap:wrap;gap:12px}
+  .logo{width:38px;height:38px;font-size:13px;border-radius:11px}
+  h1{font-size:18px}
+  .sub{display:none}
+  .head-stats{gap:12px}
+  .stat b{font-size:16px}
+  .stat+.stat{padding-left:12px}
+  .stat span{font-size:9.5px;letter-spacing:.5px}
+  .icon-btn{padding:6px 9px;font-size:11px}
+  .tabs{overflow-x:auto;padding-bottom:8px;scrollbar-width:none}
+  .tabs::-webkit-scrollbar{display:none}
+  .tab{padding:8px 13px;font-size:13px;white-space:nowrap}
+  .panel{padding:14px}
+  .mode-tabs{gap:6px;flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;padding-bottom:2px}
+  .mode-tabs::-webkit-scrollbar{display:none}
+  .mode-tabs button{padding:8px 11px;font-size:12.5px;white-space:nowrap}
+  .qcard{padding:20px 17px 17px;border-radius:16px}
+  .stem{font-size:16.5px}
+  .opt{padding:12px 12px;font-size:14px;gap:11px}
+  .opt-key{width:27px;height:27px;border-radius:8px;font-size:12.5px}
+  .actions{gap:8px}
+  .btn{padding:10px 16px;font-size:13px}
+  .hint{order:3;width:100%;margin-left:0}
+  .summary{padding:30px 18px}
+  .ring{width:128px;height:128px}
+  .bank-panel{padding:11px}
+  .search{min-width:100%}
+  .view-head{align-items:flex-start;flex-direction:column}
+}
+</style>
+</head>
+<body>
+
+<header class="site-head">
+  <div class="wrap head-row">
+    <div class="brand">
+      <div class="logo">DL</div>
+      <div>
+        <h1>深度学习题库</h1>
+        <p class="sub">568 题 · 逐题作答 · 错题自动收录</p>
+      </div>
+    </div>
+    <div class="head-stats">
+      <div class="stat"><b id="statDone">0</b><span>已练</span></div>
+      <div class="stat"><b id="statRate">—</b><span>掌握率</span></div>
+      <div class="stat"><b id="statWrong">0</b><span>错题</span></div>
+      <button class="icon-btn" id="resetBtn" title="清空练习记录与错题集">重置</button>
+    </div>
+  </div>
+  <nav class="wrap tabs" id="tabs">
+    <button class="tab active" data-view="practice">练习</button>
+    <button class="tab" data-view="wrong">错题集 <span class="badge-dot" id="wrongBadge" style="display:none">0</span></button>
+    <button class="tab" data-view="bank">题库总览</button>
+  </nav>
+</header>
+
+<main class="wrap">
+  <section id="view-practice" class="view">
+    <div class="panel">
+      <div class="section-label">练习模式</div>
+      <div class="mode-tabs" id="modeTabs">
+        <button data-mode="sequence">顺序练习</button>
+        <button data-mode="random">随机练习</button>
+        <button data-mode="chapter">按章节</button>
+        <button data-mode="wrong">错题重练</button>
+      </div>
+      <div id="chapterPicker" class="chapter-picker hidden"></div>
+    </div>
+    <div class="roundbar" id="roundbar">
+      <div class="roundinfo"><span id="roundLabel">顺序练习</span><b id="roundProgress">1 / 568</b></div>
+      <div class="progress"><i id="progressFill"></i></div>
+    </div>
+    <div id="practiceBody"></div>
+  </section>
+
+  <section id="view-wrong" class="view hidden"></section>
+  <section id="view-bank" class="view hidden"></section>
+
+  <footer>题库共 568 题 · 作答记录保存在本机浏览器</footer>
+</main>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const QUESTIONS = [{"id":1,"chapter":"线性回归","type":"single","stem":"线性回归模型 y = w·x + b 中，参数是( )","options":[{"key":"A","text":"x"},{"key":"B","text":"y"},{"key":"C","text":"w 和 b"},{"key":"D","text":"样本数量"}],"answer":["C"],"answerText":"C","explain":"线性回归的模型参数是权重 w 和偏置 b。x 是输入特征，y 是标签，都不是模型参数。"},{"id":2,"chapter":"线性回归","type":"single","stem":"线性回归的损失函数通常采用( )","options":[{"key":"A","text":"交叉熵损失"},{"key":"B","text":"平方误差损失"},{"key":"C","text":"Hinge 损失"},{"key":"D","text":"绝对值损失"}],"answer":["B"],"answerText":"B","explain":"线性回归的输出是实数，常用平方误差损失。交叉熵用于分类，Hinge 用于 SVM。"},{"id":3,"chapter":"线性回归","type":"single","stem":"平方误差损失对异常值敏感，原因是( )","options":[{"key":"A","text":"误差被平方放大"},{"key":"B","text":"误差被开方缩小"},{"key":"C","text":"误差被归一化"},{"key":"D","text":"误差被取对数"}],"answer":["A"],"answerText":"A","explain":"平方误差对误差取平方，远离直线的异常点误差很大，平方后被进一步放大，把直线往异常点方向拉。绝对值损失对异常值更鲁棒。"},{"id":4,"chapter":"线性回归","type":"single","stem":"在线性回归中，最小化平方误差等价于( )","options":[{"key":"A","text":"最小化交叉熵"},{"key":"B","text":"最大化对数似然(在高斯噪声假设下)"},{"key":"C","text":"最大化后验概率"},{"key":"D","text":"最小化 KL 散度"}],"answer":["B"],"answerText":"B","explain":"假设 y = w·x + b + ε，ε 服从高斯分布 N(0, σ²)，则最大化似然等价于最小化平方误差。损失函数的选择本质上是对数据噪声分布做了假设。"},{"id":5,"chapter":"线性回归","type":"single","stem":"随机梯度下降(SGD)与全批量梯度下降的主要区别是( )","options":[{"key":"A","text":"SGD 使用全部样本计算梯度"},{"key":"B","text":"SGD 使用单个样本估计梯度"},{"key":"C","text":"SGD 不需要学习率"},{"key":"D","text":"SGD 只能用于分类问题"}],"answer":["B"],"answerText":"B","explain":"SGD 用单个样本的梯度作为期望梯度的无偏估计。全批量梯度下降每一步遍历所有样本，计算代价高。小批量 SGD 介于两者之间。"},{"id":6,"chapter":"线性回归","type":"single","stem":"小批量随机梯度下降中，批量大小设为 1 时，等价于( )","options":[{"key":"A","text":"全批量梯度下降"},{"key":"B","text":"随机梯度下降"},{"key":"C","text":"牛顿法"},{"key":"D","text":"共轭梯度法"}],"answer":["B"],"answerText":"B","explain":"批量大小为 1 就是每次用一个样本更新参数，即 SGD。批量大小为 N(样本总数)就是全批量梯度下降。中间的小批量是折中。"},{"id":7,"chapter":"线性回归","type":"single","stem":"线性回归的神经网络图中，输出层通常( )","options":[{"key":"A","text":"加 softmax"},{"key":"B","text":"加 ReLU"},{"key":"C","text":"不加激活函数"},{"key":"D","text":"加 sigmoid"}],"answer":["C"],"answerText":"C","explain":"线性回归输出的是实数，不需要把输出限制在某个范围。softmax 用于多分类，sigmoid 用于二分类，ReLU 用于隐藏层。"},{"id":8,"chapter":"线性回归","type":"single","stem":"如果训练损失持续下降，但测试损失先下降后上升，说明( )","options":[{"key":"A","text":"欠拟合"},{"key":"B","text":"过拟合"},{"key":"C","text":"梯度消失"},{"key":"D","text":"数据泄漏"}],"answer":["B"],"answerText":"B","explain":"训练损失下降、测试损失上升，是过拟合的典型表现。模型把训练集的噪声也学进去了。对应手段包括早停、正则化、增加数据。"},{"id":9,"chapter":"线性回归","type":"single","stem":"下列关于验证集的说法，正确的是( )","options":[{"key":"A","text":"验证集用于拟合模型参数"},{"key":"B","text":"验证集用于选择超参数"},{"key":"C","text":"验证集就是测试集"},{"key":"D","text":"验证集不能用来早停"}],"answer":["B"],"answerText":"B","explain":"训练集拟合参数，验证集选择超参数和早停，测试集做最终评估。如果测试集参与调参，它就泄漏成了验证集。"},{"id":10,"chapter":"线性回归","type":"single","stem":"关于小批量随机梯度下降的批量大小，下列说法正确的是( )","options":[{"key":"A","text":"批量越大，梯度方差越大"},{"key":"B","text":"批量越大，每一步计算量越小"},{"key":"C","text":"批量越大，梯度方差越小"},{"key":"D","text":"批量大小不影响训练"}],"answer":["C"],"answerText":"C","explain":"批量越大，用更多样本估计梯度，方差越小。但每一步计算量越大，还要考虑 GPU 显存限制。批量大小是偏差-方差-计算效率-硬件的权衡。"},{"id":11,"chapter":"线性回归","type":"single","stem":"线性回归中，学习率的作用是( )","options":[{"key":"A","text":"决定模型的参数量"},{"key":"B","text":"决定参数更新的步长"},{"key":"C","text":"决定损失函数的形状"},{"key":"D","text":"决定数据集的大小"}],"answer":["B"],"answerText":"B","explain":"学习率决定参数更新的步长。太小收敛慢，太大可能震荡或发散。它是需要调的超参数。"},{"id":12,"chapter":"线性回归","type":"multi","stem":"线性回归的基本元素包括( )","options":[{"key":"A","text":"训练集"},{"key":"B","text":"测试集"},{"key":"C","text":"验证集"},{"key":"D","text":"标签"}],"answer":["A","B","C","D"],"answerText":"ABCD","explain":"线性回归的基本元素包括训练集、测试集、验证集、标签、特征。四个选项都属于基本元素。"},{"id":13,"chapter":"线性回归","type":"multi","stem":"关于平方误差损失，下列说法正确的是( )","options":[{"key":"A","text":"对异常值敏感"},{"key":"B","text":"在高斯噪声假设下等价于极大似然"},{"key":"C","text":"对异常值鲁棒"},{"key":"D","text":"是线性回归常用的损失函数"}],"answer":["A","B","D"],"answerText":"ABD","explain":"平方误差对异常值敏感，因为误差被平方放大。在高斯噪声假设下，最小化平方误差等价于最大化似然。它是线性回归常用损失。C 错误，绝对值损失才更鲁棒。"},{"id":14,"chapter":"线性回归","type":"multi","stem":"关于小批量随机梯度下降的批量大小，下列说法正确的是( )","options":[{"key":"A","text":"批量大小为 1 时等价于 SGD"},{"key":"B","text":"批量大小为 N 时等价于全批量梯度下降"},{"key":"C","text":"批量大小越大，梯度方差越小"},{"key":"D","text":"批量大小越大，计算效率越低"}],"answer":["A","B","C","D"],"answerText":"ABCD","explain":"批量大小为 1 是 SGD，为 N 是全批量。批量越大，梯度方差越小，但每一步计算量越大，计算效率越低。还要考虑 GPU 显存限制。"},{"id":15,"chapter":"线性回归","type":"multi","stem":"关于线性回归的神经网络图，下列说法正确的是( )","options":[{"key":"A","text":"输入层接收特征"},{"key":"B","text":"输出层输出预测值"},{"key":"C","text":"输出层通常不加激活函数"},{"key":"D","text":"它等价于一个全连接层"}],"answer":["A","B","C","D"],"answerText":"ABCD","explain":"线性回归的神经网络图就是输入层加一个全连接层。输入层接收特征，输出层输出预测值，输出层不加激活函数，整体等价于一个全连接层。"},{"id":16,"chapter":"线性回归","type":"multi","stem":"关于验证集和测试集，下列说法正确的是( )","options":[{"key":"A","text":"验证集用于选择超参数"},{"key":"B","text":"测试集用于最终泛化评估"},{"key":"C","text":"测试集可以用于调参"},{"key":"D","text":"验证集可以用于早停"}],"answer":["A","B","D"],"answerText":"ABD","explain":"验证集用于选超参数和早停，测试集用于最终评估。C 错误，测试集一旦用于调参，就泄漏成了验证集，泛化评估失效。"},{"id":17,"chapter":"线性回归","type":"multi","stem":"下列关于学习率的说法，正确的是( )","options":[{"key":"A","text":"学习率太小，收敛慢"},{"key":"B","text":"学习率太大，可能震荡或发散"},{"key":"C","text":"学习率是需要调的超参数"},{"key":"D","text":"学习率越大越好"}],"answer":["A","B","C"],"answerText":"ABC","explain":"学习率太小收敛慢，太大可能震荡甚至发散。它是需要调的超参数。D 错误，学习率不是越大越好。"},{"id":18,"chapter":"线性回归","type":"multi","stem":"线性回归中，如果训练误差很低但测试误差很高，可能的原因包括( )","options":[{"key":"A","text":"过拟合"},{"key":"B","text":"模型容量过大"},{"key":"C","text":"训练数据太少"},{"key":"D","text":"欠拟合"}],"answer":["A","B","C"],"answerText":"ABC","explain":"训练误差低、测试误差高是过拟合。原因可能是模型容量过大、训练数据太少。D 错误，欠拟合是训练误差和测试误差都高。"},{"id":19,"chapter":"线性回归","type":"multi","stem":"关于线性回归和 softmax 回归的区别，下列说法正确的是( )","options":[{"key":"A","text":"线性回归输出实数，softmax 回归输出概率分布"},{"key":"B","text":"线性回归用平方误差，softmax 回归用交叉熵"},{"key":"C","text":"线性回归用于回归，softmax 回归用于分类"},{"key":"D","text":"两者完全相同"}],"answer":["A","B","C"],"answerText":"ABC","explain":"线性回归输出实数，用平方误差，用于回归。softmax 回归输出概率分布，用交叉熵，用于分类。D 错误，两者是不同范式。"},{"id":20,"chapter":"线性回归","type":"multi","stem":"关于线性回归的训练流程，下列说法正确的是( )","options":[{"key":"A","text":"包括数据加载与分批"},{"key":"B","text":"包括前向传播"},{"key":"C","text":"包括损失计算"},{"key":"D","text":"包括反向传播和参数更新"}],"answer":["A","B","C","D"],"answerText":"ABCD","explain":"线性回归的训练流程包括数据加载与分批、前向传播、损失计算、反向传播、参数更新、日志记录。四个选项都属于训练流程。"},{"id":21,"chapter":"线性回归","type":"judge","stem":"线性回归的模型参数是输入特征 x 和标签 y。","options":[],"answer":"错误","answerText":"错误","explain":"线性回归的模型参数是权重 w 和偏置 b。x 是输入特征，y 是标签，都不是模型参数。"},{"id":22,"chapter":"线性回归","type":"judge","stem":"平方误差损失对异常值鲁棒。","options":[],"answer":"错误","answerText":"错误","explain":"平方误差对异常值敏感，因为误差被平方放大。绝对值损失对异常值更鲁棒。"},{"id":23,"chapter":"线性回归","type":"judge","stem":"在高斯噪声假设下，最小化平方误差等价于最大化似然。","options":[],"answer":"正确","answerText":"正确","explain":"假设 y = w·x + b + ε，ε 服从高斯分布 N(0, σ²)，则最大化似然等价于最小化平方误差。"},{"id":24,"chapter":"线性回归","type":"judge","stem":"随机梯度下降用全部样本计算梯度。","options":[],"answer":"错误","answerText":"错误","explain":"随机梯度下降用单个样本估计梯度。全批量梯度下降才用全部样本。"},{"id":25,"chapter":"线性回归","type":"judge","stem":"小批量随机梯度下降中，批量大小为 1 时等价于 SGD。","options":[],"answer":"正确","answerText":"正确","explain":"批量大小为 1 就是每次用一个样本更新参数，即 SGD。批量大小为 N 是全批量梯度下降。"},{"id":26,"chapter":"线性回归","type":"judge","stem":"线性回归的神经网络图等价于一个全连接层。","options":[],"answer":"正确","answerText":"正确","explain":"线性回归的神经网络图就是输入层加一个全连接层，输出层不加激活函数，整体等价于一个全连接层。"},{"id":27,"chapter":"线性回归","type":"judge","stem":"验证集用于拟合模型参数。","options":[],"answer":"错误","answerText":"错误","explain":"训练集用于拟合参数，验证集用于选择超参数和早停，测试集用于最终泛化评估。"},{"id":28,"chapter":"线性回归","type":"judge","stem":"测试集可以用于调参。","options":[],"answer":"错误","answerText":"错误","explain":"测试集不能用于调参。一旦用于调参，它就泄漏成了验证集，泛化评估失效。"},{"id":29,"chapter":"线性回归","type":"judge","stem":"学习率越大，模型收敛越快，所以学习率越大越好。","options":[],"answer":"错误","answerText":"错误","explain":"学习率太大可能导致震荡甚至发散，不是越大越好。学习率需要调，太小收敛慢，太大不稳定。"},{"id":30,"chapter":"线性回归","type":"judge","stem":"如果训练损失持续下降，但测试损失先下降后上升，说明模型过拟合。","options":[],"answer":"正确","answerText":"正确","explain":"训练损失下降、测试损失上升，是过拟合的典型表现。对应手段包括早停、正则化、增加数据。"},{"id":31,"chapter":"线性回归","type":"judge","stem":"训练损失越低，模型一定越好。","options":[],"answer":"错误","answerText":"错误","explain":"训练损失低不代表模型好。如果测试损失高，说明过拟合。评估模型要同时看训练损失和测试损失。"},{"id":32,"chapter":"线性回归","type":"judge","stem":"线性回归的输出层通常加 softmax 激活函数。","options":[],"answer":"错误","answerText":"错误","explain":"线性回归输出的是实数，不需要加 softmax。softmax 用于多分类，sigmoid 用于二分类，ReLU 用于隐藏层。"},{"id":33,"chapter":"线性回归","type":"judge","stem":"小批量随机梯度下降的批量大小是一个超参数。","options":[],"answer":"正确","answerText":"正确","explain":"批量大小是需要调的超参数。批量越大，梯度方差越小，但每一步计算量越大，还要考虑 GPU 显存限制。"},{"id":34,"chapter":"线性回归","type":"judge","stem":"线性回归的训练流程中，反向传播的作用是计算梯度。","options":[],"answer":"正确","answerText":"正确","explain":"反向传播的作用是计算损失对参数的梯度，然后用优化算法更新参数。"},{"id":35,"chapter":"线性回归","type":"judge","stem":"验证集和测试集是同一个东西。","options":[],"answer":"错误","answerText":"错误","explain":"验证集用于选择超参数和早停，测试集用于最终泛化评估。两者作用不同，不能混用。"},{"id":36,"chapter":"softmax 回归","type":"single","stem":"softmax 回归主要用于解决( )","options":[{"key":"A","text":"回归问题"},{"key":"B","text":"二分类问题"},{"key":"C","text":"多分类问题"},{"key":"D","text":"聚类问题"}],"answer":["C"],"answerText":"C","explain":"softmax 回归用于多分类问题，输出每个类别的概率分布。线性回归用于回归，logistic 回归用于二分类。"},{"id":37,"chapter":"softmax 回归","type":"single","stem":"softmax 运算的输出满足( )","options":[{"key":"A","text":"每个元素在 0 到 1 之间，且总和为 1"},{"key":"B","text":"每个元素都是整数"},{"key":"C","text":"每个元素都大于 1"},{"key":"D","text":"每个元素之和为 0"}],"answer":["A"],"answerText":"A","explain":"softmax 把实数分数映射为概率分布，每个元素在 0 到 1 之间，所有元素之和为 1。"},{"id":38,"chapter":"softmax 回归","type":"single","stem":"softmax 回归中，真实标签通常用( )表示。","options":[{"key":"A","text":"实数"},{"key":"B","text":"独热编码"},{"key":"C","text":"负数"},{"key":"D","text":"零向量"}],"answer":["B"],"answerText":"B","explain":"softmax 回归的真实标签通常用独热编码表示。比如 3 分类，类别 2 对应 (0, 1, 0)。"},{"id":39,"chapter":"softmax 回归","type":"single","stem":"softmax 回归常用的损失函数是( )","options":[{"key":"A","text":"平方误差损失"},{"key":"B","text":"交叉熵损失"},{"key":"C","text":"Hinge 损失"},{"key":"D","text":"绝对值损失"}],"answer":["B"],"answerText":"B","explain":"softmax 回归用交叉熵损失。交叉熵衡量模型预测分布和真实分布之间的差异。平方误差用于回归，Hinge 用于 SVM。"},{"id":40,"chapter":"softmax 回归","type":"single","stem":"交叉熵损失在独热编码下可以简化为( )","options":[{"key":"A","text":"-log(预测概率[真实类别])"},{"key":"B","text":"log(预测概率[真实类别])"},{"key":"C","text":"预测概率[真实类别]"},{"key":"D","text":"1 - 预测概率[真实类别]"}],"answer":["A"],"answerText":"A","explain":"当真实分布是独热编码时，交叉熵简化为 -log(预测概率[真实类别])。模型给真实类别分配的概率越高，损失越小。"},{"id":41,"chapter":"softmax 回归","type":"single","stem":"softmax 回归的输出层通常( )","options":[{"key":"A","text":"加 ReLU"},{"key":"B","text":"加 sigmoid"},{"key":"C","text":"加 softmax"},{"key":"D","text":"不加激活函数"}],"answer":["C"],"answerText":"C","explain":"softmax 回归的输出层加 softmax，把实数分数变成概率分布。ReLU 用于隐藏层，sigmoid 用于二分类。"},{"id":42,"chapter":"softmax 回归","type":"single","stem":"softmax 运算具有平移不变性，意思是( )","options":[{"key":"A","text":"所有分数加同一个常数，输出不变"},{"key":"B","text":"所有分数乘以同一个常数，输出不变"},{"key":"C","text":"所有分数取平方，输出不变"},{"key":"D","text":"所有分数取对数，输出不变"}],"answer":["A"],"answerText":"A","explain":"softmax 具有平移不变性:所有分数加同一个常数，输出不变。这个性质用于数值稳定性，减去最大值避免 exp 溢出。"},{"id":43,"chapter":"softmax 回归","type":"single","stem":"精度(accuracy)的计算方式是( )","options":[{"key":"A","text":"预测正确的样本数 / 总样本数"},{"key":"B","text":"预测错误的样本数 / 总样本数"},{"key":"C","text":"损失函数的倒数"},{"key":"D","text":"预测概率的平均值"}],"answer":["A"],"answerText":"A","explain":"精度是预测正确的样本数除以总样本数。它在类别不平衡时可能骗人，需要结合混淆矩阵、召回率、F1 一起看。"},{"id":44,"chapter":"softmax 回归","type":"single","stem":"如果数据集中 99% 是负类，1% 是正类，模型全部预测负类，精度是( )","options":[{"key":"A","text":"1%"},{"key":"B","text":"50%"},{"key":"C","text":"99%"},{"key":"D","text":"100%"}],"answer":["C"],"answerText":"C","explain":"全部预测负类，99% 的负类都预测正确，精度是 99%。但这个模型毫无用处，因为它完全忽略了正类。这就是精度在类别不平衡时的陷阱。"},{"id":45,"chapter":"softmax 回归","type":"single","stem":"关于 softmax 和 sigmoid 的关系，下列说法正确的是( )","options":[{"key":"A","text":"两者完全相同"},{"key":"B","text":"二分类时 softmax 退化为 sigmoid"},{"key":"C","text":"softmax 用于二分类，sigmoid 用于多分类"},{"key":"D","text":"两者都没有归一化"}],"answer":["B"],"answerText":"B","explain":"当类别数为 2 时，softmax 退化为 sigmoid。所以 softmax 回归是 logistic 回归在多分类上的推广。"},{"id":46,"chapter":"softmax 回归","type":"single","stem":"softmax 回归中，输出层输出的是( )","options":[{"key":"A","text":"类别编号"},{"key":"B","text":"概率分布"},{"key":"C","text":"实数预测值"},{"key":"D","text":"二值标签"}],"answer":["B"],"answerText":"B","explain":"softmax 回归的输出层输出概率分布，每个元素表示属于该类别的概率。类别编号是预测结果，不是输出层的直接输出。"},{"id":47,"chapter":"softmax 回归","type":"multi","stem":"关于 softmax 运算，下列说法正确的是( )","options":[{"key":"A","text":"输出每个元素在 0 到 1 之间"},{"key":"B","text":"输出所有元素之和为 1"},{"key":"C","text":"具有平移不变性"},{"key":"D","text":"输出元素可能为负数"}],"answer":["A","B","C"],"answerText":"ABC","explain":"softmax 输出每个元素在 0 到 1 之间，总和为 1，具有平移不变性。D 错误，softmax 输出非负。"},{"id":48,"chapter":"softmax 回归","type":"multi","stem":"关于独热编码，下列说法正确的是( )","options":[{"key":"A","text":"把类别映射为概率分布上的一个顶点"},{"key":"B","text":"3 分类中类别 2 对应 (0, 1, 0)"},{"key":"C","text":"是分类问题中标签的常见表示方式"},{"key":"D","text":"必须手动转换为独热编码才能用 CrossEntropyLoss"}],"answer":["A","B","C"],"answerText":"ABC","explain":"独热编码把类别映射为概率单纯形上的顶点。3 分类中类别 2 对应 (0, 1, 0)。它是分类问题中标签的常见表示。D 错误，PyTorch 的 CrossEntropyLoss 直接接收类别索引，不需要手动转独热编码。"},{"id":49,"chapter":"softmax 回归","type":"multi","stem":"关于交叉熵损失，下列说法正确的是( )","options":[{"key":"A","text":"衡量两个概率分布之间的差异"},{"key":"B","text":"在独热编码下简化为 -log(预测概率[真实类别])"},{"key":"C","text":"最小化交叉熵等价于最大化对数似然"},{"key":"D","text":"交叉熵只能用于二分类"}],"answer":["A","B","C"],"answerText":"ABC","explain":"交叉熵衡量两个概率分布的差异。独热编码下简化为 -log(预测概率[真实类别])。最小化交叉熵等价于最大化对数似然。D 错误，交叉熵可以用于多分类。"},{"id":50,"chapter":"softmax 回归","type":"multi","stem":"关于 softmax 回归的网络架构，下列说法正确的是( )","options":[{"key":"A","text":"输入层接收图像像素"},{"key":"B","text":"全连接层把输入映射到类别分数"},{"key":"C","text":"softmax 层把分数变成概率"},{"key":"D","text":"没有隐藏层"}],"answer":["A","B","C","D"],"answerText":"ABCD","explain":"softmax 回归的网络架构是输入层、全连接层、softmax 层。没有隐藏层，所以它是一个单层神经网络。"},{"id":51,"chapter":"softmax 回归","type":"multi","stem":"关于精度(accuracy)，下列说法正确的是( )","options":[{"key":"A","text":"是预测正确的样本数除以总样本数"},{"key":"B","text":"在类别不平衡时可能骗人"},{"key":"C","text":"应该结合混淆矩阵、召回率、F1 一起看"},{"key":"D","text":"精度高一定代表模型好"}],"answer":["A","B","C"],"answerText":"ABC","explain":"精度是预测正确的样本数除以总样本数。在类别不平衡时可能骗人，应该结合混淆矩阵、召回率、F1 一起看。D 错误，精度高不代表模型好。"},{"id":52,"chapter":"softmax 回归","type":"multi","stem":"关于 softmax 回归和线性回归的区别，下列说法正确的是( )","options":[{"key":"A","text":"线性回归输出实数，softmax 回归输出概率分布"},{"key":"B","text":"线性回归用平方误差，softmax 回归用交叉熵"},{"key":"C","text":"线性回归用于回归，softmax 回归用于分类"},{"key":"D","text":"两者完全相同"}],"answer":["A","B","C"],"answerText":"ABC","explain":"线性回归输出实数，用平方误差，用于回归。softmax 回归输出概率分布，用交叉熵，用于分类。D 错误，两者是不同范式。"},{"id":53,"chapter":"softmax 回归","type":"multi","stem":"关于 softmax 的数值稳定性，下列说法正确的是( )","options":[{"key":"A","text":"exp(1000) 会溢出"},{"key":"B","text":"减去最大值可以避免溢出"},{"key":"C","text":"softmax 具有平移不变性"},{"key":"D","text":"简洁实现的 CrossEntropyLoss 内部已经做了处理"}],"answer":["A","B","C","D"],"answerText":"ABCD","explain":"exp(1000) 会溢出。减去最大值可以避免溢出，因为 softmax 具有平移不变性。简洁实现的 CrossEntropyLoss 内部已经做了处理。"},{"id":54,"chapter":"softmax 回归","type":"multi","stem":"关于 softmax 回归的训练流程，下列说法正确的是( )","options":[{"key":"A","text":"包括数据加载与分批"},{"key":"B","text":"包括前向传播"},{"key":"C","text":"包括损失计算"},{"key":"D","text":"包括反向传播和参数更新"}],"answer":["A","B","C","D"],"answerText":"ABCD","explain":"softmax 回归的训练流程包括数据加载与分批、前向传播、损失计算、反向传播、参数更新、日志记录。四个选项都属于训练流程。"},{"id":55,"chapter":"softmax 回归","type":"multi","stem":"关于 softmax 回归的评估指标，下列说法正确的是( )","options":[{"key":"A","text":"训练损失反映模型在训练集上的拟合程度"},{"key":"B","text":"测试精度反映模型的泛化能力"},{"key":"C","text":"训练损失越低，模型一定越好"},{"key":"D","text":"训练损失和测试损失差距大，可能过拟合"}],"answer":["A","B","D"],"answerText":"ABD","explain":"训练损失反映拟合程度，测试精度反映泛化能力。训练损失和测试损失差距大，可能过拟合。C 错误，训练损失低不代表模型好，可能过拟合。"},{"id":56,"chapter":"softmax 回归","type":"multi","stem":"关于 softmax 回归的输出，下列说法正确的是( )","options":[{"key":"A","text":"每个元素表示属于该类别的概率"},{"key":"B","text":"所有元素之和为 1"},{"key":"C","text":"元素非负"},{"key":"D","text":"输出元素可以是任意实数"}],"answer":["A","B","C"],"answerText":"ABC","explain":"softmax 回归的输出是概率分布，每个元素表示属于该类别的概率，所有元素之和为 1，元素非负。D 错误，输出元素在 0 到 1 之间。"},{"id":57,"chapter":"softmax 回归","type":"multi","stem":"关于 softmax 回归中的交叉熵和负对数似然，下列说法正确的是( )","options":[{"key":"A","text":"当真实分布是独热编码时，两者等价"},{"key":"B","text":"交叉熵是衡量两个分布的度量"},{"key":"C","text":"负对数似然是参数估计的方法"},{"key":"D","text":"两者完全相同，没有任何区别"}],"answer":["A","B","C"],"answerText":"ABC","explain":"当真实分布是独热编码时，交叉熵等于负对数似然。交叉熵是衡量两个分布的度量，负对数似然是参数估计的方法。D 错误，如果真实分布不是独热编码(比如标签平滑)，两者不完全等价。"},{"id":58,"chapter":"softmax 回归","type":"judge","stem":"softmax 回归用于多分类问题。","options":[],"answer":"正确","answerText":"正确","explain":"softmax 回归用于多分类问题，输出每个类别的概率分布。线性回归用于回归，logistic 回归用于二分类。"},{"id":59,"chapter":"softmax 回归","type":"judge","stem":"softmax 运算的输出总和为 1。","options":[],"answer":"正确","answerText":"正确","explain":"softmax 把实数分数映射为概率分布，所有元素之和为 1。"},{"id":60,"chapter":"softmax 回归","type":"judge","stem":"softmax 运算的输出元素可以是负数。","options":[],"answer":"错误","answerText":"错误","explain":"softmax 输出元素在 0 到 1 之间，非负。因为 exp 总是正的，除以正的和，结果非负。"},{"id":61,"chapter":"softmax 回归","type":"judge","stem":"交叉熵损失在独热编码下简化为 -log(预测概率[真实类别])。","options":[],"answer":"正确","answerText":"正确","explain":"当真实分布是独热编码时，交叉熵简化为 -log(预测概率[真实类别])。模型给真实类别分配的概率越高，损失越小。"},{"id":62,"chapter":"softmax 回归","type":"judge","stem":"softmax 加交叉熵的导数是 - y。","options":[],"answer":"正确","answerText":"正确","explain":"softmax 加交叉熵的导数是预测概率减去真实标签，即 - y。这个简洁形式是指数族分布加最大似然估计的自然结果。"},{"id":63,"chapter":"softmax 回归","type":"judge","stem":"PyTorch 的 CrossEntropyLoss 内部不包含 softmax。","options":[],"answer":"错误","answerText":"错误","explain":"PyTorch 的 CrossEntropyLoss 内部已经包含了 softmax，并且做了数值稳定处理。所以代码里不需要手动加 softmax。"},{"id":64,"chapter":"softmax 回归","type":"judge","stem":"softmax 运算具有平移不变性。","options":[],"answer":"正确","answerText":"正确","explain":"softmax 具有平移不变性:所有分数加同一个常数，输出不变。这个性质用于数值稳定性，减去最大值避免 exp 溢出。"},{"id":65,"chapter":"softmax 回归","type":"judge","stem":"精度是预测正确的样本数除以总样本数。","options":[],"answer":"正确","answerText":"正确","explain":"精度是预测正确的样本数除以总样本数。它在类别不平衡时可能骗人，需要结合混淆矩阵、召回率、F1 一起看。"},{"id":66,"chapter":"softmax 回归","type":"judge","stem":"在类别不平衡时，精度高一定代表模型好。","options":[],"answer":"错误","answerText":"错误","explain":"如果数据集中 99% 是负类，模型全部预测负类，精度是 99%，但模型毫无用处。精度在类别不平衡时可能骗人。"},{"id":67,"chapter":"softmax 回归","type":"judge","stem":"二分类时，softmax 退化为 sigmoid。","options":[],"answer":"正确","answerText":"正确","explain":"当类别数为 2 时，softmax 退化为 sigmoid。所以 softmax 回归是 logistic 回归在多分类上的推广。"},{"id":68,"chapter":"softmax 回归","type":"judge","stem":"softmax 回归的网络架构有隐藏层。","options":[],"answer":"错误","answerText":"错误","explain":"softmax 回归的网络架构是输入层、全连接层、softmax 层，没有隐藏层。所以它是一个单层神经网络。"},{"id":69,"chapter":"softmax 回归","type":"judge","stem":"全连接层的参数量与输入尺寸无关。","options":[],"answer":"错误","answerText":"错误","explain":"全连接层的参数量与输入尺寸直接相关。输入 784，输出 10，参数量约 7850;输入 150528，输出 1000，参数量约 1.5 亿。"},{"id":70,"chapter":"softmax 回归","type":"judge","stem":"交叉熵只能用于二分类问题。","options":[],"answer":"错误","answerText":"错误","explain":"交叉熵可以用于二分类和多分类。二分类用二元交叉熵，多分类用多元交叉熵。"},{"id":71,"chapter":"softmax 回归","type":"judge","stem":"当真实分布是独热编码时，交叉熵等于负对数似然。","options":[],"answer":"正确","answerText":"正确","explain":"当真实分布是独热编码时，交叉熵简化为 -log(预测概率[真实类别])，这正是负对数似然。但如果真实分布不是独热编码(比如标签平滑)，两者不完全等价。"},{"id":72,"chapter":"softmax 回归","type":"judge","stem":"softmax 回归的训练流程和线性回归完全相同。","options":[],"answer":"错误","answerText":"错误","explain":"训练流程的六步相同:数据加载、前向传播、损失计算、反向传播、参数更新、日志记录。但前向传播多了 softmax，损失计算从平方误差变成了交叉熵。所以不是完全相同。"},{"id":73,"chapter":"softmax 回归","type":"judge","stem":"softmax 回归的输出可以解释为每个类别的概率。","options":[],"answer":"正确","answerText":"正确","explain":"softmax 回归的输出是概率分布，每个元素表示属于该类别的概率。所有元素之和为 1。"},{"id":74,"chapter":"线性回归","type":"fill","stem":"线性回归模型 y = w·x + b 中，w 称为____，b 称为____。","options":[],"answer":["权重","偏置"],"answerText":"权重；偏置","explain":"w 是权重，b 是偏置，它们是线性回归的模型参数。"},{"id":75,"chapter":"线性回归","type":"fill","stem":"在高斯噪声假设下，最小化平方误差等价于最大化____。","options":[],"answer":["似然"],"answerText":"似然","explain":"假设 y = w·x + b + ε，ε 服从高斯分布，最大化似然等价于最小化平方误差。"},{"id":76,"chapter":"线性回归","type":"fill","stem":"线性回归的神经网络图等价于一个____层。","options":[],"answer":["全连接"],"answerText":"全连接","explain":"线性回归的神经网络图就是输入层加一个全连接层，输出层不加激活函数。"},{"id":77,"chapter":"线性回归","type":"fill","stem":"如果训练损失持续下降，但测试损失先下降后上升，说明模型出现了____。","options":[],"answer":["过拟合"],"answerText":"过拟合","explain":"训练损失下降、测试损失上升，是过拟合的典型表现。对应手段包括早停、正则化、增加数据。"},{"id":78,"chapter":"线性回归","type":"fill","stem":"SGD 的梯度是全批量梯度的____估计。","options":[],"answer":["无偏"],"answerText":"无偏","explain":"SGD 用单个样本的梯度作为全批量梯度的无偏估计。虽然单个样本有噪声，但期望等于全批量梯度。"},{"id":79,"chapter":"线性回归","type":"fill","stem":"线性回归的简洁实现使用____定义优化器。","options":[],"answer":["torch.optim.SGD"],"answerText":"torch.optim.SGD","explain":"简洁实现用 torch.optim.SGD 定义优化器，也可以用 Adam。"},{"id":80,"chapter":"模型选择与泛化","type":"fill","stem":"如果训练损失很低但测试损失很高，说明模型____;如果训练损失和测试损失都高，说明模型____。","options":[],"answer":["过拟合","欠拟合"],"answerText":"过拟合；欠拟合","explain":"训练损失低、测试损失高是过拟合;训练损失和测试损失都高是欠拟合。"},{"id":81,"chapter":"softmax 回归","type":"fill","stem":"线性回归的输出是____，softmax 回归的输出是____。","options":[],"answer":["实数","概率分布"],"answerText":"实数；概率分布","explain":"线性回归输出实数，softmax 回归输出概率分布。这是从回归到分类的范式转换。"},{"id":82,"chapter":"softmax 回归","type":"fill","stem":"softmax 回归主要用于解决____问题。","options":[],"answer":["多分类"],"answerText":"多分类","explain":"softmax 回归用于多分类问题，输出每个类别的概率分布。线性回归用于回归，logistic 回归用于二分类。"},{"id":83,"chapter":"softmax 回归","type":"fill","stem":"softmax 运算具有____不变性，即所有分数加同一个常数，输出不变。","options":[],"answer":["平移"],"answerText":"平移","explain":"softmax 具有平移不变性。这个性质用于数值稳定性，减去最大值避免 exp 溢出。"},{"id":84,"chapter":"softmax 回归","type":"fill","stem":"softmax 回归中，真实标签通常用____表示。","options":[],"answer":["独热编码"],"answerText":"独热编码","explain":"softmax 回归的真实标签通常用独热编码表示。比如 3 分类，类别 2 对应 (0, 1, 0)。"},{"id":85,"chapter":"softmax 回归","type":"fill","stem":"softmax 回归常用的损失函数是____。","options":[],"answer":["交叉熵损失"],"answerText":"交叉熵损失","explain":"softmax 回归用交叉熵损失，衡量模型预测分布和真实分布之间的差异。"},{"id":86,"chapter":"softmax 回归","type":"fill","stem":"最小化交叉熵等价于最大化____。","options":[],"answer":["对数似然"],"answerText":"对数似然","explain":"最小化交叉熵等价于最大化对数似然。这是最大似然估计的另一种表述。"},{"id":87,"chapter":"softmax 回归","type":"fill","stem":"二分类时，softmax 退化为____。","options":[],"answer":["sigmoid"],"answerText":"sigmoid","explain":"当类别数为 2 时，softmax 退化为 sigmoid。所以 softmax 回归是 logistic 回归在多分类上的推广。"},{"id":88,"chapter":"softmax 回归","type":"fill","stem":"交叉熵衡量的是两个____之间的差异。","options":[],"answer":["概率分布"],"answerText":"概率分布","explain":"交叉熵衡量模型预测分布和真实分布之间的差异。它是分类问题常用的损失函数。"},{"id":89,"chapter":"softmax 回归","type":"fill","stem":"当真实分布是独热编码时，交叉熵等于____。","options":[],"answer":["负对数似然"],"answerText":"负对数似然","explain":"当真实分布是独热编码时，交叉熵简化为 -log(预测概率[真实类别])，这正是负对数似然。"},{"id":90,"chapter":"softmax 回归","type":"fill","stem":"softmax 回归和线性回归的区别是:线性回归输出____，softmax 回归输出____。","options":[],"answer":["实数","概率分布"],"answerText":"实数；概率分布","explain":"线性回归输出实数，用平方误差。softmax 回归输出概率分布，用交叉熵。这是从回归到分类的范式转换。"},{"id":91,"chapter":"多层感知机","type":"single","stem":"如果多层感知机去掉所有激活函数，它等价于( )","options":[{"key":"A","text":"一个更深的非线性网络"},{"key":"B","text":"一个单层线性模型"},{"key":"C","text":"一个卷积网络"},{"key":"D","text":"一个循环网络"}],"answer":["B"],"answerText":"B","explain":"线性变换的复合仍然是线性变换。W(Wx + b) + b = Wx + b，仍然是一个线性模型。所以没有激活函数，深度就是假的。"},{"id":92,"chapter":"多层感知机","type":"single","stem":"多层感知机中，激活函数的作用是( )","options":[{"key":"A","text":"限制输出范围"},{"key":"B","text":"引入非线性"},{"key":"C","text":"增加参数量"},{"key":"D","text":"减少计算量"}],"answer":["B"],"answerText":"B","explain":"激活函数的核心作用是引入非线性，让假设空间从线性函数族扩展到非线性函数族。限制输出范围只是某些激活函数的副作用。"},{"id":93,"chapter":"多层感知机","type":"single","stem":"ReLU 函数的表达式是( )","options":[{"key":"A","text":"max(x, 0)"},{"key":"B","text":"1 / (1 + exp(-x))"},{"key":"C","text":"(exp(x) - exp(-x)) / (exp(x) + exp(-x))"},{"key":"D","text":"x²"}],"answer":["A"],"answerText":"A","explain":"ReLU 的表达式是 max(x, 0)。x 大于 0 时输出 x，x 小于 0 时输出 0。"},{"id":94,"chapter":"多层感知机","type":"single","stem":"ReLU 函数在 x < 0 时的导数是( )","options":[{"key":"A","text":"1"},{"key":"B","text":"0"},{"key":"C","text":"-1"},{"key":"D","text":"x"}],"answer":["B"],"answerText":"B","explain":"ReLU 在 x < 0 时输出恒为 0，导数为 0。这可能导致神经元死亡。x > 0 时导数为 1。"},{"id":95,"chapter":"多层感知机","type":"single","stem":"sigmoid 函数在饱和区的导数是( )","options":[{"key":"A","text":"接近 1"},{"key":"B","text":"接近 0"},{"key":"C","text":"等于 0.5"},{"key":"D","text":"无穷大"}],"answer":["B"],"answerText":"B","explain":"sigmoid 在输入很大或很小时，导数接近 0。这导致梯度消失，深层网络训练不起来。"},{"id":96,"chapter":"多层感知机","type":"single","stem":"tanh 函数相比 sigmoid 函数的主要优势是( )","options":[{"key":"A","text":"计算更快"},{"key":"B","text":"输出是零中心的"},{"key":"C","text":"没有饱和区"},{"key":"D","text":"值域是 0 到 1"}],"answer":["B"],"answerText":"B","explain":"tanh 的值域是 -1 到 1，输出是零中心的，这通常能让训练更稳定。但它仍然有饱和区，梯度消失问题依然存在。"},{"id":97,"chapter":"多层感知机","type":"single","stem":"ReLU 相比 sigmoid 的主要优势是( )","options":[{"key":"A","text":"输出是零中心的"},{"key":"B","text":"正值区不饱和，梯度不会消失"},{"key":"C","text":"值域是 0 到 1"},{"key":"D","text":"计算更复杂"}],"answer":["B"],"answerText":"B","explain":"ReLU 在正值区导数恒为 1，不饱和，梯度不会消失。这让深层网络训练成为可能。sigmoid 在饱和区梯度接近 0。"},{"id":98,"chapter":"多层感知机","type":"single","stem":"ReLU 的潜在问题是( )","options":[{"key":"A","text":"梯度爆炸"},{"key":"B","text":"神经元死亡"},{"key":"C","text":"输出为负"},{"key":"D","text":"计算量太大"}],"answer":["B"],"answerText":"B","explain":"ReLU 在负值区导数为 0。如果某个神经元的输入一直是负数，它的梯度永远是 0，可能再也更新不了。这叫神经元死亡。"},{"id":99,"chapter":"多层感知机","type":"single","stem":"多层感知机的输出层做多分类时，通常使用( )","options":[{"key":"A","text":"ReLU"},{"key":"B","text":"sigmoid"},{"key":"C","text":"softmax"},{"key":"D","text":"tanh"}],"answer":["C"],"answerText":"C","explain":"多分类的输出层用 softmax，把实数分数变成概率分布。二分类用 sigmoid，回归不加激活函数，隐藏层用 ReLU。"},{"id":100,"chapter":"多层感知机","type":"single","stem":"多层感知机的输出层做二分类时，通常使用( )","options":[{"key":"A","text":"ReLU"},{"key":"B","text":"sigmoid"},{"key":"C","text":"softmax"},{"key":"D","text":"tanh"}],"answer":["B"],"answerText":"B","explain":"二分类的输出层用 sigmoid，把实数分数压到 0 到 1，解释为正类的概率。多分类用 softmax，回归不加激活函数。"},{"id":101,"chapter":"多层感知机","type":"multi","stem":"关于激活函数的作用，下列说法正确的是( )","options":[{"key":"A","text":"引入非线性"},{"key":"B","text":"让假设空间从线性扩展到非线性"},{"key":"C","text":"没有激活函数，多层线性网络等价于单层线性网络"},{"key":"D","text":"激活函数的作用是限制输出范围"}],"answer":["A","B","C"],"answerText":"ABC","explain":"激活函数的核心作用是引入非线性，让假设空间从线性扩展到非线性。没有激活函数，多层线性网络等价于单层线性网络。D 错误，限制输出范围只是某些激活函数的副作用，不是核心作用。"},{"id":102,"chapter":"多层感知机","type":"multi","stem":"关于 ReLU 函数，下列说法正确的是( )","options":[{"key":"A","text":"表达式是 max(x, 0)"},{"key":"B","text":"x > 0 时导数为 1"},{"key":"C","text":"x < 0 时导数为 0"},{"key":"D","text":"可能导致神经元死亡"}],"answer":["A","B","C","D"],"answerText":"ABCD","explain":"ReLU 的表达式是 max(x, 0)。x > 0 时导数为 1，x < 0 时导数为 0。负值区导数为 0 可能导致神经元死亡。"},{"id":103,"chapter":"多层感知机","type":"multi","stem":"关于 sigmoid 函数，下列说法正确的是( )","options":[{"key":"A","text":"值域是 0 到 1"},{"key":"B","text":"导数可以用 σ(x)(1 - σ(x)) 表示"},{"key":"C","text":"饱和区梯度消失"},{"key":"D","text":"输出是零中心的"}],"answer":["A","B","C"],"answerText":"ABC","explain":"sigmoid 的值域是 0 到 1，导数是 σ(x)(1 - σ(x))，饱和区梯度消失。D 错误，sigmoid 输出不是零中心的，tanh 才是。"},{"id":104,"chapter":"多层感知机","type":"multi","stem":"关于 tanh 函数，下列说法正确的是( )","options":[{"key":"A","text":"值域是 -1 到 1"},{"key":"B","text":"导数是 1 - tanh²(x)"},{"key":"C","text":"输出是零中心的"},{"key":"D","text":"没有饱和区"}],"answer":["A","B","C"],"answerText":"ABC","explain":"tanh 的值域是 -1 到 1，导数是 1 - tanh²(x)，输出是零中心的。D 错误，tanh 仍然有饱和区，梯度消失问题依然存在。"},{"id":105,"chapter":"多层感知机","type":"multi","stem":"关于激活函数的对比，下列说法正确的是( )","options":[{"key":"A","text":"ReLU 计算最简单"},{"key":"B","text":"tanh 是零中心的"},{"key":"C","text":"sigmoid 输出在 0 到 1 之间"},{"key":"D","text":"ReLU 在负值区导数为 0"}],"answer":["A","B","C","D"],"answerText":"ABCD","explain":"ReLU 计算最简单，tanh 是零中心的，sigmoid 输出在 0 到 1 之间，ReLU 在负值区导数为 0。这四个说法都正确。"},{"id":106,"chapter":"多层感知机","type":"multi","stem":"关于多层感知机的输出层，下列说法正确的是( )","options":[{"key":"A","text":"多分类用 softmax"},{"key":"B","text":"二分类用 sigmoid"},{"key":"C","text":"回归不加激活函数"},{"key":"D","text":"输出层必须用 ReLU"}],"answer":["A","B","C"],"answerText":"ABC","explain":"多分类用 softmax，二分类用 sigmoid，回归不加激活函数。D 错误，输出层用 ReLU 会导致输出没有概率意义，损失函数无法使用。"},{"id":107,"chapter":"多层感知机","type":"multi","stem":"关于参数初始化，下列说法正确的是( )","options":[{"key":"A","text":"不能全部初始化为 0"},{"key":"B","text":"全零初始化会导致对称性问题"},{"key":"C","text":"通常用随机数初始化"},{"key":"D","text":"初始化尺度不重要"}],"answer":["A","B","C"],"answerText":"ABC","explain":"不能全部初始化为 0，因为会导致对称性问题，所有神经元学到相同的东西。通常用随机数初始化。D 错误，初始化尺度很重要，尺度过大或过小会导致梯度爆炸或消失。"},{"id":108,"chapter":"多层感知机","type":"multi","stem":"关于多层感知机和线性模型的关系，下列说法正确的是( )","options":[{"key":"A","text":"MLP 是线性模型的扩展"},{"key":"B","text":"去掉激活函数，MLP 退化为线性模型"},{"key":"C","text":"MLP 的假设空间比线性模型大"},{"key":"D","text":"MLP 和线性模型完全相同"}],"answer":["A","B","C"],"answerText":"ABC","explain":"MLP 是线性模型的扩展。去掉激活函数，MLP 退化为线性模型。MLP 的假设空间比线性模型大。D 错误，两者不相同。"},{"id":109,"chapter":"多层感知机","type":"multi","stem":"关于多层感知机的评估指标，下列说法正确的是( )","options":[{"key":"A","text":"训练损失反映模型在训练集上的拟合程度"},{"key":"B","text":"测试精度反映模型的泛化能力"},{"key":"C","text":"训练损失越低，模型一定越好"},{"key":"D","text":"训练损失和测试损失差距大，可能过拟合"}],"answer":["A","B","D"],"answerText":"ABD","explain":"训练损失反映拟合程度，测试精度反映泛化能力。训练损失和测试损失差距大，可能过拟合。C 错误，训练损失低不代表模型好，可能过拟合。"},{"id":110,"chapter":"多层感知机","type":"judge","stem":"多层感知机相比线性模型，核心变化是引入了隐藏层和非线性激活函数。","options":[],"answer":"正确","answerText":"正确","explain":"MLP 相比线性模型的核心变化是引入了隐藏层和非线性激活函数。没有非线性，多层线性网络等价于单层线性网络。"},{"id":111,"chapter":"多层感知机","type":"judge","stem":"去掉所有激活函数，多层感知机等价于单层线性模型。","options":[],"answer":"正确","answerText":"正确","explain":"线性变换的复合仍然是线性变换。W(Wx + b) + b = Wx + b，仍然是一个线性模型。"},{"id":112,"chapter":"多层感知机","type":"judge","stem":"激活函数的作用是限制输出范围。","options":[],"answer":"错误","answerText":"错误","explain":"激活函数的核心作用是引入非线性，让假设空间从线性扩展到非线性。限制输出范围只是某些激活函数的副作用。"},{"id":113,"chapter":"多层感知机","type":"judge","stem":"ReLU 函数在 x < 0 时导数为 1。","options":[],"answer":"错误","answerText":"错误","explain":"ReLU 在 x < 0 时输出恒为 0，导数为 0。x > 0 时导数为 1。"},{"id":114,"chapter":"多层感知机","type":"judge","stem":"ReLU 在正值区不饱和，梯度不会消失。","options":[],"answer":"正确","answerText":"正确","explain":"ReLU 在正值区导数恒为 1，不饱和，梯度不会消失。这让深层网络训练成为可能。"},{"id":115,"chapter":"多层感知机","type":"judge","stem":"ReLU 可能导致神经元死亡。","options":[],"answer":"正确","answerText":"正确","explain":"ReLU 在负值区导数为 0。如果某个神经元的输入一直是负数，它的梯度永远是 0，可能再也更新不了。这叫神经元死亡。"},{"id":116,"chapter":"多层感知机","type":"judge","stem":"sigmoid 函数在饱和区梯度消失。","options":[],"answer":"正确","answerText":"正确","explain":"sigmoid 在输入很大或很小时，导数接近 0，导致梯度消失，深层网络训练不起来。"},{"id":117,"chapter":"多层感知机","type":"judge","stem":"tanh 函数输出是零中心的。","options":[],"answer":"正确","answerText":"正确","explain":"tanh 的值域是 -1 到 1，输出是零中心的。这通常能让训练更稳定。但它仍然有饱和区。"},{"id":118,"chapter":"多层感知机","type":"judge","stem":"tanh 函数没有饱和区。","options":[],"answer":"错误","answerText":"错误","explain":"tanh 仍然有饱和区。当输入很大或很小时，导数接近 0，梯度消失问题依然存在。"},{"id":119,"chapter":"多层感知机","type":"judge","stem":"多层感知机的输出层做多分类时，通常使用 softmax。","options":[],"answer":"正确","answerText":"正确","explain":"多分类的输出层用 softmax，把实数分数变成概率分布。二分类用 sigmoid，回归不加激活函数。"},{"id":120,"chapter":"多层感知机","type":"judge","stem":"多层感知机的输出层做二分类时，通常使用 softmax。","options":[],"answer":"错误","answerText":"错误","explain":"二分类的输出层用 sigmoid，不是 softmax。多分类用 softmax。"},{"id":121,"chapter":"多层感知机","type":"judge","stem":"多层感知机的输出层做回归时，通常不加激活函数。","options":[],"answer":"正确","answerText":"正确","explain":"回归问题的输出是实数，不需要把输出限制在某个范围。所以输出层不加激活函数。"},{"id":122,"chapter":"多层感知机","type":"judge","stem":"多层感知机的参数可以全部初始化为 0。","options":[],"answer":"错误","answerText":"错误","explain":"不能全部初始化为 0，因为会导致对称性问题，所有神经元学到相同的东西。必须随机初始化。"},{"id":123,"chapter":"多层感知机","type":"judge","stem":"全零初始化会导致对称性问题。","options":[],"answer":"正确","answerText":"正确","explain":"如果所有参数都是 0，所有神经元的输出都一样，梯度也一样，它们会学到完全相同的东西。这叫对称性问题。"},{"id":124,"chapter":"多层感知机","type":"judge","stem":"通用逼近定理意味着单隐藏层 MLP 一定比多层 MLP 好。","options":[],"answer":"错误","answerText":"错误","explain":"通用逼近定理说的是存在性，不是可学习性。单隐藏层可能需要指数级多的神经元，而深度网络可以用多项式级神经元达到同样效果。"},{"id":125,"chapter":"多层感知机","type":"judge","stem":"多层感知机的隐藏层默认使用 ReLU 作为激活函数。","options":[],"answer":"正确","answerText":"正确","explain":"隐藏层默认用 ReLU。它在正值区不饱和，梯度不会消失，计算简单。如果效果不好可以试 Leaky ReLU 或 GELU。"},{"id":126,"chapter":"多层感知机","type":"judge","stem":"多层感知机的隐藏层越多越好。","options":[],"answer":"错误","answerText":"错误","explain":"隐藏层不是越多越好。层数增加会带来过拟合、梯度消失、训练难度增加等问题。模型容量要与数据量匹配。"},{"id":127,"chapter":"模型选择与泛化","type":"single","stem":"泛化误差指的是( )","options":[{"key":"A","text":"模型在训练集上的误差"},{"key":"B","text":"模型在测试集上的期望误差"},{"key":"C","text":"模型在验证集上的误差"},{"key":"D","text":"模型参数量的大小"}],"answer":["B"],"answerText":"B","explain":"泛化误差是模型在测试分布上的期望误差，也叫期望风险。训练误差是经验风险，验证误差用于选择超参数。"},{"id":128,"chapter":"模型选择与泛化","type":"single","stem":"训练误差低但测试误差高，说明模型出现了( )","options":[{"key":"A","text":"欠拟合"},{"key":"B","text":"过拟合"},{"key":"C","text":"梯度消失"},{"key":"D","text":"数据泄漏"}],"answer":["B"],"answerText":"B","explain":"训练误差低、测试误差高是过拟合。训练误差和测试误差都高是欠拟合。"},{"id":129,"chapter":"模型选择与泛化","type":"single","stem":"训练误差和测试误差都高，说明模型出现了( )","options":[{"key":"A","text":"欠拟合"},{"key":"B","text":"过拟合"},{"key":"C","text":"梯度爆炸"},{"key":"D","text":"分布偏移"}],"answer":["A"],"answerText":"A","explain":"训练误差和测试误差都高是欠拟合。模型太简单，学不到数据的模式。训练误差低、测试误差高是过拟合。"},{"id":130,"chapter":"模型选择与泛化","type":"single","stem":"K 折交叉验证的主要作用是( )","options":[{"key":"A","text":"增加训练数据"},{"key":"B","text":"用有限数据估计泛化误差的方差"},{"key":"C","text":"减少模型参数量"},{"key":"D","text":"加速训练"}],"answer":["B"],"answerText":"B","explain":"K 折交叉验证用同一份数据构造多个训练/验证划分，每个划分给出一个泛化误差估计。这些估计的均值和方差比单次划分更可靠。"},{"id":131,"chapter":"模型选择与泛化","type":"single","stem":"权重衰减是在哪个空间上做约束?( )","options":[{"key":"A","text":"参数空间"},{"key":"B","text":"表示空间"},{"key":"C","text":"输入空间"},{"key":"D","text":"输出空间"}],"answer":["A"],"answerText":"A","explain":"权重衰减在损失里加 L2 惩罚，把参数往 0 拉，约束的是参数空间。暂退法是在表示空间上做约束。"},{"id":132,"chapter":"模型选择与泛化","type":"single","stem":"权重衰减中的 λ 控制的是( )","options":[{"key":"A","text":"学习率"},{"key":"B","text":"参数空间的约束强度"},{"key":"C","text":"批量大小"},{"key":"D","text":"隐藏层大小"}],"answer":["B"],"answerText":"B","explain":"λ 控制参数空间的约束强度。λ 越大，参数被拉得越靠近 0，模型容量越小;λ 越小，约束越松。"},{"id":133,"chapter":"模型选择与泛化","type":"single","stem":"暂退法(Dropout)在训练时( )","options":[{"key":"A","text":"随机丢弃神经元"},{"key":"B","text":"随机丢弃输入"},{"key":"C","text":"随机丢弃输出"},{"key":"D","text":"不丢弃任何东西"}],"answer":["A"],"answerText":"A","explain":"暂退法在训练时以概率 p 随机丢弃神经元。测试时不丢弃，但输出要乘以 (1-p)，保持期望一致。"},{"id":134,"chapter":"模型选择与泛化","type":"single","stem":"暂退法的本质是( )","options":[{"key":"A","text":"参数约束"},{"key":"B","text":"模型集成的近似"},{"key":"C","text":"数据增强"},{"key":"D","text":"梯度裁剪"}],"answer":["B"],"answerText":"B","explain":"暂退法训练时随机丢弃神经元，相当于训练了指数级多个共享参数的子网络;测试时用完整网络，相当于对这些子网络的预测做近似平均。"},{"id":135,"chapter":"模型选择与泛化","type":"single","stem":"梯度消失的本质原因是( )","options":[{"key":"A","text":"学习率太大"},{"key":"B","text":"反向传播时梯度连乘，指数级衰减"},{"key":"C","text":"批量大小太小"},{"key":"D","text":"损失函数太大"}],"answer":["B"],"answerText":"B","explain":"深度网络反向传播时，梯度是连乘的。如果每一层的梯度都小于 1，连乘之后梯度指数级衰减，这就是梯度消失。"},{"id":136,"chapter":"模型选择与泛化","type":"single","stem":"梯度爆炸的本质原因是( )","options":[{"key":"A","text":"反向传播时梯度连乘，指数级增长"},{"key":"B","text":"学习率太小"},{"key":"C","text":"批量大小太大"},{"key":"D","text":"损失函数太小"}],"answer":["A"],"answerText":"A","explain":"反向传播时，如果每一层的梯度都大于 1，连乘之后梯度指数级增长，这就是梯度爆炸。训练会发散。"},{"id":137,"chapter":"模型选择与泛化","type":"single","stem":"参数不能全部初始化为 0，原因是( )","options":[{"key":"A","text":"计算量太大"},{"key":"B","text":"对称性问题"},{"key":"C","text":"梯度爆炸"},{"key":"D","text":"损失函数无定义"}],"answer":["B"],"answerText":"B","explain":"如果所有参数都是 0，所有神经元的输出都一样，梯度也一样，它们会学到完全相同的东西。这叫对称性问题。"},{"id":138,"chapter":"模型选择与泛化","type":"multi","stem":"关于欠拟合和过拟合，下列说法正确的是( )","options":[{"key":"A","text":"欠拟合:训练误差高，测试误差高"},{"key":"B","text":"过拟合:训练误差低，测试误差高"},{"key":"C","text":"过拟合的本质是模型容量大于数据量"},{"key":"D","text":"欠拟合可以通过增加模型容量解决"}],"answer":["A","B","C","D"],"answerText":"ABCD","explain":"欠拟合是训练误差和测试误差都高，过拟合是训练误差低、测试误差高。过拟合的本质是模型容量大于数据量。欠拟合可以通过增加模型容量解决。"},{"id":139,"chapter":"模型选择与泛化","type":"multi","stem":"关于 K 折交叉验证，下列说法正确的是( )","options":[{"key":"A","text":"把数据分成 K 份"},{"key":"B","text":"每次用 K-1 份训练，1 份验证"},{"key":"C","text":"重复 K 次，取平均"},{"key":"D","text":"计算量是单次训练的 K 倍"}],"answer":["A","B","C","D"],"answerText":"ABCD","explain":"K 折交叉验证把数据分成 K 份，每次用 K-1 份训练，1 份验证，重复 K 次取平均。计算量是单次训练的 K 倍。"},{"id":140,"chapter":"模型选择与泛化","type":"multi","stem":"关于权重衰减，下列说法正确的是( )","options":[{"key":"A","text":"在损失里加 L2 惩罚"},{"key":"B","text":"把参数往 0 拉"},{"key":"C","text":"在参数空间上做约束"},{"key":"D","text":"λ 越大，模型容量越小"}],"answer":["A","B","C","D"],"answerText":"ABCD","explain":"权重衰减在损失里加 L2 惩罚，把参数往 0 拉，在参数空间上做约束。λ 越大，参数被约束得越紧，模型容量越小。"},{"id":141,"chapter":"模型选择与泛化","type":"multi","stem":"关于暂退法(Dropout)，下列说法正确的是( )","options":[{"key":"A","text":"训练时随机丢弃神经元"},{"key":"B","text":"测试时不丢弃，输出乘以 (1-p)"},{"key":"C","text":"本质是模型集成的近似"},{"key":"D","text":"在表示空间上做约束"}],"answer":["A","B","C","D"],"answerText":"ABCD","explain":"暂退法训练时随机丢弃神经元，测试时不丢弃但输出乘以 (1-p)。本质是模型集成的近似，在表示空间上做约束。"},{"id":142,"chapter":"模型选择与泛化","type":"multi","stem":"关于权重衰减和暂退法的区别，下列说法正确的是( )","options":[{"key":"A","text":"权重衰减在参数空间上做约束"},{"key":"B","text":"暂退法在表示空间上做约束"},{"key":"C","text":"两者可以一起用"},{"key":"D","text":"两者机制相同"}],"answer":["A","B","C"],"answerText":"ABC","explain":"权重衰减在参数空间上做约束，暂退法在表示空间上做约束。两者机制不同，可以一起用。D 错误，两者机制不同。"},{"id":143,"chapter":"模型选择与泛化","type":"multi","stem":"关于梯度消失和梯度爆炸，下列说法正确的是( )","options":[{"key":"A","text":"梯度消失:连乘小于 1 的数，指数级衰减"},{"key":"B","text":"梯度爆炸:连乘大于 1 的数，指数级增长"},{"key":"C","text":"梯度消失导致浅层学不到东西"},{"key":"D","text":"梯度爆炸导致训练发散"}],"answer":["A","B","C","D"],"answerText":"ABCD","explain":"梯度消失是连乘小于 1 的数，指数级衰减，浅层学不到东西。梯度爆炸是连乘大于 1 的数，指数级增长，训练发散。"},{"id":144,"chapter":"模型选择与泛化","type":"multi","stem":"关于参数初始化，下列说法正确的是( )","options":[{"key":"A","text":"不能全部初始化为 0"},{"key":"B","text":"全零初始化会导致对称性问题"},{"key":"C","text":"Xavier 初始化假设激活函数线性、零中心"},{"key":"D","text":"ReLU 更适合 He 初始化"}],"answer":["A","B","C","D"],"answerText":"ABCD","explain":"不能全部初始化为 0，因为会导致对称性问题。Xavier 初始化假设激活函数线性、零中心。ReLU 更适合 He 初始化。"},{"id":145,"chapter":"模型选择与泛化","type":"multi","stem":"关于 Xavier 初始化和 He 初始化，下列说法正确的是( )","options":[{"key":"A","text":"Xavier 初始化适用于 sigmoid、tanh"},{"key":"B","text":"He 初始化适用于 ReLU"},{"key":"C","text":"He 初始化在 Xavier 基础上乘以 2"},{"key":"D","text":"两者完全相同"}],"answer":["A","B","C"],"answerText":"ABC","explain":"Xavier 初始化适用于 sigmoid、tanh，He 初始化适用于 ReLU。He 初始化在 Xavier 基础上乘以 2，补偿 ReLU 的方差衰减。D 错误，两者不同。"},{"id":146,"chapter":"模型选择与泛化","type":"multi","stem":"关于分布偏移，下列说法正确的是( )","options":[{"key":"A","text":"协变量偏移:P(x) 变了，P(y|x) 没变"},{"key":"B","text":"标签偏移:P(y) 变了，P(x|y) 没变"},{"key":"C","text":"概念偏移:P(y|x) 本身变了"},{"key":"D","text":"分布偏移是泛化假设失效的三种方式"}],"answer":["A","B","C","D"],"answerText":"ABCD","explain":"协变量偏移是 P(x) 变了，标签偏移是 P(y) 变了，概念偏移是 P(y|x) 变了。分布偏移是泛化假设失效的三种方式。"},{"id":147,"chapter":"模型选择与泛化","type":"multi","stem":"关于分布偏移的纠正方法，下列说法正确的是( )","options":[{"key":"A","text":"协变量偏移:重要性加权"},{"key":"B","text":"标签偏移:调整输出先验"},{"key":"C","text":"概念偏移:重新收集数据"},{"key":"D","text":"三种偏移都可以用同一种方法纠正"}],"answer":["A","B","C"],"answerText":"ABC","explain":"协变量偏移用重要性加权，标签偏移用调整输出先验，概念偏移通常需要重新收集数据。D 错误，三种偏移的纠正方法不同。"},{"id":148,"chapter":"模型选择与泛化","type":"multi","stem":"关于公平、责任、透明，下列说法正确的是( )","options":[{"key":"A","text":"公平:模型在不同群体上的泛化误差是否一致"},{"key":"B","text":"责任:模型泛化失败造成伤害时，谁负责"},{"key":"C","text":"透明:能不能解释模型为什么做出某个预测"},{"key":"D","text":"它们是泛化问题在人类社会中的延伸"}],"answer":["A","B","C","D"],"answerText":"ABCD","explain":"公平是模型在不同群体上的泛化误差是否一致，责任是模型泛化失败造成伤害时谁负责，透明是能不能解释模型为什么做出某个预测。它们是泛化问题在人类社会中的延伸。"},{"id":149,"chapter":"模型选择与泛化","type":"multi","stem":"关于训练误差、验证误差、测试误差，下列说法正确的是( )","options":[{"key":"A","text":"训练误差严重低估泛化误差"},{"key":"B","text":"验证误差略低估泛化误差"},{"key":"C","text":"测试误差近似无偏"},{"key":"D","text":"训练误差可以用来估计泛化误差"}],"answer":["A","B","C"],"answerText":"ABC","explain":"训练误差严重低估，验证误差略低估，测试误差近似无偏。D 错误，训练误差不能用来估计泛化误差。"},{"id":150,"chapter":"模型选择与泛化","type":"multi","stem":"关于估计泛化误差的可靠性，下列说法正确的是( )","options":[{"key":"A","text":"数据量越多，估计越可靠"},{"key":"B","text":"K 折比单次划分更可靠"},{"key":"C","text":"分层 K 折在类别不平衡时更可靠"},{"key":"D","text":"分布偏移会让估计失效"}],"answer":["A","B","C","D"],"answerText":"ABCD","explain":"泛化误差估计的可靠性取决于数据量、划分方式、训练分布和测试分布是否一致。数据量越多越可靠，K 折比单次划分更可靠，分层 K 折在类别不平衡时更可靠，分布偏移会让估计失效。"},{"id":151,"chapter":"模型选择与泛化","type":"judge","stem":"泛化误差是模型在训练集上的误差。","options":[],"answer":"错误","answerText":"错误","explain":"泛化误差是模型在测试分布上的期望误差，不是训练集上的误差。训练误差是经验风险。"},{"id":152,"chapter":"模型选择与泛化","type":"judge","stem":"训练误差低但测试误差高，说明模型过拟合。","options":[],"answer":"正确","answerText":"正确","explain":"训练误差低、测试误差高是过拟合。训练误差和测试误差都高是欠拟合。"},{"id":153,"chapter":"模型选择与泛化","type":"judge","stem":"训练误差和测试误差都高，说明模型欠拟合。","options":[],"answer":"正确","answerText":"正确","explain":"训练误差和测试误差都高是欠拟合。模型太简单，学不到数据的模式。"},{"id":154,"chapter":"模型选择与泛化","type":"judge","stem":"K 折交叉验证的主要作用是用有限数据估计泛化误差的方差。","options":[],"answer":"正确","answerText":"正确","explain":"K 折交叉验证用同一份数据构造多个训练/验证划分，每个划分给出一个泛化误差估计。这些估计的均值和方差比单次划分更可靠。"},{"id":155,"chapter":"模型选择与泛化","type":"judge","stem":"权重衰减在表示空间上做约束。","options":[],"answer":"错误","answerText":"错误","explain":"权重衰减在参数空间上做约束，把参数往 0 拉。暂退法在表示空间上做约束。"},{"id":156,"chapter":"模型选择与泛化","type":"judge","stem":"权重衰减中的 λ 越大，模型容量越小。","options":[],"answer":"正确","answerText":"正确","explain":"λ 越大，参数被拉得越靠近 0，模型容量越小。λ 太大会导致欠拟合，λ 等于 0 则没有正则化。"},{"id":157,"chapter":"模型选择与泛化","type":"judge","stem":"暂退法在训练时随机丢弃神经元，测试时也随机丢弃。","options":[],"answer":"错误","answerText":"错误","explain":"暂退法训练时随机丢弃神经元，测试时不丢弃，但输出乘以 (1-p)，保持期望一致。如果测试时也丢弃，输出会带随机性，不稳定。"},{"id":158,"chapter":"模型选择与泛化","type":"judge","stem":"暂退法的本质是模型集成的近似。","options":[],"answer":"正确","answerText":"正确","explain":"暂退法训练时随机丢弃神经元，相当于训练了指数级多个共享参数的子网络;测试时用完整网络，相当于对这些子网络的预测做近似平均。"},{"id":159,"chapter":"模型选择与泛化","type":"judge","stem":"梯度消失的本质原因是反向传播时梯度连乘，指数级衰减。","options":[],"answer":"正确","answerText":"正确","explain":"深度网络反向传播时，梯度是连乘的。如果每一层的梯度都小于 1，连乘之后梯度指数级衰减，这就是梯度消失。"},{"id":160,"chapter":"模型选择与泛化","type":"judge","stem":"梯度爆炸会导致训练发散。","options":[],"answer":"正确","answerText":"正确","explain":"反向传播时，如果每一层的梯度都大于 1，连乘之后梯度指数级增长，训练会发散。"},{"id":161,"chapter":"模型选择与泛化","type":"judge","stem":"参数可以全部初始化为 0。","options":[],"answer":"错误","answerText":"错误","explain":"不能全部初始化为 0，因为会导致对称性问题，所有神经元学到相同的东西。必须随机初始化。"},{"id":162,"chapter":"模型选择与泛化","type":"judge","stem":"公平、责任、透明是泛化问题在人类社会中的延伸。","options":[],"answer":"正确","answerText":"正确","explain":"公平是模型在不同群体上的泛化误差是否一致，责任是模型泛化失败造成伤害时谁负责，透明是能不能解释模型为什么做出某个预测。它们是泛化问题在人类社会中的延伸。"},{"id":163,"chapter":"模型选择与泛化","type":"judge","stem":"训练误差可以用来估计泛化误差。","options":[],"answer":"错误","answerText":"错误","explain":"训练误差严重低估泛化误差，不能用来估计泛化误差。验证误差略低估，测试误差近似无偏。"},{"id":164,"chapter":"模型选择与泛化","type":"judge","stem":"K 折交叉验证的 K 越大，估计越可靠，但计算量越大。","options":[],"answer":"正确","answerText":"正确","explain":"K 越大，每个训练集越大，估计越可靠，但计算量是单次训练的 K 倍。实践中 K 通常取 5 或 10。"},{"id":165,"chapter":"模型选择与泛化","type":"judge","stem":"正则化一定能让模型变好。","options":[],"answer":"错误","answerText":"错误","explain":"正则化不一定能让模型变好。如果 λ 太大，参数被拉得太靠近 0，模型会欠拟合。正则化需要调超参数。"},{"id":166,"chapter":"模型选择与泛化","type":"judge","stem":"权重衰减和暂退法可以一起用。","options":[],"answer":"正确","answerText":"正确","explain":"权重衰减在参数空间上做约束，暂退法在表示空间上做约束。两者机制不同，可以互补，实践中经常一起用。"},{"id":167,"chapter":"模型选择与泛化","type":"judge","stem":"分布偏移是泛化假设失效的三种方式。","options":[],"answer":"正确","answerText":"正确","explain":"协变量偏移、标签偏移、概念偏移是泛化假设失效的三种方式。它们提醒我们:泛化不是理所当然的，它依赖于一个假设。"},{"id":168,"chapter":"模型选择与泛化","type":"judge","stem":"精度是分类评估的唯一指标。","options":[],"answer":"错误","answerText":"错误","explain":"精度不是唯一指标。在类别不平衡时，精度可能骗人。应该结合混淆矩阵、召回率、F1 一起看。"},{"id":169,"chapter":"模型选择与泛化","type":"judge","stem":"泛化问题的完整地图包括估计泛化误差、失败模式、控制泛化误差、泛化假设失效、泛化的社会延伸。","options":[],"answer":"正确","answerText":"正确","explain":"泛化问题的完整地图包括估计泛化误差(模型选择、K 折)、失败模式(欠拟合、过拟合)、控制泛化误差(权重衰减、暂退法)、让优化不出问题(数值稳定性、初始化)、泛化假设失效(分布偏移)、泛化的社会延伸(公平、责任、透明)。"},{"id":170,"chapter":"模型选择与泛化","type":"judge","stem":"权重衰减通常只约束权重 W，不约束偏置 b。","options":[],"answer":"正确","answerText":"正确","explain":"权重衰减通常只约束权重 W，不约束偏置 b。因为偏置不影响输入特征的权重，它只是平移。把偏置往 0 拉，不会起到防止过拟合的作用。"},{"id":171,"chapter":"模型选择与泛化","type":"judge","stem":"暂退法测试时输出乘以 (1-p) 是为了保持和训练时的期望一致。","options":[],"answer":"正确","answerText":"正确","explain":"训练时每个神经元被保留的概率是 1-p，所以训练时的期望输出是实际输出乘以 (1-p)。测试时所有神经元都保留，输出会比训练时的期望大。为了保持期望一致，测试时要把输出乘以 (1-p)。"},{"id":172,"chapter":"多层感知机","type":"fill","stem":"如果多层感知机去掉所有激活函数，它等价于____。","options":[],"answer":["单层线性模型"],"answerText":"单层线性模型","explain":"线性变换的复合仍然是线性变换。W(Wx + b) + b = Wx + b，仍然是一个线性模型。"},{"id":173,"chapter":"多层感知机","type":"fill","stem":"ReLU 在负值区导数为 0，可能导致____。","options":[],"answer":["神经元死亡"],"answerText":"神经元死亡","explain":"ReLU 在负值区导数为 0。如果某个神经元的输入一直是负数，它的梯度永远是 0，可能再也更新不了。这叫神经元死亡。"},{"id":174,"chapter":"多层感知机","type":"fill","stem":"sigmoid 函数在饱和区的导数接近____，导致____。","options":[],"answer":["0","梯度消失"],"answerText":"0；梯度消失","explain":"sigmoid 在输入很大或很小时，导数接近 0。这导致梯度消失，深层网络训练不起来。"},{"id":175,"chapter":"多层感知机","type":"fill","stem":"多层感知机中，参数不能全部初始化为 0，原因是____。","options":[],"answer":["对称性问题"],"answerText":"对称性问题","explain":"如果所有参数都是 0，所有神经元的输出都一样，梯度也一样，它们会学到完全相同的东西。这叫对称性问题。"},{"id":176,"chapter":"多层感知机","type":"fill","stem":"多层感知机的隐藏层通常使用____作为激活函数。","options":[],"answer":["ReLU"],"answerText":"ReLU","explain":"隐藏层默认用 ReLU。它在正值区不饱和，梯度不会消失，计算简单。如果效果不好可以试 Leaky ReLU 或 GELU。"},{"id":177,"chapter":"多层感知机","type":"fill","stem":"多层感知机简洁实现使用____定义损失函数。","options":[],"answer":["nn.CrossEntropyLoss"],"answerText":"nn.CrossEntropyLoss","explain":"多分类任务用 nn.CrossEntropyLoss。它内部包含 softmax 和数值稳定性处理。"},{"id":178,"chapter":"多层感知机","type":"fill","stem":"多层感知机相比线性模型，假设空间从____函数族扩展到____函数族。","options":[],"answer":["线性","非线性"],"answerText":"线性；非线性","explain":"MLP 的假设空间比线性模型大。激活函数让假设空间从线性函数族扩展到非线性函数族。"},{"id":179,"chapter":"层和块与参数管理","type":"single","stem":"在深度学习框架中，层和块的关系是( )","options":[{"key":"A","text":"层是块的容器"},{"key":"B","text":"块是层的容器，块可以包含层或其他块"},{"key":"C","text":"层和块完全相同"},{"key":"D","text":"块只能包含一层"}],"answer":["B"],"answerText":"B","explain":"层是最小计算单元，块是可以包含层或其他块的容器。块可以嵌套块，这是递归组合关系。"},{"id":180,"chapter":"层和块与参数管理","type":"single","stem":"nn.Sequential 属于( )","options":[{"key":"A","text":"层"},{"key":"B","text":"块"},{"key":"C","text":"损失函数"},{"key":"D","text":"优化器"}],"answer":["B"],"answerText":"B","explain":"nn.Sequential 是一个块，它可以包含层或其他块。nn.Linear、nn.ReLU 是层。"},{"id":181,"chapter":"层和块与参数管理","type":"single","stem":"块负责的内部处理不包括( )","options":[{"key":"A","text":"参数初始化"},{"key":"B","text":"前向传播"},{"key":"C","text":"反向传播"},{"key":"D","text":"数据标注"}],"answer":["D"],"answerText":"D","explain":"块负责参数初始化、前向传播、反向传播。数据标注不是块负责的，是数据准备阶段的工作。"},{"id":182,"chapter":"层和块与参数管理","type":"single","stem":"参数管理的三个阶段是( )","options":[{"key":"A","text":"访问、初始化、绑定"},{"key":"B","text":"访问、删除、绑定"},{"key":"C","text":"初始化、删除、保存"},{"key":"D","text":"访问、初始化、删除"}],"answer":["A"],"answerText":"A","explain":"参数管理的三个阶段是访问、初始化、绑定。访问是训练时读取和更新参数，初始化是训练前赋初值，绑定是绑定到优化器、设备、模型。"},{"id":183,"chapter":"层和块与参数管理","type":"single","stem":"访问模型中所有参数的函数是( )","options":[{"key":"A","text":"net.parameters( )"},{"key":"B","text":"net.layers( )"},{"key":"C","text":"net.modules( )"},{"key":"D","text":"net.weights( )"}],"answer":["A"],"answerText":"A","explain":"net.parameters( ) 返回模型中所有参数的迭代器。net.named_parameters( ) 同时返回参数名和参数。"},{"id":184,"chapter":"层和块与参数管理","type":"single","stem":"延后初始化的好处不包括( )","options":[{"key":"A","text":"修改模型架构变得容易"},{"key":"B","text":"避免维度错误"},{"key":"C","text":"支持动态输入形状"},{"key":"D","text":"减少模型参数量"}],"answer":["D"],"answerText":"D","explain":"延后初始化的好处是修改模型架构容易、避免维度错误、支持动态输入形状。它不减少模型参数量。"},{"id":185,"chapter":"层和块与参数管理","type":"single","stem":"自定义层需要继承( )","options":[{"key":"A","text":"nn.Module"},{"key":"B","text":"nn.Linear"},{"key":"C","text":"nn.Sequential"},{"key":"D","text":"nn.Parameter"}],"answer":["A"],"answerText":"A","explain":"自定义层需要继承 nn.Module，定义 init 和 forward。nn.Linear、nn.Sequential 都是 nn.Module 的子类。"},{"id":186,"chapter":"层和块与参数管理","type":"single","stem":"自定义层不需要自己写( )","options":[{"key":"A","text":"前向传播"},{"key":"B","text":"反向传播"},{"key":"C","text":"init"},{"key":"D","text":"forward"}],"answer":["B"],"answerText":"B","explain":"自定义层不需要自己写反向传播，框架的自动微分机制会自动计算梯度。你只需要定义 init 和 forward。"},{"id":187,"chapter":"层和块与参数管理","type":"single","stem":"保存模型参数通常使用( )","options":[{"key":"A","text":"torch.save(model.state_dict( ), 'model.pth')"},{"key":"B","text":"torch.save(model, 'model.pth')"},{"key":"C","text":"torch.save(model.parameters( ), 'model.pth')"},{"key":"D","text":"torch.save(model.layers( ), 'model.pth')"}],"answer":["A"],"answerText":"A","explain":"通常用 torch.save(model.state_dict( ), 'model.pth') 保存参数字典。state_dict 是参数名到参数的映射。"},{"id":188,"chapter":"层和块与参数管理","type":"single","stem":"模型 = 架构 + 参数，其中架构保存在( )","options":[{"key":"A","text":"参数字典中"},{"key":"B","text":"代码中"},{"key":"C","text":"优化器中"},{"key":"D","text":"数据集中"}],"answer":["B"],"answerText":"B","explain":"模型等于架构加参数。架构在代码里，参数在文件里。保存架构必须在代码中完成，而不是在参数中完成。"},{"id":189,"chapter":"层和块与参数管理","type":"single","stem":"如果模型在 GPU 上，数据在 CPU 上，会发生什么?( )","options":[{"key":"A","text":"正常计算"},{"key":"B","text":"报错，因为计算要求所有输入数据在同一设备上"},{"key":"C","text":"自动把数据移到 GPU"},{"key":"D","text":"自动把模型移到 CPU"}],"answer":["B"],"answerText":"B","explain":"深度学习框架要求计算的所有输入数据都在同一设备上。如果模型在 GPU、数据在 CPU，计算会报错。"},{"id":190,"chapter":"层和块与参数管理","type":"single","stem":"参数初始化的目的是( )","options":[{"key":"A","text":"让参数全为 0"},{"key":"B","text":"给参数赋初值，影响梯度流动"},{"key":"C","text":"减少参数量"},{"key":"D","text":"增加计算量"}],"answer":["B"],"answerText":"B","explain":"参数初始化给参数赋初值，初始化尺度影响梯度流动。全零初始化会导致对称性问题，尺度过大或过小会导致梯度爆炸或消失。"},{"id":191,"chapter":"层和块与参数管理","type":"single","stem":"自定义层中，如果参数没有用 nn.Parameter 包装，会发生什么?( )","options":[{"key":"A","text":"参数仍然会被优化器更新"},{"key":"B","text":"参数不会被注册，优化器不会更新它"},{"key":"C","text":"参数会自动变成 nn.Parameter"},{"key":"D","text":"参数会报错"}],"answer":["B"],"answerText":"B","explain":"如果参数没有用 nn.Parameter 包装，框架不会把它当作模型参数，优化器不会更新它，保存 state_dict 时也不会保存它。"},{"id":192,"chapter":"层和块与参数管理","type":"single","stem":"关于 GPU 的日志记录，正确的做法是( )","options":[{"key":"A","text":"每一步都 loss.item( ) 打印"},{"key":"B","text":"在 GPU 上累积日志，每隔一段时间搬一次"},{"key":"C","text":"把每个小批量的损失都记录到 NumPy ndarray"},{"key":"D","text":"每一步都把损失搬到 CPU"}],"answer":["B"],"answerText":"B","explain":"在 GPU 上累积日志，每隔一段时间搬一次，可以减少设备同步次数，提高性能。每一步都 loss.item( ) 会触发全局解释器锁，阻塞 GPU。"},{"id":193,"chapter":"层和块与参数管理","type":"multi","stem":"关于层和块，下列说法正确的是( )","options":[{"key":"A","text":"层是最小计算单元"},{"key":"B","text":"块可以包含层"},{"key":"C","text":"块可以包含其他块"},{"key":"D","text":"块负责参数初始化和反向传播"}],"answer":["A","B","C","D"],"answerText":"ABCD","explain":"层是最小计算单元，块可以包含层或其他块。块负责参数初始化和反向传播。块和块之间是递归组合关系。"},{"id":194,"chapter":"层和块与参数管理","type":"multi","stem":"关于参数管理，下列说法正确的是( )","options":[{"key":"A","text":"访问:读取参数、更新参数"},{"key":"B","text":"初始化:给参数赋初值"},{"key":"C","text":"绑定:绑定到优化器、设备、模型"},{"key":"D","text":"参数管理只包括访问"}],"answer":["A","B","C"],"answerText":"ABC","explain":"参数管理包括访问、初始化、绑定三个阶段。D 错误，参数管理不只是访问。"},{"id":195,"chapter":"层和块与参数管理","type":"multi","stem":"关于延后初始化，下列说法正确的是( )","options":[{"key":"A","text":"定义模型时不需要指定输入维度"},{"key":"B","text":"第一次前向传播时推断参数形状"},{"key":"C","text":"让修改模型架构变得容易"},{"key":"D","text":"避免维度错误"}],"answer":["A","B","C","D"],"answerText":"ABCD","explain":"延后初始化让框架在第一次前向传播时根据输入数据推断参数形状。定义模型时不需要指定输入维度，让修改模型架构变得容易，避免维度错误。"},{"id":196,"chapter":"层和块与参数管理","type":"multi","stem":"关于自定义层，下列说法正确的是( )","options":[{"key":"A","text":"继承 nn.Module"},{"key":"B","text":"定义 init 和 forward"},{"key":"C","text":"不需要自己写反向传播"},{"key":"D","text":"可以定义局部参数"}],"answer":["A","B","C","D"],"answerText":"ABCD","explain":"自定义层继承 nn.Module，定义 init 和 forward。不需要自己写反向传播，框架的自动微分机制会自动计算梯度。可以定义局部参数。"},{"id":197,"chapter":"层和块与参数管理","type":"multi","stem":"关于读写文件，下列说法正确的是( )","options":[{"key":"A","text":"save 和 load 可用于张量对象的文件读写"},{"key":"B","text":"可以通过参数字典保存和加载网络的全部参数"},{"key":"C","text":"保存架构必须在代码中完成"},{"key":"D","text":"模型 = 架构(代码) + 参数(文件)"}],"answer":["A","B","C","D"],"answerText":"ABCD","explain":"save 和 load 可用于张量对象的文件读写。可以通过参数字典保存和加载网络的全部参数。保存架构必须在代码中完成。模型等于架构加参数。"},{"id":198,"chapter":"层和块与参数管理","type":"multi","stem":"关于 GPU，下列说法正确的是( )","options":[{"key":"A","text":"可以指定用于存储和计算的设备"},{"key":"B","text":"默认数据在主内存中创建，CPU 计算"},{"key":"C","text":"计算要求所有输入数据在同一设备上"},{"key":"D","text":"移动数据有性能开销"}],"answer":["A","B","C","D"],"answerText":"ABCD","explain":"可以指定 CPU 或 GPU。默认数据在主内存中创建，CPU 计算。计算要求所有输入数据在同一设备上。移动数据有性能开销。"},{"id":199,"chapter":"层和块与参数管理","type":"multi","stem":"关于 GPU 的日志记录，下列说法正确的是( )","options":[{"key":"A","text":"计算 GPU 上每个小批量的损失，并在命令行中报告，会触发全局解释器锁"},{"key":"B","text":"全局解释器锁会使所有 GPU 阻塞"},{"key":"C","text":"最好为 GPU 内部的日志分配内存"},{"key":"D","text":"只移动较大的日志"}],"answer":["A","B","C","D"],"answerText":"ABCD","explain":"计算 GPU 上每个小批量的损失并在命令行中报告，会触发全局解释器锁，使所有 GPU 阻塞。最好为 GPU 内部的日志分配内存，只移动较大的日志。"},{"id":200,"chapter":"层和块与参数管理","type":"multi","stem":"关于参数初始化，下列说法正确的是( )","options":[{"key":"A","text":"全零初始化会导致对称性问题"},{"key":"B","text":"初始化尺度会影响梯度流动"},{"key":"C","text":"可以用自定义初始化方法"},{"key":"D","text":"初始化不重要"}],"answer":["A","B","C"],"answerText":"ABC","explain":"全零初始化会导致对称性问题，初始化尺度会影响梯度流动，可以用自定义初始化方法。D 错误，初始化很重要。"},{"id":201,"chapter":"层和块与参数管理","type":"multi","stem":"关于自定义层的参数，下列说法正确的是( )","options":[{"key":"A","text":"需要用 nn.Parameter 包装"},{"key":"B","text":"不包装就不会被注册"},{"key":"C","text":"不包装优化器不会更新它"},{"key":"D","text":"不包装保存 state_dict 时也不会保存它"}],"answer":["A","B","C","D"],"answerText":"ABCD","explain":"自定义层的参数需要用 nn.Parameter 包装。不包装就不会被注册，优化器不会更新它，保存 state_dict 时也不会保存它。"},{"id":202,"chapter":"层和块与参数管理","type":"multi","stem":"关于模型保存，下列说法正确的是( )","options":[{"key":"A","text":"state_dict 保存参数名到参数的映射"},{"key":"B","text":"保存整个模型有风险，依赖具体类定义和代码路径"},{"key":"C","text":"教材建议只保存 state_dict"},{"key":"D","text":"加载时需要先定义架构，再加载参数"}],"answer":["A","B","C","D"],"answerText":"ABCD","explain":"state_dict 保存参数名到参数的映射。保存整个模型有风险，依赖具体类定义和代码路径。教材建议只保存 state_dict。加载时需要先定义架构，再加载参数。"},{"id":203,"chapter":"层和块与参数管理","type":"multi","stem":"关于设备管理，下列说法正确的是( )","options":[{"key":"A","text":"模型移到 GPU 用 net.to(device)"},{"key":"B","text":"数据移到 GPU 用 X.to(device)"},{"key":"C","text":"如果模型在 GPU、数据在 CPU，计算会报错"},{"key":"D","text":"每一批数据都要显式移到 GPU"}],"answer":["A","B","C","D"],"answerText":"ABCD","explain":"模型移到 GPU 用 net.to(device)，数据移到 GPU 用 X.to(device)。如果模型在 GPU、数据在 CPU，计算会报错。每一批数据都要显式移到 GPU。"},{"id":204,"chapter":"层和块与参数管理","type":"multi","stem":"关于 GPU 性能优化，下列说法正确的是( )","options":[{"key":"A","text":"数据在设备间移动有开销"},{"key":"B","text":"频繁的小数据移动会显著降低性能"},{"key":"C","text":"建议一次性移动较大的数据块"},{"key":"D","text":"避免在训练循环里频繁 .cpu( ) 或 .item( )"}],"answer":["A","B","C","D"],"answerText":"ABCD","explain":"数据在设备间移动有开销，频繁的小数据移动会显著降低性能。建议一次性移动较大的数据块，避免在训练循环里频繁 .cpu( ) 或 .item( )。"},{"id":205,"chapter":"层和块与参数管理","type":"multi","stem":"关于块和层的递归组合，下列说法正确的是( )","options":[{"key":"A","text":"块可以包含层"},{"key":"B","text":"块可以包含块"},{"key":"C","text":"这种递归组合让框架可以表达任意复杂的网络"},{"key":"D","text":"ResNet 残差块、Transformer 编码器块都是递归组合的实例"}],"answer":["A","B","C","D"],"answerText":"ABCD","explain":"块可以包含层，也可以包含块。这种递归组合让框架可以表达任意复杂的网络。ResNet 残差块、Transformer 编码器块都是递归组合的实例。"},{"id":206,"chapter":"层和块与参数管理","type":"multi","stem":"关于参数绑定，下列说法正确的是( )","options":[{"key":"A","text":"绑定到优化器:把 net.parameters( ) 传给优化器"},{"key":"B","text":"绑定到设备:用 net.to(device)"},{"key":"C","text":"绑定到模型:用 nn.Parameter 自动注册"},{"key":"D","text":"优化器、设备、模型共享同一份参数"}],"answer":["A","B","C","D"],"answerText":"ABCD","explain":"绑定到优化器是把 net.parameters( ) 传给优化器，绑定到设备是用 net.to(device)，绑定到模型是用 nn.Parameter 自动注册。优化器、设备、模型共享同一份参数。"},{"id":207,"chapter":"层和块与参数管理","type":"multi","stem":"关于延后初始化和参数绑定的关系，下列说法正确的是( )","options":[{"key":"A","text":"延后初始化影响参数初始化的时机"},{"key":"B","text":"参数绑定发生在参数初始化之后"},{"key":"C","text":"延后初始化让参数形状在第一次前向传播时确定"},{"key":"D","text":"延后初始化不影响参数绑定"}],"answer":["A","B","C"],"answerText":"ABC","explain":"延后初始化影响参数初始化的时机，参数绑定发生在参数初始化之后。延后初始化让参数形状在第一次前向传播时确定。D 错误，延后初始化会影响参数绑定的时机。"},{"id":208,"chapter":"层和块与参数管理","type":"multi","stem":"关于读写文件，下列说法正确的是( )","options":[{"key":"A","text":"torch.save 使用 Python 的 pickle 格式"},{"key":"B","text":"可以保存任意 Python 对象"},{"key":"C","text":"加载时不要加载不可信来源的文件"},{"key":"D","text":"state_dict 只保存参数，不保存架构"}],"answer":["A","B","C","D"],"answerText":"ABCD","explain":"torch.save 使用 Python 的 pickle 格式，可以保存任意 Python 对象。加载时不要加载不可信来源的文件。state_dict 只保存参数，不保存架构。"},{"id":209,"chapter":"层和块与参数管理","type":"judge","stem":"层是最小计算单元，块是可以包含层或其他块的容器。","options":[],"answer":"正确","answerText":"正确","explain":"层是最小计算单元，块是可以包含层或其他块的容器。块可以嵌套块，这是递归组合关系。"},{"id":210,"chapter":"层和块与参数管理","type":"judge","stem":"nn.Sequential 是一个层。","options":[],"answer":"错误","answerText":"错误","explain":"nn.Sequential 是一个块，它可以包含层或其他块。nn.Linear、nn.ReLU 是层。"},{"id":211,"chapter":"层和块与参数管理","type":"judge","stem":"块负责参数初始化、前向传播和反向传播。","options":[],"answer":"正确","answerText":"正确","explain":"块负责大量的内部处理，包括参数初始化和反向传播。前向传播也由块定义。"},{"id":212,"chapter":"层和块与参数管理","type":"judge","stem":"参数管理的三个阶段是访问、初始化、绑定。","options":[],"answer":"正确","answerText":"正确","explain":"参数管理的三个阶段是访问、初始化、绑定。访问是训练时读取和更新参数，初始化是训练前赋初值，绑定是绑定到优化器、设备、模型。"},{"id":213,"chapter":"层和块与参数管理","type":"judge","stem":"延后初始化让框架在第一次前向传播时根据输入数据推断参数形状。","options":[],"answer":"正确","answerText":"正确","explain":"延后初始化让框架在第一次前向传播时，根据输入数据自动推断参数形状。定义模型时不需要指定输入维度。"},{"id":214,"chapter":"层和块与参数管理","type":"judge","stem":"延后初始化会减少模型参数量。","options":[],"answer":"错误","answerText":"错误","explain":"延后初始化不减少模型参数量。它的好处是修改模型架构容易、避免维度错误、支持动态输入形状。"},{"id":215,"chapter":"层和块与参数管理","type":"judge","stem":"自定义层需要继承 nn.Module。","options":[],"answer":"正确","answerText":"正确","explain":"自定义层需要继承 nn.Module，定义 init 和 forward。nn.Linear、nn.Sequential 都是 nn.Module 的子类。"},{"id":216,"chapter":"层和块与参数管理","type":"judge","stem":"自定义层中的参数需要用 nn.Parameter 包装，才能被框架注册。","options":[],"answer":"正确","answerText":"正确","explain":"自定义层中的参数需要用 nn.Parameter 包装，才能被框架注册。优化器会更新它，保存 state_dict 时也会保存它。"},{"id":217,"chapter":"层和块与参数管理","type":"judge","stem":"如果自定义层的参数没有用 nn.Parameter 包装，优化器仍然会更新它。","options":[],"answer":"错误","answerText":"错误","explain":"如果参数没有用 nn.Parameter 包装，框架不会把它当作模型参数，优化器不会更新它，保存 state_dict 时也不会保存它。"},{"id":218,"chapter":"层和块与参数管理","type":"judge","stem":"torch.save(model.state_dict( ), 'model.pth') 保存了整个模型。","options":[],"answer":"错误","answerText":"错误","explain":"state_dict 只保存参数，不保存架构。模型等于架构加参数。架构在代码里，参数在文件里。"},{"id":219,"chapter":"层和块与参数管理","type":"judge","stem":"模型 = 架构(代码) + 参数(文件)。","options":[],"answer":"正确","answerText":"正确","explain":"模型等于架构加参数。架构在代码里，参数在文件里。保存架构必须在代码中完成，而不是在参数中完成。"},{"id":220,"chapter":"层和块与参数管理","type":"judge","stem":"如果只保存了 state_dict，没有保存代码，不能恢复模型。","options":[],"answer":"正确","answerText":"正确","explain":"state_dict 只保存参数的数值，不保存模型的架构。加载时，需要先在代码里定义架构，然后加载参数。"},{"id":221,"chapter":"层和块与参数管理","type":"judge","stem":"CPU 和 GPU 是两个独立的设备，各有自己的内存。","options":[],"answer":"正确","answerText":"正确","explain":"CPU 和 GPU 是两个独立的设备，各有自己的内存。计算要求所有输入数据在同一设备上。数据在设备间移动有开销。"},{"id":222,"chapter":"层和块与参数管理","type":"judge","stem":"如果模型在 GPU、数据在 CPU，框架会自动把数据移到 GPU。","options":[],"answer":"错误","answerText":"错误","explain":"框架不会自动把数据移到 GPU。计算要求所有输入数据在同一设备上。如果模型在 GPU、数据在 CPU，计算会报错。"},{"id":223,"chapter":"层和块与参数管理","type":"judge","stem":"初始化尺度不影响梯度流动。","options":[],"answer":"错误","answerText":"错误","explain":"初始化尺度会影响梯度流动。尺度过大可能导致梯度爆炸，过小可能导致梯度消失。"},{"id":224,"chapter":"层和块与参数管理","type":"judge","stem":"在 GPU 上累积日志，每隔一段时间搬一次，可以减少设备同步次数。","options":[],"answer":"正确","answerText":"正确","explain":"在 GPU 上累积日志，每隔一段时间搬一次，可以减少设备同步次数，提高性能。每一步都 loss.item( ) 会触发全局解释器锁，阻塞 GPU。"},{"id":225,"chapter":"层和块与参数管理","type":"judge","stem":"参数绑定到优化器时，优化器、设备、模型共享同一份参数。","options":[],"answer":"正确","answerText":"正确","explain":"优化器、设备、模型共享同一份参数。如果你把参数复制了一份，优化器更新的是副本，模型用的还是原来的，训练就不会生效。"},{"id":226,"chapter":"层和块与参数管理","type":"judge","stem":"延后初始化让修改模型架构变得容易。","options":[],"answer":"正确","answerText":"正确","explain":"延后初始化让框架自动推断参数形状，修改模型架构时不需要手动修改每一层的输入维度，避免维度错误。"},{"id":227,"chapter":"层和块与参数管理","type":"judge","stem":"数据在设备间移动有性能开销。","options":[],"answer":"正确","answerText":"正确","explain":"数据在设备间移动有性能开销，频繁的小数据移动会显著降低性能。建议一次性移动较大的数据块。"},{"id":228,"chapter":"卷积神经网络","type":"single","stem":"卷积神经网络相比全连接层，最核心的优势是( )","options":[{"key":"A","text":"参数更多"},{"key":"B","text":"利用了图像的平移不变性和局部性"},{"key":"C","text":"不需要激活函数"},{"key":"D","text":"不需要训练"}],"answer":["B"],"answerText":"B","explain":"卷积层通过权重共享和局部连接，把图像的平移不变性和局部性编码进了网络结构。这是 CNN 相比全连接层最核心的优势。"},{"id":229,"chapter":"卷积神经网络","type":"single","stem":"卷积层的权重共享对应图像的( )","options":[{"key":"A","text":"局部性"},{"key":"B","text":"平移不变性"},{"key":"C","text":"颜色不变性"},{"key":"D","text":"旋转不变性"}],"answer":["B"],"answerText":"B","explain":"权重共享对应平移不变性:同样的物体出现在不同位置，应该被同一个卷积核识别。局部连接对应局部性。"},{"id":230,"chapter":"卷积神经网络","type":"single","stem":"填充(padding)的作用是( )","options":[{"key":"A","text":"减小输出尺寸"},{"key":"B","text":"增加输出尺寸，常用于使输出与输入具有相同的高和宽"},{"key":"C","text":"增加参数量"},{"key":"D","text":"减少通道数"}],"answer":["B"],"answerText":"B","explain":"填充在输入边缘补零，增加输出的高度和宽度。常用于使输出与输入具有相同的高和宽。"},{"id":231,"chapter":"卷积神经网络","type":"single","stem":"步幅(stride)的作用是( )","options":[{"key":"A","text":"增加输出尺寸"},{"key":"B","text":"减小输出尺寸，控制下采样倍率"},{"key":"C","text":"增加参数量"},{"key":"D","text":"减少通道数"}],"answer":["B"],"answerText":"B","explain":"步幅是卷积核移动的步长，控制下采样倍率。步幅为 2，输出尺寸减半。"},{"id":232,"chapter":"卷积神经网络","type":"single","stem":"汇聚层的主要作用是( )","options":[{"key":"A","text":"增加参数量"},{"key":"B","text":"减轻卷积层对位置的过度敏感"},{"key":"C","text":"增加空间尺寸"},{"key":"D","text":"增加通道数"}],"answer":["B"],"answerText":"B","explain":"汇聚层的主要作用是减轻卷积层对位置的过度敏感。最大汇聚取窗口内最大值，平均汇聚取窗口内平均值。"},{"id":233,"chapter":"卷积神经网络","type":"single","stem":"汇聚层的输出通道数与输入通道数的关系是( )","options":[{"key":"A","text":"输出通道数大于输入通道数"},{"key":"B","text":"输出通道数小于输入通道数"},{"key":"C","text":"输出通道数等于输入通道数"},{"key":"D","text":"没有关系"}],"answer":["C"],"answerText":"C","explain":"汇聚层的输出通道数等于输入通道数。它不改变通道数，只改变空间尺寸。"},{"id":234,"chapter":"卷积神经网络","type":"single","stem":"最大汇聚层输出的是( )","options":[{"key":"A","text":"窗口内的最大值"},{"key":"B","text":"窗口内的平均值"},{"key":"C","text":"窗口内的最小值"},{"key":"D","text":"窗口内的和"}],"answer":["A"],"answerText":"A","explain":"最大汇聚层输出窗口内的最大值。平均汇聚层输出窗口内的平均值。"},{"id":235,"chapter":"卷积神经网络","type":"single","stem":"卷积核的参数是( )","options":[{"key":"A","text":"人工设计的"},{"key":"B","text":"从数据中学习的"},{"key":"C","text":"固定不变的"},{"key":"D","text":"随机生成的"}],"answer":["B"],"answerText":"B","explain":"卷积核的参数是从数据中学习的。人工设计的边缘检测卷积核只是用来解释卷积的直觉，不是实际使用的。"},{"id":236,"chapter":"卷积神经网络","type":"multi","stem":"关于填充和步幅，下列说法正确的是( )","options":[{"key":"A","text":"填充可以增加输出的高度和宽度"},{"key":"B","text":"步幅可以减小输出的高和宽"},{"key":"C","text":"填充和步幅可用于有效调整数据的维度"},{"key":"D","text":"填充 2、卷积核 5×5，可以让输出和输入一样大"}],"answer":["A","B","C","D"],"answerText":"ABCD","explain":"填充增加输出尺寸，步幅减小输出尺寸。填充和步幅可用于调整数据维度。填充 2、卷积核 5×5，可以让输出和输入一样大。"},{"id":237,"chapter":"卷积神经网络","type":"multi","stem":"关于多输入多输出通道，下列说法正确的是( )","options":[{"key":"A","text":"多输入多输出通道可以扩展卷积层的模型"},{"key":"B","text":"1×1 卷积层相当于全连接层"},{"key":"C","text":"1×1 卷积层通常用于调整通道数量"},{"key":"D","text":"每个输出通道是一个不同的卷积核"}],"answer":["A","B","C","D"],"answerText":"ABCD","explain":"多输入多输出通道可以扩展卷积层的模型。1×1 卷积层相当于在每个像素上做全连接，用于调整通道数量。每个输出通道是一个不同的卷积核。"},{"id":238,"chapter":"卷积神经网络","type":"multi","stem":"关于汇聚层，下列说法正确的是( )","options":[{"key":"A","text":"最大汇聚层输出窗口内的最大值"},{"key":"B","text":"平均汇聚层输出窗口内的平均值"},{"key":"C","text":"汇聚层减轻卷积层对位置的过度敏感"},{"key":"D","text":"汇聚层的输出通道数与输入通道数相同"}],"answer":["A","B","C","D"],"answerText":"ABCD","explain":"最大汇聚输出窗口内最大值，平均汇聚输出窗口内平均值。汇聚层减轻卷积层对位置的过度敏感。汇聚层的输出通道数与输入通道数相同。"},{"id":239,"chapter":"卷积神经网络","type":"multi","stem":"关于卷积核，下列说法正确的是( )","options":[{"key":"A","text":"可以设计卷积核来检测图像的边缘"},{"key":"B","text":"可以从数据中学习卷积核的参数"},{"key":"C","text":"学习卷积核时，无论用严格卷积或互相关，输出不会受太大影响"},{"key":"D","text":"卷积核参数是人工设计的"}],"answer":["A","B","C"],"answerText":"ABC","explain":"可以设计卷积核来检测边缘，但实际训练中卷积核参数是从数据中学习的。学习卷积核时，严格卷积和互相关的输出不会受太大影响。D 错误，卷积核参数是学出来的。"},{"id":240,"chapter":"卷积神经网络","type":"multi","stem":"关于感受野，下列说法正确的是( )","options":[{"key":"A","text":"浅层感受野小，深层感受野大"},{"key":"B","text":"堆叠卷积层可以扩大感受野"},{"key":"C","text":"两个 3×3 卷积层堆叠，感受野是 5×5"},{"key":"D","text":"步幅和汇聚层也可以扩大感受野"}],"answer":["A","B","C","D"],"answerText":"ABCD","explain":"浅层感受野小，深层感受野大。堆叠卷积层可以扩大感受野。两个 3×3 堆叠感受野是 5×5。步幅和汇聚层也可以扩大感受野。"},{"id":241,"chapter":"卷积神经网络","type":"multi","stem":"关于卷积网络的参数量，下列说法正确的是( )","options":[{"key":"A","text":"卷积层参数量远小于全连接层"},{"key":"B","text":"参数少是权重共享和局部连接的结果"},{"key":"C","text":"参数少是目的"},{"key":"D","text":"如果图像没有平移不变性，卷积的优势就不存在"}],"answer":["A","B","D"],"answerText":"ABD","explain":"卷积层参数量远小于全连接层，参数少是权重共享和局部连接的结果，不是目的。如果图像没有平移不变性，卷积的优势就不存在。C 错误，参数少是结果，不是目的。"},{"id":242,"chapter":"卷积神经网络","type":"multi","stem":"关于 CNN 和 MLP 的对比，下列说法正确的是( )","options":[{"key":"A","text":"CNN 参数少，MLP 参数多"},{"key":"B","text":"CNN 利用空间结构，MLP 丢失空间结构"},{"key":"C","text":"CNN 有平移不变性，MLP 没有"},{"key":"D","text":"CNN 适合图像，MLP 适合表格数据"}],"answer":["A","B","C","D"],"answerText":"ABCD","explain":"CNN 参数少，利用空间结构，有平移不变性，适合图像。MLP 参数多，丢失空间结构，没有平移不变性，适合表格数据。"},{"id":243,"chapter":"卷积神经网络","type":"multi","stem":"关于 1×1 卷积，下列说法正确的是( )","options":[{"key":"A","text":"不改变空间尺寸"},{"key":"B","text":"改变通道数"},{"key":"C","text":"在每个像素上做全连接"},{"key":"D","text":"所有位置共享权重"}],"answer":["A","B","C","D"],"answerText":"ABCD","explain":"1×1 卷积不改变空间尺寸，改变通道数。它在每个像素上做全连接，所有位置共享权重。"},{"id":244,"chapter":"卷积神经网络","type":"multi","stem":"关于卷积层的输出尺寸计算，下列说法正确的是( )","options":[{"key":"A","text":"输出尺寸 = 输入尺寸 - 卷积核尺寸 + 1(无填充、步幅 1)"},{"key":"B","text":"填充可以增加输出尺寸"},{"key":"C","text":"步幅可以减小输出尺寸"},{"key":"D","text":"输出尺寸 = (输入尺寸 + 2×填充 - 卷积核尺寸) / 步幅 + 1"}],"answer":["A","B","C","D"],"answerText":"ABCD","explain":"无填充、步幅 1 时，输出尺寸 = 输入尺寸 - 卷积核尺寸 + 1。填充增加输出尺寸，步幅减小输出尺寸。通用公式:输出尺寸 = (输入尺寸 + 2×填充 - 卷积核尺寸) / 步幅 + 1。"},{"id":245,"chapter":"卷积神经网络","type":"multi","stem":"关于 CNN 的计算量，下列说法正确的是( )","options":[{"key":"A","text":"卷积层计算量远大于参数量"},{"key":"B","text":"卷积是计算密集型操作"},{"key":"C","text":"GPU 适合并行计算卷积"},{"key":"D","text":"卷积核在不同位置的运算是独立的"}],"answer":["A","B","C","D"],"answerText":"ABCD","explain":"卷积层计算量远大于参数量，是计算密集型操作。GPU 适合并行计算卷积，因为卷积核在不同位置的运算是独立的。"},{"id":246,"chapter":"卷积神经网络","type":"multi","stem":"关于 CNN 和全连接层的参数对比，下列说法正确的是( )","options":[{"key":"A","text":"输入 224×224×3，输出 1000 类，全连接层参数量约 1.5 亿"},{"key":"B","text":"同样输入输出，卷积层参数量约 2.8 万"},{"key":"C","text":"参数少是归纳偏置的结果"},{"key":"D","text":"参数少是目的"}],"answer":["A","B","C"],"answerText":"ABC","explain":"输入 224×224×3，输出 1000 类，全连接层参数量约 1.5 亿，卷积层参数量约 2.8 万。参数少是归纳偏置的结果，不是目的。D 错误。"},{"id":247,"chapter":"卷积神经网络","type":"judge","stem":"卷积层的权重共享对应平移不变性。","options":[],"answer":"正确","answerText":"正确","explain":"权重共享对应平移不变性:同样的物体出现在不同位置，应该被同一个卷积核识别。局部连接对应局部性。"},{"id":248,"chapter":"卷积神经网络","type":"judge","stem":"卷积层的局部连接对应局部性。","options":[],"answer":"正确","answerText":"正确","explain":"局部连接对应局部性:图像的局部区域就足以提取有用特征。权重共享对应平移不变性。"},{"id":249,"chapter":"卷积神经网络","type":"judge","stem":"填充可以增加输出的高度和宽度。","options":[],"answer":"正确","answerText":"正确","explain":"填充在输入边缘补零，增加输出的高度和宽度。常用于使输出与输入具有相同的高和宽。"},{"id":250,"chapter":"卷积神经网络","type":"judge","stem":"步幅可以减小输出的高和宽。","options":[],"answer":"正确","answerText":"正确","explain":"步幅是卷积核移动的步长，控制下采样倍率。步幅为 2，输出尺寸减半。"},{"id":251,"chapter":"卷积神经网络","type":"judge","stem":"输入 32×32，卷积核 5×5，步幅 1，无填充，输出是 28×28。","options":[],"answer":"正确","answerText":"正确","explain":"输出尺寸 = 输入尺寸 - 卷积核尺寸 + 1 = 32 - 5 + 1 = 28。所以输出是 28×28。"},{"id":252,"chapter":"卷积神经网络","type":"judge","stem":"输入 32×32，卷积核 5×5，步幅 1，填充 2，输出是 32×32。","options":[],"answer":"正确","answerText":"正确","explain":"输出尺寸 = 输入尺寸 + 2×填充 - 卷积核尺寸 + 1 = 32 + 4 - 5 + 1 = 32。所以输出是 32×32。"},{"id":253,"chapter":"卷积神经网络","type":"judge","stem":"1×1 卷积不改变空间尺寸，只改变通道数。","options":[],"answer":"正确","answerText":"正确","explain":"1×1 卷积不改变空间尺寸，只改变通道数。它在每个像素上做全连接，可以增加非线性，减少计算量。"},{"id":254,"chapter":"卷积神经网络","type":"judge","stem":"1×1 卷积和全连接层完全相同。","options":[],"answer":"错误","answerText":"错误","explain":"1×1 卷积是权重共享版的全连接层。全连接层每个位置有独立权重，1×1 卷积所有位置共享权重。所以不完全相同。"},{"id":255,"chapter":"卷积神经网络","type":"judge","stem":"汇聚层的主要作用是减轻卷积层对位置的过度敏感。","options":[],"answer":"正确","answerText":"正确","explain":"汇聚层的主要作用是减轻卷积层对位置的过度敏感。最大汇聚取窗口内最大值，平均汇聚取窗口内平均值。"},{"id":256,"chapter":"卷积神经网络","type":"judge","stem":"汇聚层的输出通道数大于输入通道数。","options":[],"answer":"错误","answerText":"错误","explain":"汇聚层的输出通道数等于输入通道数。它不改变通道数，只改变空间尺寸。"},{"id":257,"chapter":"卷积神经网络","type":"judge","stem":"最大汇聚层输出窗口内的平均值。","options":[],"answer":"错误","answerText":"错误","explain":"最大汇聚层输出窗口内的最大值。平均汇聚层输出窗口内的平均值。"},{"id":258,"chapter":"卷积神经网络","type":"judge","stem":"感受野是输出特征图上一个像素对应输入图像上的区域大小。","options":[],"answer":"正确","answerText":"正确","explain":"感受野是输出特征图上一个像素对应输入图像上的区域大小。浅层感受野小，深层感受野大。"},{"id":259,"chapter":"卷积神经网络","type":"judge","stem":"两个 3×3 卷积层堆叠的感受野是 5×5。","options":[],"answer":"正确","answerText":"正确","explain":"感受野是逐层累加的。两个 3×3 卷积层堆叠，感受野是 5×5。三个 3×3 堆叠是 7×7。公式:RF = 1 + n × (k - 1)。"},{"id":260,"chapter":"卷积神经网络","type":"judge","stem":"卷积层参数量远小于全连接层。","options":[],"answer":"正确","answerText":"正确","explain":"卷积层参数量远小于全连接层。参数少是权重共享和局部连接的结果，不是目的。"},{"id":261,"chapter":"卷积神经网络","type":"judge","stem":"如果图像没有平移不变性，卷积的优势就不存在。","options":[],"answer":"正确","answerText":"正确","explain":"卷积的优势来自平移不变性和局部性。如果图像没有平移不变性，权重共享就没有意义，卷积的优势就不存在。"},{"id":262,"chapter":"卷积神经网络","type":"judge","stem":"CNN 的位置鲁棒性来自权重共享和汇聚层。","options":[],"answer":"正确","answerText":"正确","explain":"CNN 的位置鲁棒性来自权重共享和汇聚层。权重共享让同一个卷积核在不同位置复用，汇聚层让小幅平移不改变输出。"},{"id":263,"chapter":"卷积神经网络","type":"judge","stem":"卷积层的计算量远大于参数量。","options":[],"answer":"正确","answerText":"正确","explain":"卷积层的计算量远大于参数量，是计算密集型操作。GPU 适合并行计算卷积，因为卷积核在不同位置的运算是独立的。"},{"id":264,"chapter":"卷积神经网络","type":"judge","stem":"卷积和互相关是一回事。","options":[],"answer":"错误","answerText":"错误","explain":"数学卷积需要翻转卷积核，互相关不翻转。深度学习框架中的 conv2d 实际上是互相关。因为卷积核参数是学出来的，翻转不翻转不影响模型能力。"},{"id":265,"chapter":"卷积神经网络","type":"judge","stem":"填充和步幅只是调参技巧，不影响特征图空间分辨率。","options":[],"answer":"错误","answerText":"错误","explain":"填充和步幅是控制特征图空间分辨率的两个旋钮，不是简单的调参技巧。填充增加输出尺寸，步幅减小输出尺寸。"},{"id":266,"chapter":"卷积神经网络","type":"judge","stem":"CNN 只能处理图像。","options":[],"answer":"错误","answerText":"错误","explain":"CNN 也可以处理文本、音频、时间序列。卷积的权重共享和局部连接假设适用于任何有空间或时间结构的数据。"},{"id":267,"chapter":"卷积神经网络","type":"judge","stem":"全卷积网络可以处理任意尺寸的输入。","options":[],"answer":"正确","answerText":"正确","explain":"全卷积网络用卷积层代替全连接层，可以处理任意尺寸的输入。全连接层要求固定输入维度，卷积层不要求。"},{"id":268,"chapter":"现代卷积神经网络","type":"single","stem":"AlexNet 用 ReLU 代替 sigmoid 的主要原因是( )","options":[{"key":"A","text":"ReLU 计算更简单"},{"key":"B","text":"ReLU 在正值区不饱和，梯度不会消失"},{"key":"C","text":"ReLU 输出在 0 到 1 之间"},{"key":"D","text":"ReLU 是零中心的"}],"answer":["B"],"answerText":"B","explain":"sigmoid 在饱和区梯度接近 0，深层网络训练不起来。ReLU 在正值区导数恒为 1，不饱和，梯度不会消失。"},{"id":269,"chapter":"现代卷积神经网络","type":"single","stem":"AlexNet 使用 Dropout 的主要目的是( )","options":[{"key":"A","text":"加速训练"},{"key":"B","text":"防止过拟合"},{"key":"C","text":"增加参数量"},{"key":"D","text":"减少计算量"}],"answer":["B"],"answerText":"B","explain":"AlexNet 的全连接层参数量大，容易过拟合。Dropout 随机丢弃神经元，相当于模型集成，防止过拟合。"},{"id":270,"chapter":"现代卷积神经网络","type":"single","stem":"VGG 的核心设计是( )","options":[{"key":"A","text":"残差连接"},{"key":"B","text":"重复块 + 小卷积核堆叠"},{"key":"C","text":"1×1 卷积"},{"key":"D","text":"密集连接"}],"answer":["B"],"answerText":"B","explain":"VGG 的核心设计是重复块加小卷积核堆叠。VGG 块由多个 3×3 卷积加一个 2×2 最大汇聚组成，然后重复堆叠。"},{"id":271,"chapter":"现代卷积神经网络","type":"single","stem":"VGG 用 3×3 卷积核堆叠代替 5×5 卷积核，主要原因是( )","options":[{"key":"A","text":"3×3 卷积核计算更快"},{"key":"B","text":"两个 3×3 感受野等于 5×5，但参数量更少，非线性更强"},{"key":"C","text":"3×3 卷积核参数更多"},{"key":"D","text":"5×5 卷积核不能使用"}],"answer":["B"],"answerText":"B","explain":"两个 3×3 卷积层的感受野等于一个 5×5 卷积层。但参数量:2×3×3=18 vs 5×5=25。小卷积核参数量更少，而且中间多了一层非线性激活。"},{"id":272,"chapter":"现代卷积神经网络","type":"single","stem":"VGG 的主要缺点是( )","options":[{"key":"A","text":"结构不规整"},{"key":"B","text":"参数量大，大部分在全连接层"},{"key":"C","text":"不能迁移学习"},{"key":"D","text":"无法加深"}],"answer":["B"],"answerText":"B","explain":"VGG 的参数量约 1.38 亿，大部分参数在全连接层。后续模型用全局平均汇聚代替全连接层，减少参数量。"},{"id":273,"chapter":"现代卷积神经网络","type":"single","stem":"NiN 的核心创新是( )","options":[{"key":"A","text":"用 1×1 卷积代替全连接层"},{"key":"B","text":"用残差连接代替全连接层"},{"key":"C","text":"用密集连接代替全连接层"},{"key":"D","text":"用 Inception 块代替全连接层"}],"answer":["A"],"answerText":"A","explain":"NiN 用 1×1 卷积代替全连接层，减少参数量，保留空间结构。还用全局平均汇聚代替最后的全连接层。"},{"id":274,"chapter":"现代卷积神经网络","type":"single","stem":"NiN 用全局平均汇聚代替最后的全连接层，主要好处是( )","options":[{"key":"A","text":"增加参数量"},{"key":"B","text":"参数量为 0，减少过拟合"},{"key":"C","text":"增加空间尺寸"},{"key":"D","text":"增加通道数"}],"answer":["B"],"answerText":"B","explain":"全局平均汇聚对每个通道取平均值，参数量为 0。它减少了参数量，避免了过拟合。这个设计后来被 GoogLeNet、ResNet 沿用。"},{"id":275,"chapter":"现代卷积神经网络","type":"single","stem":"GoogLeNet 的核心设计是( )","options":[{"key":"A","text":"Inception 块"},{"key":"B","text":"残差连接"},{"key":"C","text":"密集连接"},{"key":"D","text":"重复块"}],"answer":["A"],"answerText":"A","explain":"GoogLeNet 的核心设计是 Inception 块。它用并行多尺度卷积和 1×1 卷积降维，提取多尺度特征。"},{"id":276,"chapter":"现代卷积神经网络","type":"single","stem":"Inception 块中使用 1×1 卷积的主要目的是( )","options":[{"key":"A","text":"增加空间尺寸"},{"key":"B","text":"降维，减少计算量"},{"key":"C","text":"增加参数量"},{"key":"D","text":"减少通道数"}],"answer":["B"],"answerText":"B","explain":"Inception 块用 1×1 卷积降维，减少计算量。比如先用 1×1 卷积把 256 通道降到 64 通道，再做 5×5 卷积，参数量减少约 70%。"},{"id":277,"chapter":"现代卷积神经网络","type":"single","stem":"批量规范化的作用是( )","options":[{"key":"A","text":"增加参数量"},{"key":"B","text":"让每层输入分布稳定，允许更大学习率，加快收敛"},{"key":"C","text":"减少通道数"},{"key":"D","text":"增加空间尺寸"}],"answer":["B"],"answerText":"B","explain":"批量规范化让每层输入分布稳定，允许更大学习率，加快收敛，还有轻微正则化效果。"},{"id":278,"chapter":"现代卷积神经网络","type":"single","stem":"批量规范化通常插入在( )","options":[{"key":"A","text":"卷积层之前"},{"key":"B","text":"卷积层和激活函数之间"},{"key":"C","text":"激活函数之后"},{"key":"D","text":"输出层之后"}],"answer":["B"],"answerText":"B","explain":"批量规范化通常插入在卷积层和激活函数之间。它对每个 mini-batch 做归一化，让每层输入分布稳定。"},{"id":279,"chapter":"现代卷积神经网络","type":"single","stem":"批量规范化在测试时使用( )","options":[{"key":"A","text":"mini-batch 统计量"},{"key":"B","text":"全局统计量"},{"key":"C","text":"随机统计量"},{"key":"D","text":"不需要统计量"}],"answer":["B"],"answerText":"B","explain":"批量规范化训练时用 mini-batch 统计量，测试时用全局统计量。这个细节很重要，测试时用 mini-batch 统计量会导致结果不稳定。"},{"id":280,"chapter":"现代卷积神经网络","type":"single","stem":"ResNet 的核心设计是( )","options":[{"key":"A","text":"Inception 块"},{"key":"B","text":"残差连接"},{"key":"C","text":"密集连接"},{"key":"D","text":"重复块"}],"answer":["B"],"answerText":"B","explain":"ResNet 的核心设计是残差连接。残差块学习的是 F(x) = H(x) - x，而不是完整映射 H(x)。"},{"id":281,"chapter":"现代卷积神经网络","type":"single","stem":"残差块学习的是( )","options":[{"key":"A","text":"H(x)"},{"key":"B","text":"F(x) = H(x) - x"},{"key":"C","text":"F(x) = H(x) + x"},{"key":"D","text":"F(x) = H(x) · x"}],"answer":["B"],"answerText":"B","explain":"残差块学习的是 F(x) = H(x) - x，输出是 F(x) + x。如果恒等映射是最优的，F(x) 只需要学成 0。"},{"id":282,"chapter":"现代卷积神经网络","type":"single","stem":"ResNet 解决的核心问题是( )","options":[{"key":"A","text":"过拟合"},{"key":"B","text":"退化问题"},{"key":"C","text":"梯度爆炸"},{"key":"D","text":"数据不平衡"}],"answer":["B"],"answerText":"B","explain":"ResNet 解决的是退化问题:深度增加后，训练误差反而上升，这不是过拟合，而是优化困难。"},{"id":283,"chapter":"现代卷积神经网络","type":"single","stem":"ResNet 的瓶颈残差块是( )","options":[{"key":"A","text":"两个 3×3 卷积"},{"key":"B","text":"1×1 降维 → 3×3 卷积 → 1×1 升维"},{"key":"C","text":"两个 5×5 卷积"},{"key":"D","text":"一个 7×7 卷积"}],"answer":["B"],"answerText":"B","explain":"瓶颈残差块是 1×1 降维、3×3 卷积、1×1 升维。它用于更深的网络，因为 1×1 卷积可以减少计算量。"},{"id":284,"chapter":"现代卷积神经网络","type":"single","stem":"DenseNet 的核心设计是( )","options":[{"key":"A","text":"残差连接"},{"key":"B","text":"密集连接"},{"key":"C","text":"Inception 块"},{"key":"D","text":"重复块"}],"answer":["B"],"answerText":"B","explain":"DenseNet 的核心设计是密集连接。每一层连接前面所有层，用拼接 [x, F(x)] 代替相加。"},{"id":285,"chapter":"现代卷积神经网络","type":"single","stem":"DenseNet 和 ResNet 的连接方式区别是( )","options":[{"key":"A","text":"ResNet 是拼接，DenseNet 是相加"},{"key":"B","text":"ResNet 是相加，DenseNet 是拼接"},{"key":"C","text":"两者都是相加"},{"key":"D","text":"两者都是拼接"}],"answer":["B"],"answerText":"B","explain":"ResNet 是相加 F(x) + x，DenseNet 是拼接 [x, F(x)]。相加融合特征，拼接保留所有特征。"},{"id":286,"chapter":"现代卷积神经网络","type":"multi","stem":"关于 VGG，下列说法正确的是( )","options":[{"key":"A","text":"利用许多重复的神经网络块"},{"key":"B","text":"用 3×3 卷积核堆叠"},{"key":"C","text":"结构规整，容易加深"},{"key":"D","text":"参数量大，大部分在全连接层"}],"answer":["A","B","C","D"],"answerText":"ABCD","explain":"VGG 利用许多重复的神经网络块，用 3×3 卷积核堆叠，结构规整，容易加深。但参数量大约 1.38 亿，大部分在全连接层。"},{"id":287,"chapter":"现代卷积神经网络","type":"multi","stem":"关于两个 3×3 卷积层堆叠代替一个 5×5 卷积层，下列说法正确的是( )","options":[{"key":"A","text":"感受野相同"},{"key":"B","text":"参数量更少"},{"key":"C","text":"非线性更强"},{"key":"D","text":"计算量更大"}],"answer":["A","B","C"],"answerText":"ABC","explain":"两个 3×3 卷积层感受野等于一个 5×5 卷积层。参数量更少(18 vs 25)，中间多了一层非线性激活。D 错误，计算量不一定更大。"},{"id":288,"chapter":"现代卷积神经网络","type":"multi","stem":"关于 NiN，下列说法正确的是( )","options":[{"key":"A","text":"用 1×1 卷积代替全连接层"},{"key":"B","text":"用全局平均汇聚代替最后的全连接层"},{"key":"C","text":"参数量少，保留空间结构"},{"key":"D","text":"效果一般，但设计思想影响后续模型"}],"answer":["A","B","C","D"],"answerText":"ABCD","explain":"NiN 用 1×1 卷积代替全连接层，用全局平均汇聚代替最后的全连接层。参数量少，保留空间结构。效果一般，但设计思想影响后续模型。"},{"id":289,"chapter":"现代卷积神经网络","type":"multi","stem":"关于 GoogLeNet，下列说法正确的是( )","options":[{"key":"A","text":"使用并行连结的网络"},{"key":"B","text":"通过不同窗口大小的卷积层和最大汇聚层并行抽取信息"},{"key":"C","text":"Inception 块用 1×1 卷积降维"},{"key":"D","text":"参数量约 500 万"}],"answer":["A","B","C","D"],"answerText":"ABCD","explain":"GoogLeNet 使用并行连结的网络，通过不同窗口大小的卷积层和最大汇聚层并行抽取信息。Inception 块用 1×1 卷积降维，参数量约 500 万。"},{"id":290,"chapter":"现代卷积神经网络","type":"multi","stem":"关于 Inception 块，下列说法正确的是( )","options":[{"key":"A","text":"并行分支:1×1、3×3、5×5 卷积、3×3 最大汇聚"},{"key":"B","text":"所有分支输出在通道维度拼接"},{"key":"C","text":"1×1 卷积降维减少计算量"},{"key":"D","text":"没有 1×1 卷积降维，计算量会大很多"}],"answer":["A","B","C","D"],"answerText":"ABCD","explain":"Inception 块有四个并行分支:1×1、3×3、5×5 卷积、3×3 最大汇聚。所有分支输出在通道维度拼接。1×1 卷积降维减少计算量，没有它计算量会大很多。"},{"id":291,"chapter":"现代卷积神经网络","type":"multi","stem":"关于批量规范化，下列说法正确的是( )","options":[{"key":"A","text":"对每个 mini-batch 做归一化"},{"key":"B","text":"让每层输入分布稳定"},{"key":"C","text":"允许更大学习率，加快收敛"},{"key":"D","text":"有轻微正则化效果"}],"answer":["A","B","C","D"],"answerText":"ABCD","explain":"批量规范化对每个 mini-batch 做归一化，让每层输入分布稳定，允许更大学习率，加快收敛，有轻微正则化效果。"},{"id":292,"chapter":"现代卷积神经网络","type":"multi","stem":"关于批量规范化的插入位置和训练/测试行为，下列说法正确的是( )","options":[{"key":"A","text":"插入在卷积层和激活函数之间"},{"key":"B","text":"训练时用 mini-batch 统计量"},{"key":"C","text":"测试时用全局统计量"},{"key":"D","text":"训练和测试行为相同"}],"answer":["A","B","C"],"answerText":"ABC","explain":"批量规范化插入在卷积层和激活函数之间。训练时用 mini-batch 统计量，测试时用全局统计量。D 错误，训练和测试行为不同。"},{"id":293,"chapter":"现代卷积神经网络","type":"multi","stem":"关于 ResNet，下列说法正确的是( )","options":[{"key":"A","text":"通过残差块构建跨层的数据通道"},{"key":"B","text":"是计算机视觉中最流行的体系架构之一"},{"key":"C","text":"解决退化问题"},{"key":"D","text":"可以训练 152 层甚至更深的网络"}],"answer":["A","B","C","D"],"answerText":"ABCD","explain":"ResNet 通过残差块构建跨层的数据通道，是计算机视觉中最流行的体系架构之一。它解决退化问题，可以训练 152 层甚至更深的网络。"},{"id":294,"chapter":"现代卷积神经网络","type":"multi","stem":"关于残差块，下列说法正确的是( )","options":[{"key":"A","text":"学习 F(x) = H(x) - x"},{"key":"B","text":"输出 F(x) + x"},{"key":"C","text":"如果恒等映射最优，F(x) 学成 0"},{"key":"D","text":"跳跃连接让梯度直接传到浅层"}],"answer":["A","B","C","D"],"answerText":"ABCD","explain":"残差块学习 F(x) = H(x) - x，输出 F(x) + x。如果恒等映射最优，F(x) 学成 0。跳跃连接让梯度直接传到浅层，解决梯度消失。"},{"id":295,"chapter":"现代卷积神经网络","type":"multi","stem":"关于 ResNet 的两种残差块，下列说法正确的是( )","options":[{"key":"A","text":"基本残差块:两个 3×3 卷积"},{"key":"B","text":"瓶颈残差块:1×1 降维、3×3 卷积、1×1 升维"},{"key":"C","text":"瓶颈块用于更深的网络"},{"key":"D","text":"瓶颈块减少计算量"}],"answer":["A","B","C","D"],"answerText":"ABCD","explain":"基本残差块是两个 3×3 卷积，瓶颈残差块是 1×1 降维、3×3 卷积、1×1 升维。瓶颈块用于更深的网络，减少计算量。"},{"id":296,"chapter":"现代卷积神经网络","type":"multi","stem":"关于 DenseNet，下列说法正确的是( )","options":[{"key":"A","text":"计算成本很高，但效果更好"},{"key":"B","text":"每一层连接前面所有层"},{"key":"C","text":"用拼接 [x, F(x)] 代替相加"},{"key":"D","text":"参数量更少，但计算量更大"}],"answer":["A","B","C","D"],"answerText":"ABCD","explain":"DenseNet 计算成本很高，但效果更好。每一层连接前面所有层，用拼接 [x, F(x)] 代替相加。参数量更少，但计算量更大。"},{"id":297,"chapter":"现代卷积神经网络","type":"multi","stem":"关于 ResNet 和 DenseNet 的区别，下列说法正确的是( )","options":[{"key":"A","text":"ResNet 是相加 F(x) + x"},{"key":"B","text":"DenseNet 是拼接 [x, F(x)]"},{"key":"C","text":"ResNet 融合特征，DenseNet 保留所有特征"},{"key":"D","text":"DenseNet 参数量更少，但计算量更大"}],"answer":["A","B","C","D"],"answerText":"ABCD","explain":"ResNet 是相加 F(x) + x，DenseNet 是拼接 [x, F(x)]。ResNet 融合特征，DenseNet 保留所有特征。DenseNet 参数量更少，但计算量更大。"},{"id":298,"chapter":"现代卷积神经网络","type":"multi","stem":"关于深度网络面临的挑战，下列说法正确的是( )","options":[{"key":"A","text":"梯度消失/爆炸"},{"key":"B","text":"计算量爆炸"},{"key":"C","text":"特征复用不足"},{"key":"D","text":"训练不稳定"}],"answer":["A","B","C","D"],"answerText":"ABCD","explain":"深度网络面临四个核心挑战:梯度消失/爆炸、计算量爆炸、特征复用不足、训练不稳定。这一章的模型就是围绕这四个挑战展开的。"},{"id":299,"chapter":"现代卷积神经网络","type":"multi","stem":"关于每个模型回应的挑战，下列说法正确的是( )","options":[{"key":"A","text":"AlexNet:ReLU 解决梯度消失，Dropout 解决过拟合"},{"key":"B","text":"NiN:1×1 卷积减少参数量"},{"key":"C","text":"GoogLeNet:Inception 块提高计算效率"},{"key":"D","text":"ResNet:残差连接解决退化问题"}],"answer":["A","B","C","D"],"answerText":"ABCD","explain":"AlexNet 用 ReLU 解决梯度消失，用 Dropout 解决过拟合。NiN 用 1×1 卷积减少参数量。GoogLeNet 用 Inception 块提高计算效率。ResNet 用残差连接解决退化问题。"},{"id":300,"chapter":"现代卷积神经网络","type":"multi","stem":"关于批量规范化，下列说法正确的是( )","options":[{"key":"A","text":"是现代网络的标配"},{"key":"B","text":"让深层网络训练从“调参玄学”变成“工程可控”"},{"key":"C","text":"对 batch size 敏感"},{"key":"D","text":"batch size 太小时统计量不稳定"}],"answer":["A","B","C","D"],"answerText":"ABCD","explain":"批量规范化是现代网络的标配，让深层网络训练从“调参玄学”变成“工程可控”。但它对 batch size 敏感，batch size 太小时统计量不稳定。"},{"id":301,"chapter":"现代卷积神经网络","type":"multi","stem":"关于 ResNet 能训练多深，下列说法正确的是( )","options":[{"key":"A","text":"ResNet 原始论文:18、34、50、101、152 层"},{"key":"B","text":"后来有人训练了 ResNet-1000"},{"key":"C","text":"残差连接解决“能不能训练深”"},{"key":"D","text":"瓶颈块解决“训练深贵不贵”"}],"answer":["A","B","C","D"],"answerText":"ABCD","explain":"ResNet 原始论文包括 18、34、50、101、152 层。后来有人训练了 ResNet-1000。残差连接解决“能不能训练深”，瓶颈块解决“训练深贵不贵”。"},{"id":302,"chapter":"现代卷积神经网络","type":"multi","stem":"关于深度网络的常见误区，下列说法正确的是( )","options":[{"key":"A","text":"网络越深越好"},{"key":"B","text":"1×1 卷积没有用"},{"key":"C","text":"残差连接是跳过一些层"},{"key":"D","text":"这些模型已经过时了"}],"answer":["A","B","C","D"],"answerText":"ABCD","explain":"这些都是常见误区。网络不是越深越好，1×1 卷积可以调整通道和增加非线性，残差连接学习的是残差，这些模型的设计思想仍然在现代网络中广泛使用。"},{"id":303,"chapter":"现代卷积神经网络","type":"judge","stem":"AlexNet 是第一个在大规模视觉竞赛中击败传统计算机视觉模型的大型神经网络。","options":[],"answer":"正确","answerText":"正确","explain":"AlexNet 是第一个在大规模视觉竞赛中击败传统计算机视觉模型的大型神经网络。它用 ReLU、Dropout、GPU 三个关键设计。"},{"id":304,"chapter":"现代卷积神经网络","type":"judge","stem":"AlexNet 用 sigmoid 代替 ReLU，解决了梯度消失问题。","options":[],"answer":"错误","answerText":"错误","explain":"AlexNet 用 ReLU 代替 sigmoid。sigmoid 在饱和区梯度接近 0，ReLU 在正值区导数恒为 1，不饱和。"},{"id":305,"chapter":"现代卷积神经网络","type":"judge","stem":"AlexNet 使用 Dropout 防止过拟合。","options":[],"answer":"正确","answerText":"正确","explain":"AlexNet 的全连接层参数量大，容易过拟合。Dropout 随机丢弃神经元，相当于模型集成，防止过拟合。"},{"id":306,"chapter":"现代卷积神经网络","type":"judge","stem":"VGG 利用许多重复的神经网络块。","options":[],"answer":"正确","answerText":"正确","explain":"VGG 利用许多重复的神经网络块。VGG 块由多个 3×3 卷积加一个 2×2 最大汇聚组成，然后重复堆叠。"},{"id":307,"chapter":"现代卷积神经网络","type":"judge","stem":"两个 3×3 卷积层的感受野等于一个 5×5 卷积层，但参数量更多。","options":[],"answer":"错误","answerText":"错误","explain":"两个 3×3 卷积层的感受野等于一个 5×5 卷积层。但参数量:2×3×3=18 vs 5×5=25。小卷积核参数量更少，而且非线性更强。"},{"id":308,"chapter":"现代卷积神经网络","type":"judge","stem":"VGG 的参数量大部分在全连接层。","options":[],"answer":"正确","answerText":"正确","explain":"VGG 的参数量约 1.38 亿，大部分参数在全连接层。后续模型用全局平均汇聚代替全连接层，减少参数量。"},{"id":309,"chapter":"现代卷积神经网络","type":"judge","stem":"NiN 用 1×1 卷积代替全连接层。","options":[],"answer":"正确","answerText":"正确","explain":"NiN 用 1×1 卷积代替全连接层，减少参数量，保留空间结构。还用全局平均汇聚代替最后的全连接层。"},{"id":310,"chapter":"现代卷积神经网络","type":"judge","stem":"NiN 用全局平均汇聚代替最后的全连接层，增加了参数量。","options":[],"answer":"错误","answerText":"错误","explain":"全局平均汇聚对每个通道取平均值，参数量为 0。它减少了参数量，避免了过拟合。这个设计后来被 GoogLeNet、ResNet 沿用。"},{"id":311,"chapter":"现代卷积神经网络","type":"judge","stem":"GoogLeNet 使用并行连结的网络，通过不同窗口大小的卷积层和最大汇聚层来并行抽取信息。","options":[],"answer":"正确","answerText":"正确","explain":"GoogLeNet 使用并行连结的网络，通过不同窗口大小的卷积层和最大汇聚层来并行抽取信息。Inception 块是它的核心设计。"},{"id":312,"chapter":"现代卷积神经网络","type":"judge","stem":"Inception 块中的 1×1 卷积用于增加计算量。","options":[],"answer":"错误","answerText":"错误","explain":"Inception 块中的 1×1 卷积用于降维，减少计算量。比如先用 1×1 卷积把 256 通道降到 64 通道，再做 5×5 卷积，参数量减少约 70%。"},{"id":313,"chapter":"现代卷积神经网络","type":"judge","stem":"批量规范化让每层输入分布稳定，允许更大学习率，加快收敛。","options":[],"answer":"正确","answerText":"正确","explain":"批量规范化对每个 mini-batch 做归一化，让每层输入分布稳定，允许更大学习率，加快收敛，还有轻微正则化效果。"},{"id":314,"chapter":"现代卷积神经网络","type":"judge","stem":"批量规范化插入在激活函数之后。","options":[],"answer":"错误","answerText":"错误","explain":"批量规范化通常插入在卷积层和激活函数之间，不是激活函数之后。"},{"id":315,"chapter":"现代卷积神经网络","type":"judge","stem":"批量规范化训练时用全局统计量，测试时用 mini-batch 统计量。","options":[],"answer":"错误","answerText":"错误","explain":"批量规范化训练时用 mini-batch 统计量，测试时用全局统计量。反过来说就错了。"},{"id":316,"chapter":"现代卷积神经网络","type":"judge","stem":"ResNet 通过残差块构建跨层的数据通道。","options":[],"answer":"正确","answerText":"正确","explain":"ResNet 通过残差块构建跨层的数据通道，是计算机视觉中最流行的体系架构之一。残差块学习 F(x) = H(x) - x。"},{"id":317,"chapter":"现代卷积神经网络","type":"judge","stem":"ResNet 解决的核心问题是过拟合。","options":[],"answer":"错误","answerText":"错误","explain":"ResNet 解决的是退化问题:深度增加后，训练误差反而上升，这不是过拟合，而是优化困难。过拟合是训练误差低、测试误差高。"},{"id":318,"chapter":"现代卷积神经网络","type":"judge","stem":"ResNet 是相加，DenseNet 是拼接。","options":[],"answer":"正确","answerText":"正确","explain":"ResNet 是相加 F(x) + x，DenseNet 是拼接 [x, F(x)]。相加融合特征，拼接保留所有特征。"},{"id":319,"chapter":"现代卷积神经网络","type":"judge","stem":"DenseNet 的参数量比 ResNet 更多。","options":[],"answer":"错误","answerText":"错误","explain":"DenseNet 的参数量更少，因为每层只需要输出少量新特征，前面所有层的特征被拼接复用。但计算量更大。"},{"id":320,"chapter":"现代卷积神经网络","type":"judge","stem":"深度网络面临的四个核心挑战是梯度消失/爆炸、计算量爆炸、特征复用不足、训练不稳定。","options":[],"answer":"正确","answerText":"正确","explain":"深度网络面临四个核心挑战:梯度消失/爆炸、计算量爆炸、特征复用不足、训练不稳定。这一章的模型就是围绕这四个挑战展开的。"},{"id":321,"chapter":"现代卷积神经网络","type":"judge","stem":"残差连接解决“能不能训练深”，瓶颈块解决“训练深贵不贵”。","options":[],"answer":"正确","answerText":"正确","explain":"残差连接解决“能不能训练深”，瓶颈块解决“训练深贵不贵”。ResNet 原始论文做到 152 层，后来有人做到 1000 层以上。"},{"id":322,"chapter":"现代卷积神经网络","type":"judge","stem":"1×1 卷积没有用。","options":[],"answer":"错误","answerText":"错误","explain":"1×1 卷积可以调整通道数、增加非线性、减少计算量。它在 NiN、GoogLeNet、ResNet 里都有使用。"},{"id":323,"chapter":"现代卷积神经网络","type":"fill","stem":"输入 32×32，卷积核 5×5，步幅 1，无填充，输出尺寸是____。","options":[],"answer":["28×28"],"answerText":"28×28","explain":"输出尺寸 = 输入尺寸 - 卷积核尺寸 + 1 = 32 - 5 + 1 = 28。"},{"id":324,"chapter":"现代卷积神经网络","type":"fill","stem":"输入 32×32，卷积核 5×5，步幅 1，填充 2，输出尺寸是____。","options":[],"answer":["32×32"],"answerText":"32×32","explain":"输出尺寸 = 输入尺寸 + 2×填充 - 卷积核尺寸 + 1 = 32 + 4 - 5 + 1 = 32。填充 2 让输出和输入一样大。"},{"id":325,"chapter":"现代卷积神经网络","type":"fill","stem":"输入 32×32，卷积核 5×5，步幅 2，填充 2，输出尺寸是____。","options":[],"answer":["16×16"],"answerText":"16×16","explain":"输出尺寸 = (输入尺寸 + 2×填充 - 卷积核尺寸) / 步幅 + 1 = (32 + 4 - 5) / 2 + 1 = 16。"},{"id":326,"chapter":"现代卷积神经网络","type":"fill","stem":"汇聚层的输出通道数与输入通道数____。","options":[],"answer":["相同"],"answerText":"相同","explain":"汇聚层的输出通道数等于输入通道数。它不改变通道数，只改变空间尺寸。"},{"id":327,"chapter":"现代卷积神经网络","type":"fill","stem":"最大汇聚层输出窗口内的____，平均汇聚层输出窗口内的____。","options":[],"answer":["最大值","平均值"],"answerText":"最大值；平均值","explain":"最大汇聚输出窗口内最大值，平均汇聚输出窗口内平均值。"},{"id":328,"chapter":"现代卷积神经网络","type":"fill","stem":"NiN 的核心创新是用 1×1 卷积代替____。","options":[],"answer":["全连接层"],"answerText":"全连接层","explain":"NiN 用 1×1 卷积代替全连接层，减少参数量，保留空间结构。"},{"id":329,"chapter":"现代卷积神经网络","type":"fill","stem":"NiN 用全局平均汇聚代替最后的全连接层，参数量为____。","options":[],"answer":["0"],"answerText":"0","explain":"全局平均汇聚对每个通道取平均值，参数量为 0。它减少了参数量，避免了过拟合。"},{"id":330,"chapter":"现代卷积神经网络","type":"fill","stem":"批量规范化的作用是让每层输入分布____，允许更____的学习率，加快收敛。","options":[],"answer":["稳定","大"],"answerText":"稳定；大","explain":"批量规范化让每层输入分布稳定，允许更大学习率，加快收敛，还有轻微正则化效果。"},{"id":331,"chapter":"现代卷积神经网络","type":"fill","stem":"ResNet 的核心设计是____，它解决的核心问题是退化问题。","options":[],"answer":["残差连接"],"answerText":"残差连接","explain":"ResNet 的核心设计是残差连接。它解决退化问题:深度增加后，训练误差反而上升。"},{"id":332,"chapter":"现代卷积神经网络","type":"fill","stem":"DenseNet 的核心设计是密集连接，它用____代替相加。","options":[],"answer":["拼接"],"answerText":"拼接","explain":"DenseNet 的核心设计是密集连接。每一层连接前面所有层，用拼接 [x, F(x)] 代替相加。"},{"id":333,"chapter":"现代卷积神经网络","type":"fill","stem":"网络不是越深越好，深度增加会遇到____问题，训练误差反而上升。","options":[],"answer":["退化"],"answerText":"退化","explain":"网络不是越深越好。深度增加会遇到退化问题，训练误差反而上升。ResNet 的残差连接让深度不再是瓶颈。"},{"id":334,"chapter":"循环神经网络与序列模型","type":"single","stem":"循环神经网络(RNN)主要用于处理( )","options":[{"key":"A","text":"空间信息"},{"key":"B","text":"序列信息"},{"key":"C","text":"图像信息"},{"key":"D","text":"表格信息"}],"answer":["B"],"answerText":"B","explain":"如果说卷积神经网络可以有效地处理空间信息，那么循环神经网络则可以更好地处理序列信息。RNN 通过引入状态变量存储过去的信息和当前的输入，从而确定当前的输出。"},{"id":335,"chapter":"循环神经网络与序列模型","type":"single","stem":"RNN 通过什么机制存储过去的信息?( )","options":[{"key":"A","text":"卷积核"},{"key":"B","text":"状态变量(隐状态)"},{"key":"C","text":"池化层"},{"key":"D","text":"全连接层"}],"answer":["B"],"answerText":"B","explain":"循环神经网络通过引入状态变量(隐状态)存储过去的信息和当前的输入，从而可以确定当前的输出。"},{"id":336,"chapter":"循环神经网络与序列模型","type":"single","stem":"序列模型训练时必须尊重时间顺序，原因是( )","options":[{"key":"A","text":"计算量太大"},{"key":"B","text":"不能基于未来数据进行训练"},{"key":"C","text":"数据量太小"},{"key":"D","text":"模型参数太多"}],"answer":["B"],"answerText":"B","explain":"内插法和外推法在实践难度上差别很大。对于拥有的序列数据，训练时始终要尊重其时间顺序，即最好不要基于未来的数据进行训练。"},{"id":337,"chapter":"循环神经网络与序列模型","type":"single","stem":"序列模型中，两种较流行的估计模型是( )","options":[{"key":"A","text":"自回归模型和隐变量自回归模型"},{"key":"B","text":"CNN 和 RNN"},{"key":"C","text":"SVM 和决策树"},{"key":"D","text":"GAN 和 VAE"}],"answer":["A"],"answerText":"A","explain":"序列模型的估计需要专门的统计工具，两种较流行的选择是自回归模型和隐变量自回归模型。"},{"id":338,"chapter":"循环神经网络与序列模型","type":"single","stem":"对于因果模型，通常哪种估计更容易?( )","options":[{"key":"A","text":"反向估计"},{"key":"B","text":"正向估计"},{"key":"C","text":"两者一样"},{"key":"D","text":"无法比较"}],"answer":["B"],"answerText":"B","explain":"对于时间是向前推进的因果模型，正向估计通常比反向估计更容易。"},{"id":339,"chapter":"循环神经网络与序列模型","type":"single","stem":"随着预测时间 k 增加，k 步预测的误差会( )","options":[{"key":"A","text":"保持不变"},{"key":"B","text":"快速累积，预测质量极速下降"},{"key":"C","text":"逐渐减小"},{"key":"D","text":"随机波动"}],"answer":["B"],"answerText":"B","explain":"随着对预测时间 k 值的增加，会造成误差的快速累积和预测质量的极速下降。"},{"id":340,"chapter":"循环神经网络与序列模型","type":"single","stem":"文本预处理中，构建词表的作用是( )","options":[{"key":"A","text":"把文本拆分成词元"},{"key":"B","text":"将词元字符串映射为数字索引"},{"key":"C","text":"把文本转换为词元索引"},{"key":"D","text":"增加文本长度"}],"answer":["B"],"answerText":"B","explain":"为了对文本进行预处理，通常将文本拆分为词元，构建词表将词元字符串映射为数字索引，并将文本数据转换为词元索引以供模型操作。"},{"id":341,"chapter":"循环神经网络与序列模型","type":"single","stem":"语言模型中，n 元语法的作用是( )","options":[{"key":"A","text":"增加序列长度"},{"key":"B","text":"通过截断相关性，为处理长序列提供实用模型"},{"key":"C","text":"减少词表大小"},{"key":"D","text":"增加计算量"}],"answer":["B"],"answerText":"B","explain":"n 元语法通过截断相关性，为处理长序列提供了一种实用的模型。长序列存在一个问题:它们很少出现或者从不出现。"},{"id":342,"chapter":"循环神经网络与序列模型","type":"single","stem":"评价语言模型质量的常用指标是( )","options":[{"key":"A","text":"精度"},{"key":"B","text":"召回率"},{"key":"C","text":"困惑度"},{"key":"D","text":"F1 值"}],"answer":["C"],"answerText":"C","explain":"我们可以使用困惑度来评价语言模型的质量。困惑度是交叉熵的指数，越低越好。"},{"id":343,"chapter":"循环神经网络与序列模型","type":"single","stem":"顺序划分时，需要分离梯度的原因是( )","options":[{"key":"A","text":"增加计算量"},{"key":"B","text":"减少计算量"},{"key":"C","text":"防止过拟合"},{"key":"D","text":"增加参数量"}],"answer":["B"],"answerText":"B","explain":"当使用顺序划分时，我们需要分离梯度以减少计算量。否则梯度会沿整个序列反向传播，计算量爆炸。"},{"id":344,"chapter":"循环神经网络与序列模型","type":"single","stem":"在进行任何预测之前，模型通过预热期进行自我更新，目的是( )","options":[{"key":"A","text":"增加参数量"},{"key":"B","text":"获得比初始值更好的隐状态"},{"key":"C","text":"减少计算量"},{"key":"D","text":"防止过拟合"}],"answer":["B"],"answerText":"B","explain":"在进行任何预测之前，模型通过预热期进行自我更新(例如，获得比初始值更好的隐状态)。"},{"id":345,"chapter":"循环神经网络与序列模型","type":"multi","stem":"关于循环神经网络，下列说法正确的是( )","options":[{"key":"A","text":"可以更好地处理序列信息"},{"key":"B","text":"通过引入状态变量存储过去的信息和当前的输入"},{"key":"C","text":"隐状态可以捕获直到当前时间步序列的历史信息"},{"key":"D","text":"参数数量不会随着时间步的增加而增加"}],"answer":["A","B","C","D"],"answerText":"ABCD","explain":"RNN 可以更好地处理序列信息，通过隐状态存储过去的信息和当前输入。隐状态捕获历史信息，参数数量不随时间步增加。"},{"id":346,"chapter":"循环神经网络与序列模型","type":"multi","stem":"关于序列模型，下列说法正确的是( )","options":[{"key":"A","text":"训练时始终要尊重时间顺序"},{"key":"B","text":"最好不要基于未来的数据进行训练"},{"key":"C","text":"自回归模型和隐变量自回归模型是两种较流行的选择"},{"key":"D","text":"正向估计通常比反向估计更容易"}],"answer":["A","B","C","D"],"answerText":"ABCD","explain":"训练时尊重时间顺序，不基于未来数据训练。自回归模型和隐变量自回归模型是两种流行选择。因果模型的正向估计通常比反向估计更容易。"},{"id":347,"chapter":"循环神经网络与序列模型","type":"multi","stem":"关于 k 步预测，下列说法正确的是( )","options":[{"key":"A","text":"在时间步 t 预测 t+k 的输出"},{"key":"B","text":"随着 k 增加，误差快速累积"},{"key":"C","text":"随着 k 增加，预测质量极速下降"},{"key":"D","text":"误差累积是线性的，不会加速"}],"answer":["A","B","C"],"answerText":"ABC","explain":"k 步预测在时间步 t 预测 t+k 的输出。随着 k 增加，误差快速累积，预测质量极速下降。D 错误，误差累积可能比线性更快。"},{"id":348,"chapter":"循环神经网络与序列模型","type":"multi","stem":"关于文本预处理，下列说法正确的是( )","options":[{"key":"A","text":"文本是序列数据的一种最常见的形式之一"},{"key":"B","text":"通常将文本拆分为词元"},{"key":"C","text":"构建词表将词元字符串映射为数字索引"},{"key":"D","text":"将文本数据转换为词元索引以供模型操作"}],"answer":["A","B","C","D"],"answerText":"ABCD","explain":"文本是序列数据最常见的形式之一。预处理包括拆分词元、构建词表、映射为数字索引、转换为词元索引。"},{"id":349,"chapter":"循环神经网络与序列模型","type":"multi","stem":"关于语言模型，下列说法正确的是( )","options":[{"key":"A","text":"语言模型是自然语言处理的关键"},{"key":"B","text":"n 元语法通过截断相关性处理长序列"},{"key":"C","text":"长序列很少出现或者从不出现"},{"key":"D","text":"齐普夫定律支配着单词的分布"}],"answer":["A","B","C","D"],"answerText":"ABCD","explain":"语言模型是 NLP 的关键。n 元语法截断相关性处理长序列。长序列很少出现。齐普夫定律支配单词分布。"},{"id":350,"chapter":"循环神经网络与序列模型","type":"multi","stem":"关于随机采样和顺序分区，下列说法正确的是( )","options":[{"key":"A","text":"两者都是读取长序列的主要方式"},{"key":"B","text":"顺序分区保证相邻小批量的子序列在原始序列上相邻"},{"key":"C","text":"随机采样每个 batch 的隐状态独立初始化"},{"key":"D","text":"顺序分区需要分离梯度以减少计算量"}],"answer":["A","B","C","D"],"answerText":"ABCD","explain":"随机采样和顺序分区都是读取长序列的主要方式。顺序分区保证相邻子序列相邻，随机采样隐状态独立初始化，顺序分区需要分离梯度。"},{"id":351,"chapter":"循环神经网络与序列模型","type":"multi","stem":"关于通过时间反向传播(BPTT)，下列说法正确的是( )","options":[{"key":"A","text":"仅适用于反向传播在具有隐状态的序列模型"},{"key":"B","text":"截断是计算方便性和数值稳定性的需要"},{"key":"C","text":"截断包括规则截断和随机截断"},{"key":"D","text":"矩阵的高次幂可能导致梯度爆炸或消失"}],"answer":["A","B","C","D"],"answerText":"ABCD","explain":"BPTT 仅适用于具有隐状态的序列模型。截断是计算方便性和数值稳定性的需要，包括规则截断和随机截断。矩阵高次幂可能导致梯度爆炸或消失。"},{"id":352,"chapter":"循环神经网络与序列模型","type":"multi","stem":"关于 BPTT 的计算效率，下列说法正确的是( )","options":[{"key":"A","text":"为了计算效率，BPTT 在计算期间会缓存中间值"},{"key":"B","text":"缓存中间值会增加显存占用"},{"key":"C","text":"缓存中间值可以避免重新计算"},{"key":"D","text":"缓存中间值不影响计算效率"}],"answer":["A","B","C"],"answerText":"ABC","explain":"BPTT 在计算期间会缓存中间值以提高计算效率，但会增加显存占用。D 错误，缓存中间值影响计算效率。"},{"id":353,"chapter":"循环神经网络与序列模型","type":"multi","stem":"关于 RNN 训练中的梯度问题，下列说法正确的是( )","options":[{"key":"A","text":"梯度消失导致早期时间步的梯度接近 0"},{"key":"B","text":"梯度爆炸导致训练发散"},{"key":"C","text":"梯度裁剪可以防止梯度爆炸"},{"key":"D","text":"梯度裁剪可以解决梯度消失"}],"answer":["A","B","C"],"answerText":"ABC","explain":"梯度消失导致早期梯度接近 0，梯度爆炸导致训练发散。梯度裁剪防止梯度爆炸，但不能解决梯度消失。D 错误。"},{"id":354,"chapter":"循环神经网络与序列模型","type":"judge","stem":"循环神经网络可以更好地处理序列信息。","options":[],"answer":"正确","answerText":"正确","explain":"如果说卷积神经网络可以有效地处理空间信息，那么循环神经网络则可以更好地处理序列信息。"},{"id":355,"chapter":"循环神经网络与序列模型","type":"judge","stem":"RNN 通过引入状态变量存储过去的信息和当前的输入。","options":[],"answer":"正确","answerText":"正确","explain":"循环神经网络通过引入状态变量存储过去的信息和当前的输入，从而可以确定当前的输出。"},{"id":356,"chapter":"循环神经网络与序列模型","type":"judge","stem":"序列模型训练时可以基于未来的数据进行训练。","options":[],"answer":"错误","answerText":"错误","explain":"训练时始终要尊重时间顺序，最好不要基于未来的数据进行训练。内插法和外推法在实践难度上差别很大。"},{"id":357,"chapter":"循环神经网络与序列模型","type":"judge","stem":"自回归模型和隐变量自回归模型是两种较流行的序列模型。","options":[],"answer":"正确","answerText":"正确","explain":"序列模型的估计需要专门的统计工具，两种较流行的选择是自回归模型和隐变量自回归模型。"},{"id":358,"chapter":"循环神经网络与序列模型","type":"judge","stem":"对于因果模型，反向估计通常比正向估计更容易。","options":[],"answer":"错误","answerText":"错误","explain":"对于时间是向前推进的因果模型，正向估计通常比反向估计更容易。"},{"id":359,"chapter":"循环神经网络与序列模型","type":"judge","stem":"随着 k 增加，k 步预测的误差会快速累积，预测质量极速下降。","options":[],"answer":"正确","answerText":"正确","explain":"随着对预测时间 k 值的增加，会造成误差的快速累积和预测质量的极速下降。"},{"id":360,"chapter":"循环神经网络与序列模型","type":"judge","stem":"文本预处理中，构建词表将词元字符串映射为数字索引。","options":[],"answer":"正确","answerText":"正确","explain":"构建词表将词元字符串映射为数字索引，并将文本数据转换为词元索引以供模型操作。"},{"id":361,"chapter":"循环神经网络与序列模型","type":"judge","stem":"n 元语法通过截断相关性，为处理长序列提供了一种实用的模型。","options":[],"answer":"正确","answerText":"正确","explain":"n 元语法通过截断相关性，为处理长序列提供了一种实用的模型。长序列存在一个问题:它们很少出现或者从不出现。"},{"id":362,"chapter":"循环神经网络与序列模型","type":"judge","stem":"顺序分区可以保证来自两个相邻小批量的子序列在原始序列上也是相邻的。","options":[],"answer":"正确","answerText":"正确","explain":"在迭代过程中，顺序分区可以保证来自两个相邻的小批量中的子序列在原始序列上也是相邻的。"},{"id":363,"chapter":"循环神经网络与序列模型","type":"judge","stem":"RNN 的隐状态可以捕获直到当前时间步序列的历史信息。","options":[],"answer":"正确","answerText":"正确","explain":"循环神经网络的隐状态可以捕获直到当前时间步序列的历史信息。"},{"id":364,"chapter":"循环神经网络与序列模型","type":"judge","stem":"RNN 模型的参数数量会随着时间步的增加而增加。","options":[],"answer":"错误","answerText":"错误","explain":"循环神经网络模型的参数数量不会随着时间步的增加而增加，因为所有时间步共享同一组权重。"},{"id":365,"chapter":"循环神经网络与序列模型","type":"judge","stem":"困惑度可以用来评价语言模型的质量。","options":[],"answer":"正确","answerText":"正确","explain":"我们可以使用困惑度来评价语言模型的质量。困惑度越低越好。"},{"id":366,"chapter":"循环神经网络与序列模型","type":"judge","stem":"梯度裁剪可以防止梯度爆炸，也能应对梯度消失。","options":[],"answer":"错误","answerText":"错误","explain":"梯度裁剪可以防止梯度爆炸，但不能应对梯度消失。"},{"id":367,"chapter":"循环神经网络与序列模型","type":"judge","stem":"顺序划分时需要分离梯度以减少计算量。","options":[],"answer":"正确","answerText":"正确","explain":"当使用顺序划分时，我们需要分离梯度以减少计算量。"},{"id":368,"chapter":"循环神经网络与序列模型","type":"judge","stem":"预热期可以让模型获得比初始值更好的隐状态。","options":[],"answer":"正确","answerText":"正确","explain":"在进行任何预测之前，模型通过预热期进行自我更新，获得比初始值更好的隐状态。"},{"id":369,"chapter":"循环神经网络与序列模型","type":"judge","stem":"BPTT 中矩阵的高次幂可能导致梯度爆炸或消失。","options":[],"answer":"正确","answerText":"正确","explain":"矩阵的高次幂可能导致神经网络特征值的发散或消失，将以梯度爆炸或梯度消失的形式表现。"},{"id":370,"chapter":"循环神经网络与序列模型","type":"judge","stem":"BPTT 在计算期间会缓存中间值以提高计算效率。","options":[],"answer":"正确","answerText":"正确","explain":"为了计算的效率，“通过时间反向传播”在计算期间会缓存中间值。"},{"id":371,"chapter":"循环神经网络与序列模型","type":"judge","stem":"RNN 的隐状态是记忆，可以完整存储所有历史信息。","options":[],"answer":"错误","answerText":"错误","explain":"隐状态是压缩表示，不是记忆。它是固定维度的向量，不能完整存储所有历史信息。"},{"id":372,"chapter":"循环神经网络与序列模型","type":"judge","stem":"RNN 的参数共享对应时间不变性。","options":[],"answer":"正确","answerText":"正确","explain":"RNN 的参数在不同时间步共享，对应时间不变性。CNN 的权重共享对应空间不变性。"},{"id":373,"chapter":"循环神经网络与序列模型","type":"judge","stem":"RNN 可以完美建模任意长度的序列。","options":[],"answer":"错误","answerText":"错误","explain":"RNN 不能完美建模任意长度序列。长序列中梯度消失/爆炸，隐状态是固定维度的信息瓶颈。"},{"id":374,"chapter":"循环神经网络与序列模型","type":"judge","stem":"字符级语言模型可以用 RNN 实现。","options":[],"answer":"正确","answerText":"正确","explain":"我们可以使用循环神经网络创建字符级语言模型，根据用户提供的文本的前缀生成后续文本。"},{"id":375,"chapter":"循环神经网络与序列模型","type":"single","stem":"GRU 中“重置门”的主要作用是( )","options":[{"key":"A","text":"控制新状态中有多少是旧状态的副本"},{"key":"B","text":"控制“可能还想记住”的过去状态的数量，有助于捕获短期依赖"},{"key":"C","text":"控制输出层的大小"},{"key":"D","text":"控制学习率"}],"answer":["B"],"answerText":"B","explain":"重置门控制“可能还想记住”的过去状态的数量，有助于捕获短期依赖。更新门控制新状态中有多少是旧状态的副本，有助于捕获长期依赖。"},{"id":376,"chapter":"循环神经网络与序列模型","type":"single","stem":"GRU 中“更新门”的主要作用是( )","options":[{"key":"A","text":"控制新状态中有多少个是旧状态的副本，有助于捕获长期依赖"},{"key":"B","text":"控制重置多少历史状态"},{"key":"C","text":"控制输出维度"},{"key":"D","text":"控制梯度裁剪阈值"}],"answer":["A"],"answerText":"A","explain":"更新门控制新状态中有多少个是旧状态的副本，有助于捕获长期依赖。"},{"id":377,"chapter":"循环神经网络与序列模型","type":"single","stem":"GRU 相比 LSTM 的主要优势是( )","options":[{"key":"A","text":"参数更多，效果一定更好"},{"key":"B","text":"结构更简单，计算速度通常更快"},{"key":"C","text":"不需要门控机制"},{"key":"D","text":"只能处理短序列"}],"answer":["B"],"answerText":"B","explain":"GRU 是 LSTM 的简化变体，参数更少，计算速度通常更快，效果通常相当。"},{"id":378,"chapter":"循环神经网络与序列模型","type":"single","stem":"LSTM 中“遗忘门”的主要作用是( )","options":[{"key":"A","text":"决定当前输入有多少写入记忆元"},{"key":"B","text":"决定记忆元中哪些信息被保留、哪些被丢弃"},{"key":"C","text":"决定输出多少信息到隐状态"},{"key":"D","text":"决定学习率大小"}],"answer":["B"],"answerText":"B","explain":"LSTM 有三种门:输入门、遗忘门、输出门。遗忘门决定记忆元中哪些信息被保留、哪些被丢弃。"},{"id":379,"chapter":"循环神经网络与序列模型","type":"single","stem":"LSTM 中“记忆元”与“隐状态”的关系是( )","options":[{"key":"A","text":"两者完全相同"},{"key":"B","text":"记忆元完全属于内部信息，只有隐状态会传递到输出层"},{"key":"C","text":"隐状态完全属于内部信息，记忆元传递到输出层"},{"key":"D","text":"两者都不传递到输出层"}],"answer":["B"],"answerText":"B","explain":"LSTM 的隐藏层输出包括隐状态和记忆元。只有隐状态会传递到输出层，记忆元完全属于内部信息。"},{"id":380,"chapter":"循环神经网络与序列模型","type":"single","stem":"深度循环神经网络中，隐状态的信息传递方向是( )","options":[{"key":"A","text":"只传递到当前层的下一个时间步"},{"key":"B","text":"只传递到下一层的当前时间步"},{"key":"C","text":"同时传递到当前层的下一时间步和下一层的当前时间步"},{"key":"D","text":"不传递"}],"answer":["C"],"answerText":"C","explain":"在深度 RNN 中，隐状态同时传递到当前层的下一时间步和下一层的当前时间步。"},{"id":381,"chapter":"循环神经网络与序列模型","type":"single","stem":"编码器-解码器架构中，编码器的作用是( )","options":[{"key":"A","text":"生成输出序列"},{"key":"B","text":"将长度可变的输入序列转换为固定形状的编码状态"},{"key":"C","text":"计算损失函数"},{"key":"D","text":"执行梯度裁剪"}],"answer":["B"],"answerText":"B","explain":"编码器接收长度可变的序列作为输入，将其转换为具有固定形状的编码状态。"},{"id":382,"chapter":"循环神经网络与序列模型","type":"single","stem":"束搜索中，超参数“束宽”k 的作用是( )","options":[{"key":"A","text":"控制学习率"},{"key":"B","text":"每个时间步保留概率最高的 k 个候选序列"},{"key":"C","text":"控制词表大小"},{"key":"D","text":"控制梯度范数"}],"answer":["B"],"answerText":"B","explain":"束搜索在每个时间步保留概率最高的 k 个候选序列，k 是束宽。k=1 时退化为贪心搜索。"},{"id":383,"chapter":"循环神经网络与序列模型","type":"single","stem":"贪心搜索的主要问题是( )","options":[{"key":"A","text":"计算量太大"},{"key":"B","text":"每个时间步只选当前最优，可能错过全局最优序列"},{"key":"C","text":"无法处理变长序列"},{"key":"D","text":"需要大量显存"}],"answer":["B"],"answerText":"B","explain":"贪心搜索每个时间步选择条件概率最高的词元，但局部最优不等于全局最优。"},{"id":384,"chapter":"循环神经网络与序列模型","type":"single","stem":"强制教学的主要副作用是( )","options":[{"key":"A","text":"训练太慢"},{"key":"B","text":"训练和预测不一致，导致曝光偏差"},{"key":"C","text":"参数量太大"},{"key":"D","text":"无法处理长序列"}],"answer":["B"],"answerText":"B","explain":"强制教学训练时用真实值，预测时用预测值，导致训练和预测不一致，模型没见过带误差的输入，预测时误差会累积。"},{"id":385,"chapter":"循环神经网络与序列模型","type":"single","stem":"BLEU 评估指标测量的是( )","options":[{"key":"A","text":"翻译的语义正确性"},{"key":"B","text":"预测序列和标签序列之间的 n 元语法匹配度"},{"key":"C","text":"模型的参数量"},{"key":"D","text":"训练速度"}],"answer":["B"],"answerText":"B","explain":"BLEU 通过测量预测序列和标签序列之间的 n 元语法匹配度来评估预测，不是语义正确性。"},{"id":386,"chapter":"循环神经网络与序列模型","type":"single","stem":"LSTM 可以缓解梯度消失的主要原因是( )","options":[{"key":"A","text":"参数更多"},{"key":"B","text":"记忆元的梯度路径只乘遗忘门，不乘权重矩阵和激活函数导数"},{"key":"C","text":"使用 ReLU 激活函数"},{"key":"D","text":"不需要反向传播"}],"answer":["B"],"answerText":"B","explain":"LSTM 的记忆元更新是加法路径，梯度只乘遗忘门。遗忘门接近 1 时，梯度可以传很远。"},{"id":387,"chapter":"循环神经网络与序列模型","type":"single","stem":"GRU 和 LSTM 的关系是( )","options":[{"key":"A","text":"完全相同"},{"key":"B","text":"GRU 是 LSTM 的简化变体"},{"key":"C","text":"LSTM 是 GRU 的简化变体"},{"key":"D","text":"两者没有关系"}],"answer":["B"],"answerText":"B","explain":"GRU 由 Cho 等人在 2014 年提出，是 LSTM(1997 年)的简化变体，参数更少，速度更快。"},{"id":388,"chapter":"循环神经网络与序列模型","type":"multi","stem":"关于 GRU 的门控机制，下列说法正确的是( )","options":[{"key":"A","text":"重置门有助于捕获短期依赖"},{"key":"B","text":"更新门有助于捕获长期依赖"},{"key":"C","text":"重置门打开时，GRU 包含基本 RNN"},{"key":"D","text":"更新门打开时，GRU 可以跳过子序列"}],"answer":["A","B","C","D"],"answerText":"ABCD","explain":"重置门有助于捕获短期依赖，更新门有助于捕获长期依赖。重置门打开时，GRU 包含基本 RNN;更新门打开时，GRU 可以跳过子序列。"},{"id":389,"chapter":"循环神经网络与序列模型","type":"multi","stem":"关于 LSTM 的门，下列说法正确的是( )","options":[{"key":"A","text":"LSTM 有三种门:输入门、遗忘门、输出门"},{"key":"B","text":"遗忘门决定记忆元中哪些信息被丢弃"},{"key":"C","text":"输入门决定当前输入有多少写入记忆元"},{"key":"D","text":"输出门决定隐状态输出多少"}],"answer":["A","B","C","D"],"answerText":"ABCD","explain":"LSTM 有三种门:输入门、遗忘门、输出门。遗忘门决定丢弃哪些信息，输入门决定写入哪些新信息，输出门决定输出多少到隐状态。"},{"id":390,"chapter":"循环神经网络与序列模型","type":"multi","stem":"关于束搜索，下列说法正确的是( )","options":[{"key":"A","text":"束宽 k=1 时等价于贪心搜索"},{"key":"B","text":"束宽越大，计算量越大"},{"key":"C","text":"束搜索在每个时间步保留 k 个最优候选"},{"key":"D","text":"束搜索一定比贪心搜索好"}],"answer":["A","B","C"],"answerText":"ABC","explain":"束宽 k=1 时退化为贪心搜索。k 越大计算量越大，但搜索空间更大。D 错误，束搜索不保证一定比贪心搜索好，但通常能找到更好的序列。"},{"id":391,"chapter":"循环神经网络与序列模型","type":"multi","stem":"关于 BLEU 评估指标，下列说法正确的是( )","options":[{"key":"A","text":"测量预测序列和标签序列之间的 n 元语法匹配度"},{"key":"B","text":"不是准确率，是重叠度"},{"key":"C","text":"BLEU 高代表翻译完全正确"},{"key":"D","text":"BLEU 对语义等价但表面形式不同的翻译不敏感"}],"answer":["A","B","D"],"answerText":"ABD","explain":"BLEU 测量 n 元语法匹配度，不是准确率。BLEU 对语义等价但表面形式不同的翻译不敏感。C 错误，BLEU 高不代表完全正确。"},{"id":392,"chapter":"循环神经网络与序列模型","type":"multi","stem":"关于编码器-解码器和 seq2seq 的关系，下列说法正确的是( )","options":[{"key":"A","text":"编码器-解码器是架构思想"},{"key":"B","text":"seq2seq 是用 RNN 实现这个思想的具体模型"},{"key":"C","text":"Transformer 也是编码器-解码器架构"},{"key":"D","text":"两者完全相同"}],"answer":["A","B","C"],"answerText":"ABC","explain":"编码器-解码器是架构思想，seq2seq 是用 RNN 实现的具体模型。Transformer 也是编码器- 解码器架构，只是用注意力实现。D 错误。"},{"id":393,"chapter":"循环神经网络与序列模型","type":"judge","stem":"GRU 的重置门有助于捕获长期依赖关系。","options":[],"answer":"错误","answerText":"错误","explain":"重置门有助于捕获短期依赖关系，更新门有助于捕获长期依赖关系。"},{"id":394,"chapter":"循环神经网络与序列模型","type":"judge","stem":"GRU 的更新门可以控制新状态中有多少是旧状态的副本。","options":[],"answer":"正确","answerText":"正确","explain":"更新门控制新状态中有多少个是旧状态的副本。更新门接近 1 时保留旧状态，接近 0 时采用新信息。"},{"id":395,"chapter":"循环神经网络与序列模型","type":"judge","stem":"LSTM 有四种门:输入门、遗忘门、输出门和更新门。","options":[],"answer":"错误","answerText":"错误","explain":"LSTM 有三种门:输入门、遗忘门、输出门。更新门是 GRU 的概念，不是 LSTM 的。"},{"id":396,"chapter":"循环神经网络与序列模型","type":"judge","stem":"LSTM 的记忆元会直接传递到输出层。","options":[],"answer":"错误","answerText":"错误","explain":"只有隐状态会传递到输出层，记忆元完全属于内部信息，不直接传递到输出层。"},{"id":397,"chapter":"循环神经网络与序列模型","type":"judge","stem":"编码器-解码器架构中，编码器将变长输入转换为固定形状的编码状态。","options":[],"answer":"正确","answerText":"正确","explain":"编码器接收变长输入，将其转换为固定形状的编码状态。解码器将固定形状的编码状态映射为变长输出。"},{"id":398,"chapter":"循环神经网络与序列模型","type":"judge","stem":"束搜索中束宽 k 越大，计算量越小。","options":[],"answer":"错误","answerText":"错误","explain":"束宽 k 越大，每个时间步保留的候选序列越多，计算量越大。"},{"id":399,"chapter":"循环神经网络与序列模型","type":"judge","stem":"贪心搜索在每个时间步选择当前条件概率最高的词元。","options":[],"answer":"正确","answerText":"正确","explain":"贪心搜索在每个时间步选择条件概率最高的词元作为输出，但局部最优不等于全局最优。"},{"id":400,"chapter":"循环神经网络与序列模型","type":"judge","stem":"深度循环神经网络只能使用 LSTM，不能使用 GRU。","options":[],"answer":"错误","answerText":"错误","explain":"深度 RNN 可以堆叠任意类型的循环层，包括经典 RNN、GRU、LSTM 等。"},{"id":401,"chapter":"循环神经网络与序列模型","type":"judge","stem":"束宽 k=1 时，束搜索等价于贪心搜索。","options":[],"answer":"正确","answerText":"正确","explain":"束宽 k=1 时，每个时间步只保留一个最优候选，即贪心搜索。"},{"id":402,"chapter":"循环神经网络与序列模型","type":"judge","stem":"LSTM 可以缓解梯度消失问题。","options":[],"answer":"正确","answerText":"正确","explain":"LSTM 通过门控机制和记忆元，让梯度可以在时间步之间更稳定地流动，从而缓解梯度消失问题。"},{"id":403,"chapter":"循环神经网络与序列模型","type":"judge","stem":"现代循环神经网络彻底解决了长序列建模的所有问题。","options":[],"answer":"错误","answerText":"错误","explain":"GRU/LSTM 缓解了梯度消失，但没有彻底解决长序列建模问题。信息瓶颈仍然存在，后面还需要注意力机制和 Transformer。"},{"id":404,"chapter":"循环神经网络与序列模型","type":"judge","stem":"强制教学在 seq2seq 训练中用真实输出序列作为解码器输入。","options":[],"answer":"正确","answerText":"正确","explain":"强制教学训练时用真实输出序列作为解码器输入，而不是用模型的预测结果，让训练更稳定。"},{"id":405,"chapter":"循环神经网络与序列模型","type":"judge","stem":"强制教学会导致曝光偏差。","options":[],"answer":"正确","answerText":"正确","explain":"强制教学训练时用真实值，预测时用预测值，导致训练和预测不一致，模型没见过带误差的输入，预测时误差会累积，这就是曝光偏差。"},{"id":406,"chapter":"循环神经网络与序列模型","type":"judge","stem":"BLEU 测量的是翻译的语义正确性。","options":[],"answer":"错误","answerText":"错误","explain":"BLEU 测量预测序列和标签序列之间的 n 元语法匹配度，不是语义正确性。同义词替换会降低 BLEU，但语义可能完全正确。"},{"id":407,"chapter":"循环神经网络与序列模型","type":"judge","stem":"编码器-解码器注意力中，Q 来自解码器，K、V 来自编码器。","options":[],"answer":"正确","answerText":"正确","explain":"编码器-解码器注意力让解码器用自己的状态作为查询，去查编码器的输出。Q 来自解码器，K、V 来自编码器。"},{"id":408,"chapter":"循环神经网络与序列模型","type":"judge","stem":"seq2seq 的编码器通常使用双向 RNN。","options":[],"answer":"正确","answerText":"正确","explain":"seq2seq 的编码器通常使用双向 RNN，可以同时看过去和未来信息，更好地编码源语言。解码器通常使用单向 RNN，因为生成时不能看未来。"},{"id":409,"chapter":"循环神经网络与序列模型","type":"judge","stem":"贪心搜索保证找到全局最优序列。","options":[],"answer":"错误","answerText":"错误","explain":"贪心搜索每个时间步选当前最优，局部最优不等于全局最优，不能保证找到全局最优序列。"},{"id":410,"chapter":"循环神经网络与序列模型","type":"judge","stem":"穷举搜索保证找到全局最优序列，但计算量指数级。","options":[],"answer":"正确","answerText":"正确","explain":"穷举搜索尝试所有可能的序列，保证找到全局最优，但计算量指数级，实际不可行。"},{"id":411,"chapter":"循环神经网络与序列模型","type":"judge","stem":"束搜索是贪心搜索和穷举搜索的折中。","options":[],"answer":"正确","answerText":"正确","explain":"束搜索每个时间步保留 k 个候选，k=1 是贪心，k=无穷是穷举。中间是折中。"},{"id":412,"chapter":"循环神经网络与序列模型","type":"judge","stem":"LSTM 的记忆元是内部信息，不直接输出。","options":[],"answer":"正确","answerText":"正确","explain":"LSTM 的隐藏层输出包括隐状态和记忆元。只有隐状态会传递到输出层，记忆元完全属于内部信息。"},{"id":413,"chapter":"循环神经网络与序列模型","type":"judge","stem":"现代 RNN 通过门控机制彻底解决了梯度消失问题。","options":[],"answer":"错误","answerText":"错误","explain":"门控机制缓解了梯度消失，但没有彻底解决。长序列中信息瓶颈仍然存在，真正的解决需要注意力机制。"},{"id":414,"chapter":"循环神经网络与序列模型","type":"judge","stem":"深度 RNN 需要谨慎的初始化来确保收敛。","options":[],"answer":"正确","answerText":"正确","explain":"深度 RNN 需要大量调参，初始化需要谨慎，否则训练不收敛。"},{"id":415,"chapter":"循环神经网络与序列模型","type":"judge","stem":"编码器-解码器架构中，解码器可以使用编码器的最终隐状态作为初始隐状态。","options":[],"answer":"正确","answerText":"正确","explain":"编码器的最终隐状态可以作为解码器的初始隐状态，把源语言的信息传给解码器。"},{"id":416,"chapter":"循环神经网络与序列模型","type":"judge","stem":"seq2seq 的损失函数计算时需要遮蔽填充位置。","options":[],"answer":"正确","answerText":"正确","explain":"填充位置不是真实词，计算损失时应该遮蔽，避免模型学习预测填充。"},{"id":417,"chapter":"循环神经网络与序列模型","type":"judge","stem":"束搜索的束宽 k 越大，结果一定越好。","options":[],"answer":"错误","answerText":"错误","explain":"束宽 k 越大，搜索空间越大，但不保证一定找到最优序列，而且计算量越大。k 太大会过拟合验证集。"},{"id":418,"chapter":"循环神经网络与序列模型","type":"judge","stem":"GRU 和 LSTM 都是通过门控机制选择性记忆和遗忘。","options":[],"answer":"正确","answerText":"正确","explain":"GRU 用重置门和更新门，LSTM 用输入门、遗忘门、输出门，都是选择性记忆和遗忘。"},{"id":419,"chapter":"循环神经网络与序列模型","type":"judge","stem":"现代循环神经网络的主线是从序列建模到序列转换再到序列生成。","options":[],"answer":"正确","answerText":"正确","explain":"前半章改进 RNN 本身(GRU、LSTM、深度、双向)，后半章做序列转换(编码器-解码器、seq2seq)，最后用束搜索做序列生成。"},{"id":420,"chapter":"循环神经网络与序列模型","type":"fill","stem":"循环神经网络主要用于处理____信息，通过引入状态变量(隐状态) 存储过去的信息和当前的输入。","options":[],"answer":["序列"],"answerText":"序列","explain":"如果说卷积神经网络可以有效地处理空间信息，那么循环神经网络则可以更好地处理序列信息。RNN 通过引入状态变量存储过去的信息和当前的输入。"},{"id":421,"chapter":"循环神经网络与序列模型","type":"fill","stem":"齐普夫定律描述的是单词频率和排名成____。","options":[],"answer":["反比"],"answerText":"反比","explain":"齐普夫定律支配着单词的分布，单词频率和排名成反比。这个分布不仅适用于一元语法，还适用于其他 n 元语法。"},{"id":422,"chapter":"循环神经网络与序列模型","type":"fill","stem":"读取长序列的主要方式是____和顺序分区。","options":[],"answer":["随机采样"],"answerText":"随机采样","explain":"读取长序列的主要方式是随机采样和顺序分区。顺序分区可以保证相邻小批量的子序列在原始序列上相邻。"},{"id":423,"chapter":"循环神经网络与序列模型","type":"fill","stem":"RNN 的隐状态可以捕获直到当前____序列的历史信息。","options":[],"answer":["时间步"],"answerText":"时间步","explain":"循环神经网络的隐状态可以捕获直到当前时间步序列的历史信息。"},{"id":424,"chapter":"循环神经网络与序列模型","type":"fill","stem":"梯度裁剪可以防止梯度____，但不能应对梯度____。","options":[],"answer":["爆炸","消失"],"answerText":"爆炸；消失","explain":"梯度裁剪可以防止梯度爆炸，但不能应对梯度消失。梯度消失需要 LSTM、GRU 等结构改进。"},{"id":425,"chapter":"循环神经网络与序列模型","type":"fill","stem":"为了计算的效率，BPTT 在计算期间会____中间值，以提高计算效率。","options":[],"answer":["缓存"],"answerText":"缓存","explain":"为了计算的效率，BPTT 在计算期间会缓存中间值，以提高计算效率。"},{"id":426,"chapter":"循环神经网络与序列模型","type":"fill","stem":"RNN 的参数共享对应____不变性，CNN 的权重共享对应____不变性。","options":[],"answer":["时间","空间"],"answerText":"时间；空间","explain":"RNN 的参数在不同时间步共享，对应时间不变性。CNN 的权重在不同空间位置共享，对应空间不变性。"},{"id":427,"chapter":"循环神经网络与序列模型","type":"fill","stem":"LSTM 的隐藏层输出包括隐状态和记忆元，只有____会传递到输出层。","options":[],"answer":["隐状态"],"answerText":"隐状态","explain":"LSTM 的隐藏层输出包括隐状态和记忆元。只有隐状态会传递到输出层，记忆元完全属于内部信息。"},{"id":428,"chapter":"循环神经网络与序列模型","type":"fill","stem":"双向循环神经网络中，每个时间步的隐状态由当前时间步的____数据同时决定。","options":[],"answer":["前后"],"answerText":"前后","explain":"在双向 RNN 中，每个时间步的隐状态由当前时间步的前后数据同时决定。"},{"id":429,"chapter":"循环神经网络与序列模型","type":"fill","stem":"通过截断和____文本序列，可以保证所有的文本序列都具有相同的长度，以便以小批量的方式加载。","options":[],"answer":["填充"],"answerText":"填充","explain":"通过截断和填充文本序列，可以保证所有的文本序列都具有相同的长度，以便以小批量的方式加载。"},{"id":430,"chapter":"循环神经网络与序列模型","type":"fill","stem":"“编码器-解码器”架构可以将长度____的序列作为输入和输出。","options":[],"answer":["可变"],"answerText":"可变","explain":"“编码器-解码器”架构可以将长度可变的序列作为输入和输出，因此适用于机器翻译等序列转换问题。"},{"id":431,"chapter":"循环神经网络与序列模型","type":"fill","stem":"seq2seq 使用两个____来设计序列到序列学习的模型。","options":[],"answer":["循环神经网络"],"answerText":"循环神经网络","explain":"根据“编码器-解码器”架构的设计，我们可以使用两个循环神经网络来设计一个序列到序列学习的模型。"},{"id":432,"chapter":"循环神经网络与序列模型","type":"fill","stem":"穷举搜索保证找到全局最优，但计算量是____级，不可行。","options":[],"answer":["指数"],"answerText":"指数","explain":"穷举搜索尝试所有可能的序列，保证找到全局最优，但计算量指数级，实际不可行。"},{"id":433,"chapter":"循环神经网络与序列模型","type":"fill","stem":"束搜索每个时间步保留概率最高的 k 个候选序列，k 叫____。","options":[],"answer":["束宽"],"answerText":"束宽","explain":"束搜索在每个时间步保留概率最高的 k 个候选序列，k 是束宽。k=1 时退化为贪心搜索。"},{"id":434,"chapter":"循环神经网络与序列模型","type":"fill","stem":"束宽 k=1 时，束搜索等价于____;k 越大，计算量越____。","options":[],"answer":["贪心搜索","大"],"answerText":"贪心搜索；大","explain":"束宽 k=1 时退化为贪心搜索。k 越大，每个时间步保留的候选越多，计算量越大。"},{"id":435,"chapter":"循环神经网络与序列模型","type":"fill","stem":"LSTM 的记忆元是内部信息，不直接传递到____。","options":[],"answer":["输出层"],"answerText":"输出层","explain":"记忆元是内部信息，不直接传递到输出层。只有隐状态会传递到输出层。"},{"id":436,"chapter":"注意力机制与 Transformer","type":"single","stem":"注意力机制的核心思想是( )","options":[{"key":"A","text":"把所有输入一视同仁"},{"key":"B","text":"根据查询和键的相似度，对值加权聚合"},{"key":"C","text":"只保留第一个输入"},{"key":"D","text":"随机选择输入"}],"answer":["B"],"answerText":"B","explain":"注意力用查询和键算相似度，得到权重，再对值加权求和。它的核心是根据相关性分配不同的权重。"},{"id":437,"chapter":"注意力机制与 Transformer","type":"single","stem":"注意力中的 Q、K、V 分别代表( )","options":[{"key":"A","text":"查询、键、值"},{"key":"B","text":"问题、知识、验证"},{"key":"C","text":"质量、键值、向量"},{"key":"D","text":"队列、核、变量"}],"answer":["A"],"answerText":"A","explain":"Q 是查询(Query)，K 是键(Key)，V 是值(Value)。它们代表三个角色，不是三个固定输入。"},{"id":438,"chapter":"注意力机制与 Transformer","type":"single","stem":"注意力权重是( )","options":[{"key":"A","text":"固定的模型参数"},{"key":"B","text":"每次前向传播时根据 Q 和 K 动态计算的"},{"key":"C","text":"随机生成的"},{"key":"D","text":"人工设定的"}],"answer":["B"],"answerText":"B","explain":"注意力权重是每次前向传播时用查询和键算相似度，再 softmax 得到的。它是动态的，不同输入、不同查询，权重不同。"},{"id":439,"chapter":"注意力机制与 Transformer","type":"single","stem":"掩蔽 softmax 的作用是( )","options":[{"key":"A","text":"增加注意力权重"},{"key":"B","text":"忽略填充位置，不参与注意力计算"},{"key":"C","text":"减少模型参数"},{"key":"D","text":"加速训练"}],"answer":["B"],"answerText":"B","explain":"变长序列有填充，填充位置不该参与注意力。把填充位置的分数设为负无穷，softmax 后权重为 0。"},{"id":440,"chapter":"注意力机制与 Transformer","type":"single","stem":"Bahdanau 注意力解决的主要问题是( )","options":[{"key":"A","text":"梯度爆炸"},{"key":"B","text":"seq2seq 编码器把整个源序列压缩成固定向量的瓶颈"},{"key":"C","text":"过拟合"},{"key":"D","text":"数据不足"}],"answer":["B"],"answerText":"B","explain":"普通 seq2seq 的编码器把整个源序列压缩成一个固定向量，长序列信息丢失。Bahdanau 注意力让解码器每一步都直接看编码器的所有隐状态。"},{"id":441,"chapter":"注意力机制与 Transformer","type":"single","stem":"多头注意力中每个头的作用是( )","options":[{"key":"A","text":"重复计算同一个注意力"},{"key":"B","text":"在不同的子空间里算注意力，关注不同的关系"},{"key":"C","text":"增加参数量"},{"key":"D","text":"减少计算量"}],"answer":["B"],"answerText":"B","explain":"每个头有独立的线性变换，在不同的子空间里算注意力。有的头关注语法，有的关注语义，有的关注位置。"},{"id":442,"chapter":"注意力机制与 Transformer","type":"single","stem":"自注意力的 Q、K、V 来自( )","options":[{"key":"A","text":"三个不同的序列"},{"key":"B","text":"同一个序列"},{"key":"C","text":"编码器和解码器"},{"key":"D","text":"随机生成"}],"answer":["B"],"answerText":"B","explain":"自注意力的 Q、K、V 都来自同一个序列，每个位置可以看序列里所有位置，包括自己。"},{"id":443,"chapter":"注意力机制与 Transformer","type":"single","stem":"自注意力相比 RNN 的主要优势是( )","options":[{"key":"A","text":"参数更少"},{"key":"B","text":"任意两个位置直接连接，路径长度 O(1)，可以并行"},{"key":"C","text":"不需要训练"},{"key":"D","text":"只能处理短序列"}],"answer":["B"],"answerText":"B","explain":"RNN 逐步传递，路径长度 O(n)，不能并行。自注意力让任意两个位置直接连接，路径 O(1)，可以并行。"},{"id":444,"chapter":"注意力机制与 Transformer","type":"single","stem":"位置编码的作用是( )","options":[{"key":"A","text":"增加模型参数量"},{"key":"B","text":"给自注意力注入顺序信息"},{"key":"C","text":"减少计算量"},{"key":"D","text":"替代注意力"}],"answer":["B"],"answerText":"B","explain":"自注意力本身没有顺序感，打乱序列顺序输出不变。位置编码给每个位置注入顺序信息，让模型知道词序。"},{"id":445,"chapter":"注意力机制与 Transformer","type":"single","stem":"Transformer 的编码器层包含哪些组件?( )","options":[{"key":"A","text":"多头自注意力、残差连接、层归一化、前馈网络"},{"key":"B","text":"只有自注意力"},{"key":"C","text":"只有前馈网络"},{"key":"D","text":"卷积层和池化层"}],"answer":["A"],"answerText":"A","explain":"编码器层包含多头自注意力、残差连接、层归一化、前馈网络。自注意力和前馈网络是“做什么”，残差和归一化是“怎么训得稳”。"},{"id":446,"chapter":"注意力机制与 Transformer","type":"single","stem":"Transformer 解码器的自注意力为什么要掩蔽?( )","options":[{"key":"A","text":"增加计算量"},{"key":"B","text":"生成时不能看未来，保证训练和预测一致"},{"key":"C","text":"减少参数量"},{"key":"D","text":"加速训练"}],"answer":["B"],"answerText":"B","explain":"解码器逐步生成，第 t 步只能看前 t-1 个词。不掩蔽的话，训练时偷看未来，训练和预测不一致。"},{"id":447,"chapter":"注意力机制与 Transformer","type":"single","stem":"编码器-解码器注意力中，Q、K、V 分别来自( )","options":[{"key":"A","text":"Q 来自解码器，K、V 来自编码器"},{"key":"B","text":"Q 来自编码器，K、V 来自解码器"},{"key":"C","text":"都来自编码器"},{"key":"D","text":"都来自解码器"}],"answer":["A"],"answerText":"A","explain":"编码器-解码器注意力让解码器用自己的状态作为查询，去查编码器的输出。Q 来自解码器，K、V 来自编码器。"},{"id":448,"chapter":"注意力机制与 Transformer","type":"single","stem":"层归一化在 Transformer 中的作用是( )","options":[{"key":"A","text":"增加参数量"},{"key":"B","text":"稳定每层的输入分布，让训练更稳定"},{"key":"C","text":"替代注意力"},{"key":"D","text":"减少计算量"}],"answer":["B"],"answerText":"B","explain":"层归一化对每个样本的所有特征做归一化，让每层输入分布稳定，训练更稳定、收敛更快。"},{"id":449,"chapter":"注意力机制与 Transformer","type":"multi","stem":"关于查询、键、值，下列说法正确的是( )","options":[{"key":"A","text":"Q 是“我想找什么”"},{"key":"B","text":"K 是“每个位置有什么”"},{"key":"C","text":"V 是“每个位置的实际内容”"},{"key":"D","text":"Q、K、V 必须是三个不同的输入"}],"answer":["A","B","C"],"answerText":"ABC","explain":"Q、K、V 是三个角色。D 错误，它们可以来自同一个输入，通过不同的变换得到，这就是自注意力。"},{"id":450,"chapter":"注意力机制与 Transformer","type":"multi","stem":"关于注意力权重，下列说法正确的是( )","options":[{"key":"A","text":"是每次前向传播时动态计算的"},{"key":"B","text":"不同输入、不同查询，权重不同"},{"key":"C","text":"是固定的模型参数"},{"key":"D","text":"通过 softmax 归一化得到"}],"answer":["A","B","D"],"answerText":"ABD","explain":"注意力权重是动态计算的，不同输入不同，通过 softmax 归一化。C 错误，它不是固定参数。"},{"id":451,"chapter":"注意力机制与 Transformer","type":"multi","stem":"关于加性注意力，下列说法正确的是( )","options":[{"key":"A","text":"适合查询和键维度不同"},{"key":"B","text":"用一个小神经网络算相似度"},{"key":"C","text":"计算比缩放点积慢"},{"key":"D","text":"不需要参数"}],"answer":["A","B","C"],"answerText":"ABC","explain":"加性注意力适合维度不同，用一个小神经网络算相似度，计算比缩放点积慢。D 错误，它需要参数。"},{"id":452,"chapter":"注意力机制与 Transformer","type":"multi","stem":"关于掩蔽 softmax，下列说法正确的是( )","options":[{"key":"A","text":"把填充位置的分数设为负无穷"},{"key":"B","text":"softmax 后填充位置权重为 0"},{"key":"C","text":"用于变长序列批处理"},{"key":"D","text":"会增加计算量"}],"answer":["A","B","C"],"answerText":"ABC","explain":"掩蔽 softmax 把填充位置的分数设为负无穷，softmax 后权重为 0，用于变长序列批处理。D 错误，它不增加计算量。"},{"id":453,"chapter":"注意力机制与 Transformer","type":"multi","stem":"关于多头注意力，下列说法正确的是( )","options":[{"key":"A","text":"每个头有独立的线性变换"},{"key":"B","text":"每个头关注不同的子空间"},{"key":"C","text":"所有头输出拼接后过一个线性变换"},{"key":"D","text":"每个头的维度通常是 d/h"}],"answer":["A","B","C","D"],"answerText":"ABCD","explain":"多头注意力每个头有独立的线性变换，关注不同子空间，输出拼接后过线性变换。每个头维度通常是 d/h，总计算量和单头差不多。"},{"id":454,"chapter":"注意力机制与 Transformer","type":"multi","stem":"关于自注意力，下列说法正确的是( )","options":[{"key":"A","text":"Q、K、V 来自同一个序列"},{"key":"B","text":"每个位置可以看所有位置"},{"key":"C","text":"任意两个位置路径长度 O(1)"},{"key":"D","text":"可以并行计算"}],"answer":["A","B","C","D"],"answerText":"ABCD","explain":"自注意力的 Q、K、V 来自同一个序列，每个位置可以看所有位置，路径 O(1)，可以并行。"},{"id":455,"chapter":"注意力机制与 Transformer","type":"multi","stem":"关于 Transformer 编码器层，下列说法正确的是( )","options":[{"key":"A","text":"包含多头自注意力"},{"key":"B","text":"包含残差连接和层归一化"},{"key":"C","text":"包含前馈网络"},{"key":"D","text":"包含掩蔽自注意力"}],"answer":["A","B","C"],"answerText":"ABC","explain":"编码器层包含多头自注意力、残差连接、层归一化、前馈网络。D 错误，掩蔽自注意力在解码器里。"},{"id":456,"chapter":"注意力机制与 Transformer","type":"multi","stem":"关于 Transformer 解码器层，下列说法正确的是( )","options":[{"key":"A","text":"包含掩蔽多头自注意力"},{"key":"B","text":"包含编码器-解码器注意力"},{"key":"C","text":"包含前馈网络"},{"key":"D","text":"比编码器多一个子层"}],"answer":["A","B","C","D"],"answerText":"ABCD","explain":"解码器层包含掩蔽多头自注意力、编码器-解码器注意力、前馈网络，比编码器多一个子层。"},{"id":457,"chapter":"注意力机制与 Transformer","type":"judge","stem":"注意力机制的核心是根据查询和键的相似度，对值加权聚合。","options":[],"answer":"正确","answerText":"正确","explain":"注意力用查询和键算相似度，得到权重，再对值加权求和。这是它的核心思想。"},{"id":458,"chapter":"注意力机制与 Transformer","type":"judge","stem":"注意力中的 Q、K、V 必须是三个不同的输入。","options":[],"answer":"错误","answerText":"错误","explain":"Q、K、V 是三个角色，不是三个固定输入。它们可以来自同一个输入，通过不同的变换得到，这就是自注意力。"},{"id":459,"chapter":"注意力机制与 Transformer","type":"judge","stem":"注意力权重是固定的模型参数。","options":[],"answer":"错误","answerText":"错误","explain":"注意力权重是每次前向传播时根据 Q 和 K 动态计算的，不是固定参数。"},{"id":460,"chapter":"注意力机制与 Transformer","type":"judge","stem":"掩蔽 softmax 用于忽略填充位置。","options":[],"answer":"正确","answerText":"正确","explain":"掩蔽 softmax 把填充位置的分数设为负无穷，softmax 后权重为 0，忽略填充位置。"},{"id":461,"chapter":"注意力机制与 Transformer","type":"judge","stem":"Bahdanau 注意力解决了 seq2seq 的固定向量瓶颈。","options":[],"answer":"正确","answerText":"正确","explain":"Bahdanau 注意力让解码器每一步都直接看编码器的所有隐状态，不再依赖一个固定向量。"},{"id":462,"chapter":"注意力机制与 Transformer","type":"judge","stem":"多头注意力就是把同一个注意力算多次，然后取平均。","options":[],"answer":"错误","answerText":"错误","explain":"多头注意力的每个头有独立的线性变换，在不同的子空间里算注意力，最后拼接。不是重复计算取平均。"},{"id":463,"chapter":"注意力机制与 Transformer","type":"judge","stem":"自注意力的 Q、K、V 都来自同一个序列。","options":[],"answer":"正确","answerText":"正确","explain":"自注意力的 Q、K、V 都来自同一个序列，每个位置可以看序列里所有位置，包括自己。"},{"id":464,"chapter":"注意力机制与 Transformer","type":"judge","stem":"自注意力让任意两个位置直接连接，路径长度 O(1)。","options":[],"answer":"正确","answerText":"正确","explain":"自注意力让任意两个位置直接连接，不需要逐步传递，路径长度是常数 O(1)。"},{"id":465,"chapter":"注意力机制与 Transformer","type":"judge","stem":"自注意力可以完全并行计算。","options":[],"answer":"正确","answerText":"正确","explain":"自注意力让每个位置独立计算，不依赖其他位置的结果，可以完全并行。"},{"id":466,"chapter":"注意力机制与 Transformer","type":"judge","stem":"Transformer 解码器的自注意力要掩蔽，因为生成时不能看未来。","options":[],"answer":"正确","answerText":"正确","explain":"解码器逐步生成，第 t 步只能看前 t-1 个词。不掩蔽的话，训练时偷看未来，训练和预测不一致。"},{"id":467,"chapter":"注意力机制与 Transformer","type":"judge","stem":"编码器-解码器注意力中，Q 来自编码器，K、V 来自解码器。","options":[],"answer":"错误","answerText":"错误","explain":"Q 来自解码器，K、V 来自编码器。解码器用自己的状态去查编码器的输出。反过来说就错了。"},{"id":468,"chapter":"注意力机制与 Transformer","type":"judge","stem":"层归一化在 Transformer 中用于稳定每层的输入分布。","options":[],"answer":"正确","answerText":"正确","explain":"层归一化对每个样本的所有特征做归一化，让每层输入分布稳定，训练更稳定、收敛更快。"},{"id":469,"chapter":"注意力机制与 Transformer","type":"judge","stem":"残差连接在 Transformer 中让梯度直接回流。","options":[],"answer":"正确","answerText":"正确","explain":"残差连接是子层输出加子层输入，加法路径的导数是 1，梯度可以直接回流，不会消失。"},{"id":470,"chapter":"注意力机制与 Transformer","type":"judge","stem":"Transformer 训练时解码器输入真实输出序列，这叫强制教学。","options":[],"answer":"正确","answerText":"正确","explain":"强制教学训练时用真实输出序列作为解码器输入，不用模型的预测结果，让训练更稳定、可并行。"},{"id":471,"chapter":"注意力机制与 Transformer","type":"judge","stem":"标签平滑防止模型过度自信。","options":[],"answer":"正确","answerText":"正确","explain":"标签平滑不把真实标签当成 one-hot，而是加一点噪声，防止模型把正确类别概率推到接近 1，提高泛化能力。"},{"id":472,"chapter":"注意力机制与 Transformer","type":"judge","stem":"BERT 只保留编码器，双向看上下文。","options":[],"answer":"正确","answerText":"正确","explain":"BERT 只保留编码器，自注意力不掩蔽，每个位置可以看所有位置，所以叫双向看上下文。"},{"id":473,"chapter":"注意力机制与 Transformer","type":"judge","stem":"GPT 只保留解码器，自回归生成。","options":[],"answer":"正确","answerText":"正确","explain":"GPT 只保留解码器，自注意力掩蔽，每个位置只能看前面的位置，所以叫自回归生成。"},{"id":474,"chapter":"注意力机制与 Transformer","type":"judge","stem":"T5 是编码器-解码器架构，统一成文本到文本。","options":[],"answer":"正确","answerText":"正确","explain":"T5 保留完整的编码器-解码器结构，把所有任务统一成文本到文本的形式。"},{"id":475,"chapter":"注意力机制与 Transformer","type":"judge","stem":"ViT 把图像当序列处理。","options":[],"answer":"正确","answerText":"正确","explain":"ViT 把图像切成小块，每块当成一个词，输入编码器。这就是把图像当序列处理。"},{"id":476,"chapter":"注意力机制与 Transformer","type":"judge","stem":"Transformer 的编码器和解码器必须使用相同数量的层。","options":[],"answer":"错误","answerText":"错误","explain":"编码器和解码器的层数可以不同。原始 Transformer 是 6+6，但很多模型会根据任务调整。"},{"id":477,"chapter":"注意力机制与 Transformer","type":"judge","stem":"自注意力的计算量是 O(n²·d)，长序列很贵。","options":[],"answer":"正确","answerText":"正确","explain":"每个位置都要和所有位置算注意力，n 个位置就是 n×n 个分数。计算量是 O(n²·d)，长序列很贵。"},{"id":478,"chapter":"注意力机制与 Transformer","type":"judge","stem":"注意力机制可以完全取代 RNN。","options":[],"answer":"错误","answerText":"错误","explain":"在大多数任务上能取代，但不是所有。RNN 在流式处理、资源受限等场景仍然有用。Transformer 计算量随序列长度平方增长，超长序列很贵。"},{"id":479,"chapter":"注意力机制与 Transformer","type":"judge","stem":"多头注意力的每个头维度通常是 d/h。","options":[],"answer":"正确","answerText":"正确","explain":"每个头的维度通常是 d/h，这样多头总计算量和单头差不多。如果每个头都是 d 维，计算量会变成 h 倍。"},{"id":480,"chapter":"注意力机制与 Transformer","type":"judge","stem":"注意力机制是从 RNN 的补充演变成 RNN 的替代。","options":[],"answer":"正确","answerText":"正确","explain":"Bahdanau 注意力是 RNN 加注意力，缓解瓶颈。Transformer 是纯注意力，完全取代 RNN。注意力从补充变成了替代。"},{"id":481,"chapter":"注意力机制与 Transformer","type":"judge","stem":"正弦位置编码可以外推到比训练时更长的序列。","options":[],"answer":"正确","answerText":"正确","explain":"正弦位置编码用正弦和余弦函数生成，不需要学习，可以外推到更长序列。可学习位置编码不能外推。"},{"id":482,"chapter":"注意力机制与 Transformer","type":"judge","stem":"多头注意力如果每个头的变换都一样，等价于单头。","options":[],"answer":"正确","answerText":"正确","explain":"如果每个头的变换都一样，所有头输出相同，拼接后等价于单头。多头的前提是每个头有不同的变换。"},{"id":483,"chapter":"注意力机制与 Transformer","type":"judge","stem":"Transformer 是组合创新，不是从零发明的新模型。","options":[],"answer":"正确","answerText":"正确","explain":"自注意力、残差连接、层归一化、前馈网络都是已有技术。Transformer 的创新是把它们组合起来，用自注意力取代 RNN。"},{"id":484,"chapter":"注意力机制与 Transformer","type":"judge","stem":"缩放点积注意力中，维度越高，点积的标准差越大。","options":[],"answer":"正确","answerText":"正确","explain":"点积是 d 项乘积的和，方差是 d，标准差是 √d。维度越高，标准差越大。"},{"id":485,"chapter":"注意力机制与 Transformer","type":"judge","stem":"自注意力的输出可以解释为“每个位置对所有位置信息的加权聚合”。","options":[],"answer":"正确","answerText":"正确","explain":"自注意力用每个位置的查询和所有位置的键算权重，再对所有位置的值加权求和。输出就是加权聚合的结果。"},{"id":486,"chapter":"注意力机制与 Transformer","type":"judge","stem":"位置编码加到嵌入向量上，是相加不是拼接。","options":[],"answer":"正确","answerText":"正确","explain":"位置编码加到嵌入向量上，保持维度不变，计算高效。拼接会让维度翻倍，增加计算量。"},{"id":487,"chapter":"注意力机制与 Transformer","type":"judge","stem":"编码器-解码器注意力的 Q 来自解码器，因为解码器是“提问方”。","options":[],"answer":"正确","answerText":"正确","explain":"解码器想知道当前生成到这个词时，源语言的哪些位置相关。Q 代表“我想找什么”，所以来自解码器。"},{"id":488,"chapter":"注意力机制与 Transformer","type":"judge","stem":"Transformer 的编码器层和解码器层都包含前馈网络。","options":[],"answer":"正确","answerText":"正确","explain":"编码器层和解码器层都包含前馈网络。前馈网络负责对每个位置做非线性变换。"},{"id":489,"chapter":"注意力机制与 Transformer","type":"judge","stem":"注意力权重可视化可以帮助理解模型在关注什么。","options":[],"answer":"正确","answerText":"正确","explain":"注意力权重可视化能看出模型在关注哪些位置，帮助调试和理解模型行为。"},{"id":490,"chapter":"注意力机制与 Transformer","type":"fill","stem":"注意力机制的核心思想是根据查询和键的相似度，对____加权聚合。","options":[],"answer":["值"],"answerText":"值","explain":"注意力用查询和键算相似度，得到权重，再对值加权求和。这是它的核心思想。"},{"id":491,"chapter":"注意力机制与 Transformer","type":"fill","stem":"注意力权重是每次前向传播时根据查询和____动态计算的，不是固定的模型参数。","options":[],"answer":["键"],"answerText":"键","explain":"注意力权重是动态计算的，不同输入、不同查询，权重不同。它不是固定参数。"},{"id":492,"chapter":"注意力机制与 Transformer","type":"fill","stem":"加性注意力适合查询和键维度____的情况，缩放点积注意力适合维度____的情况。","options":[],"answer":["不同","相同"],"answerText":"不同；相同","explain":"加性注意力用一个小神经网络算相似度，适合维度不同。缩放点积用点积算相似度，适合维度相同。"},{"id":493,"chapter":"注意力机制与 Transformer","type":"fill","stem":"缩放点积注意力中除以 √d 的作用是防止点积太大导致____饱和。","options":[],"answer":["softmax"],"answerText":"softmax","explain":"点积的方差随维度 d 增长，标准差是 √d。除以 √d 把标准差拉回 1，防止 softmax 饱和成 one-hot，梯度接近 0。"},{"id":494,"chapter":"注意力机制与 Transformer","type":"fill","stem":"自注意力的 Q、K、V 都来自同一个序列，每个位置可以看____位置。","options":[],"answer":["所有"],"answerText":"所有","explain":"自注意力的 Q、K、V 都来自同一个序列，每个位置可以看序列里所有位置，包括自己。"},{"id":495,"chapter":"注意力机制与 Transformer","type":"fill","stem":"自注意力让任意两个位置直接连接，路径长度是 O(1)，可以____计算。","options":[],"answer":["并行"],"answerText":"并行","explain":"自注意力让任意两个位置直接连接，路径长度 O(1)，可以并行计算。RNN 逐步传递，路径 O (n)，不能并行。"},{"id":496,"chapter":"注意力机制与 Transformer","type":"fill","stem":"位置编码的作用是给自注意力注入____信息。","options":[],"answer":["顺序"],"answerText":"顺序","explain":"自注意力本身没有顺序感，打乱序列顺序输出不变。位置编码给每个位置注入顺序信息，让模型知道词序。"},{"id":497,"chapter":"注意力机制与 Transformer","type":"fill","stem":"编码器-解码器注意力中，Q 来自____，K、V 来自____。","options":[],"answer":["解码器","编码器"],"answerText":"解码器；编码器","explain":"编码器-解码器注意力让解码器用自己的状态作为查询，去查编码器的输出。Q 来自解码器，K、V 来自编码器。"},{"id":498,"chapter":"注意力机制与 Transformer","type":"fill","stem":"Transformer 训练时解码器输入真实输出序列，这叫____。","options":[],"answer":["强制教学"],"answerText":"强制教学","explain":"强制教学训练时用真实输出序列作为解码器输入，不用模型的预测结果，让训练更稳定、可并行。"},{"id":499,"chapter":"注意力机制与 Transformer","type":"fill","stem":"学习率预热是先____后____，让训练初期更稳定。","options":[],"answer":["小","大"],"answerText":"小；大","explain":"学习率预热是先小后大，训练初期用小学习率防止发散，逐渐增大到设定值。"},{"id":500,"chapter":"注意力机制与 Transformer","type":"judge","stem":"Transformer 训练时不需要任何技巧，直接训练就能收敛。","options":[],"answer":"错误","answerText":"错误","explain":"Transformer 训练需要强制教学、掩蔽、学习率预热、标签平滑等技巧。没有这些，训练不稳定，容易发散。"},{"id":501,"chapter":"计算机视觉应用","type":"single","stem":"图像增广的主要目的是( )","options":[{"key":"A","text":"增加模型参数量"},{"key":"B","text":"在有限数据上制造多样性，减少过拟合"},{"key":"C","text":"减少训练时间"},{"key":"D","text":"提高模型深度"}],"answer":["B"],"answerText":"B","explain":"图像增广通过随机变换制造更多样的训练样本，让模型见过更多变化，减少过拟合。"},{"id":502,"chapter":"计算机视觉应用","type":"single","stem":"微调时通常冻结前面的层，原因是( )","options":[{"key":"A","text":"前面的层参数太多"},{"key":"B","text":"前面的层学到的是通用特征，对新任务也有用"},{"key":"C","text":"前面的层不重要"},{"key":"D","text":"冻结可以减少模型深度"}],"answer":["B"],"answerText":"B","explain":"前面的层学到的是边缘、纹理等通用特征，对新任务也有用。冻结可以防止过拟合、减少计算量。"},{"id":503,"chapter":"计算机视觉应用","type":"single","stem":"微调的学习率通常比从头训练( )","options":[{"key":"A","text":"更大"},{"key":"B","text":"更小"},{"key":"C","text":"相同"},{"key":"D","text":"无关"}],"answer":["B"],"answerText":"B","explain":"预训练权重已经很好，大步长会破坏它们。微调学习率通常是从头训练的 1/10 到 1/100。"},{"id":504,"chapter":"计算机视觉应用","type":"single","stem":"目标检测的输出是( )","options":[{"key":"A","text":"一个类别标签"},{"key":"B","text":"一组边界框和每个框的类别"},{"key":"C","text":"每个像素的类别"},{"key":"D","text":"一张新图像"}],"answer":["B"],"answerText":"B","explain":"目标检测输出一组边界框，每个框标注类别。分类输出一个标签，分割输出每个像素的类别。"},{"id":505,"chapter":"计算机视觉应用","type":"single","stem":"锚框的作用是( )","options":[{"key":"A","text":"人工标注真实框"},{"key":"B","text":"预先定义不同大小和比例的候选框"},{"key":"C","text":"计算损失函数"},{"key":"D","text":"替代边界框"}],"answer":["B"],"answerText":"B","explain":"锚框是预先定义的不同大小、不同比例的候选框。模型在锚框上做预测，减少候选框数量。"},{"id":506,"chapter":"计算机视觉应用","type":"single","stem":"IoU 的定义是( )","options":[{"key":"A","text":"交集面积"},{"key":"B","text":"交集面积除以并集面积"},{"key":"C","text":"并集面积除以交集面积"},{"key":"D","text":"两个框的距离"}],"answer":["B"],"answerText":"B","explain":"IoU 是交集面积除以并集面积，是归一化的重合度。完全重合 IoU=1，完全不重合 IoU=0。"},{"id":507,"chapter":"计算机视觉应用","type":"single","stem":"非极大值抑制(NMS)的作用是( )","options":[{"key":"A","text":"增加候选框数量"},{"key":"B","text":"去掉重叠的预测框，保留最优的"},{"key":"C","text":"计算 IoU"},{"key":"D","text":"生成锚框"}],"answer":["B"],"answerText":"B","explain":"NMS 按置信度排序，保留最高的框，去掉与它 IoU 超过阈值的框，重复直到处理完。"},{"id":508,"chapter":"计算机视觉应用","type":"single","stem":"多尺度目标检测中，浅层特征图通常负责检测( )","options":[{"key":"A","text":"大物体"},{"key":"B","text":"小物体"},{"key":"C","text":"所有物体"},{"key":"D","text":"背景"}],"answer":["B"],"answerText":"B","explain":"浅层感受野小，每个位置对应原图区域小，适合检测小物体。深层感受野大，适合检测大物体。"},{"id":509,"chapter":"计算机视觉应用","type":"single","stem":"SSD 的核心思想是( )","options":[{"key":"A","text":"只用一层特征图检测"},{"key":"B","text":"锚框 + 多尺度 + 分类 + 回归"},{"key":"C","text":"两阶段检测"},{"key":"D","text":"只用全连接层"}],"answer":["B"],"answerText":"B","explain":"SSD 把锚框、多尺度、分类、回归组合起来，一次前向就输出检测结果。"},{"id":510,"chapter":"计算机视觉应用","type":"single","stem":"R-CNN 的主要计算瓶颈是( )","options":[{"key":"A","text":"锚框太多"},{"key":"B","text":"每个候选框都要跑一次 CNN"},{"key":"C","text":"没有使用 GPU"},{"key":"D","text":"损失函数太复杂"}],"answer":["B"],"answerText":"B","explain":"R-CNN 对每个候选框都跑一次 CNN，候选框之间有很多重叠区域，重复计算严重。"},{"id":511,"chapter":"计算机视觉应用","type":"single","stem":"Fast R-CNN 相比 R-CNN 的主要改进是( )","options":[{"key":"A","text":"整张图跑一次 CNN，候选框在特征图上取"},{"key":"B","text":"用 RPN 生成候选框"},{"key":"C","text":"加了分割分支"},{"key":"D","text":"去掉候选框"}],"answer":["A"],"answerText":"A","explain":"Fast R-CNN 整张图跑一次 CNN，候选框在特征图上取对应区域，减少重复计算。"},{"id":512,"chapter":"计算机视觉应用","type":"single","stem":"Faster R-CNN 中的 RPN 作用是( )","options":[{"key":"A","text":"分类"},{"key":"B","text":"生成候选框"},{"key":"C","text":"分割"},{"key":"D","text":"计算损失"}],"answer":["B"],"answerText":"B","explain":"RPN 是区域提议网络，在特征图上预测每个位置有没有物体、框要怎么调整，用来生成候选框。"},{"id":513,"chapter":"计算机视觉应用","type":"single","stem":"Mask R-CNN 在 Faster R-CNN 基础上加了( )","options":[{"key":"A","text":"锚框"},{"key":"B","text":"分割分支"},{"key":"C","text":"RPN"},{"key":"D","text":"多尺度"}],"answer":["B"],"answerText":"B","explain":"Mask R-CNN 在 Faster R-CNN 基础上加了分割分支，输出边界框、类别和像素级掩码，做实例分割。"},{"id":514,"chapter":"计算机视觉应用","type":"single","stem":"语义分割的任务是( )","options":[{"key":"A","text":"给整张图一个标签"},{"key":"B","text":"给每个像素分类"},{"key":"C","text":"画边界框"},{"key":"D","text":"生成新图像"}],"answer":["B"],"answerText":"B","explain":"语义分割给每个像素分类，输出每个像素的类别标签。"},{"id":515,"chapter":"计算机视觉应用","type":"single","stem":"全卷积网络(FCN)的核心特点是( )","options":[{"key":"A","text":"没有卷积层"},{"key":"B","text":"去掉全连接层，保留空间信息"},{"key":"C","text":"只有全连接层"},{"key":"D","text":"不需要训练"}],"answer":["B"],"answerText":"B","explain":"全卷积网络去掉全连接层，全部用卷积，输出保留空间维度，每个像素一个预测。"},{"id":516,"chapter":"计算机视觉应用","type":"single","stem":"转置卷积的作用是( )","options":[{"key":"A","text":"下采样"},{"key":"B","text":"上采样，把小特征图变大"},{"key":"C","text":"分类"},{"key":"D","text":"计算损失"}],"answer":["B"],"answerText":"B","explain":"转置卷积做上采样，小特征图变成大特征图。它不是卷积的逆运算，是可学习的上采样。"},{"id":517,"chapter":"计算机视觉应用","type":"single","stem":"转置卷积和卷积的关系是( )","options":[{"key":"A","text":"转置卷积是卷积的精确逆运算"},{"key":"B","text":"转置卷积是可学习的上采样，不是逆运算"},{"key":"C","text":"两者完全相同"},{"key":"D","text":"转置卷积不能学习"}],"answer":["B"],"answerText":"B","explain":"卷积会丢失信息，转置卷积只能恢复形状，不能恢复丢失的细节。它是可学习的上采样，不是逆运算。"},{"id":518,"chapter":"计算机视觉应用","type":"single","stem":"风格迁移的损失函数包含( )","options":[{"key":"A","text":"只有内容损失"},{"key":"B","text":"只有风格损失"},{"key":"C","text":"内容损失 + 风格损失"},{"key":"D","text":"只有分类损失"}],"answer":["C"],"answerText":"C","explain":"风格迁移的损失包含内容损失和风格损失。内容损失保持内容，风格损失保持风格。"},{"id":519,"chapter":"计算机视觉应用","type":"single","stem":"风格迁移中 Gram 矩阵的作用是( )","options":[{"key":"A","text":"计算内容损失"},{"key":"B","text":"捕捉特征图之间的相关性，表示风格"},{"key":"C","text":"生成图像"},{"key":"D","text":"计算分类损失"}],"answer":["B"],"answerText":"B","explain":"Gram 矩阵是特征图的内积矩阵，捕捉不同通道之间的相关性，表示风格。风格损失用 Gram 矩阵的差异衡量。"},{"id":520,"chapter":"计算机视觉应用","type":"multi","stem":"关于图像增广，下列说法正确的是( )","options":[{"key":"A","text":"在有限数据上制造多样性"},{"key":"B","text":"可以减少过拟合"},{"key":"C","text":"增广方法必须匹配任务的语义不变性"},{"key":"D","text":"所有任务都能用所有增广方法"}],"answer":["A","B","C"],"answerText":"ABC","explain":"图像增广制造多样性、减少过拟合，但增广方法必须匹配任务的语义不变性。D 错误，数字 6 和 9 不能翻转。"},{"id":521,"chapter":"计算机视觉应用","type":"multi","stem":"关于微调，下列说法正确的是( )","options":[{"key":"A","text":"加载预训练模型"},{"key":"B","text":"替换输出层适配新任务"},{"key":"C","text":"可以冻结前面的层"},{"key":"D","text":"学习率通常比从头训练小"}],"answer":["A","B","C","D"],"answerText":"ABCD","explain":"微调加载预训练模型，替换输出层，冻结前面的层，用较小的学习率训练。"},{"id":522,"chapter":"计算机视觉应用","type":"multi","stem":"关于目标检测，下列说法正确的是( )","options":[{"key":"A","text":"输出一组边界框和类别"},{"key":"B","text":"需要定位物体"},{"key":"C","text":"和分类的输出形式相同"},{"key":"D","text":"用 mAP 评估"}],"answer":["A","B","D"],"answerText":"ABD","explain":"目标检测输出边界框和类别，需要定位，用 mAP 评估。C 错误，分类输出一个标签，检测输出一组框。"},{"id":523,"chapter":"计算机视觉应用","type":"multi","stem":"关于 IoU，下列说法正确的是( )","options":[{"key":"A","text":"交集面积除以并集面积"},{"key":"B","text":"完全重合 IoU=1"},{"key":"C","text":"完全不重合 IoU=0"},{"key":"D","text":"用来衡量两个框的重合程度"}],"answer":["A","B","C","D"],"answerText":"ABCD","explain":"IoU 是交集除以并集，完全重合为 1，完全不重合为 0，用来衡量重合程度。"},{"id":524,"chapter":"计算机视觉应用","type":"multi","stem":"关于非极大值抑制(NMS)，下列说法正确的是( )","options":[{"key":"A","text":"按置信度排序"},{"key":"B","text":"保留最高的框"},{"key":"C","text":"去掉与它 IoU 超过阈值的框"},{"key":"D","text":"两个真实物体重叠多时可能误删"}],"answer":["A","B","C","D"],"answerText":"ABCD","explain":"NMS 按置信度排序，保留最高的，去掉重叠框。局限是两个真实物体重叠多时可能误删。"},{"id":525,"chapter":"计算机视觉应用","type":"multi","stem":"关于多尺度目标检测，下列说法正确的是( )","options":[{"key":"A","text":"用不同层的特征图检测"},{"key":"B","text":"浅层检测小物体"},{"key":"C","text":"深层检测大物体"},{"key":"D","text":"只用一层特征图"}],"answer":["A","B","C"],"answerText":"ABC","explain":"多尺度检测用不同层的特征图，浅层检测小物体，深层检测大物体。D 错误。"},{"id":526,"chapter":"计算机视觉应用","type":"multi","stem":"关于 SSD，下列说法正确的是( )","options":[{"key":"A","text":"单发多框检测"},{"key":"B","text":"一次前向输出检测结果"},{"key":"C","text":"每个特征图位置输出类别分数和边界框偏移"},{"key":"D","text":"是两阶段检测"}],"answer":["A","B","C"],"answerText":"ABC","explain":"SSD 是单发多框检测，一次前向输出结果，每个位置输出类别分数和框偏移。D 错误，SSD 是一阶段。"},{"id":527,"chapter":"计算机视觉应用","type":"multi","stem":"关于 R-CNN 系列的演进，下列说法正确的是( )","options":[{"key":"A","text":"R-CNN 每个候选框跑一次 CNN"},{"key":"B","text":"Fast R-CNN 整张图跑一次 CNN"},{"key":"C","text":"Faster R-CNN 用 RPN 生成候选框"},{"key":"D","text":"Mask R-CNN 加了分割分支"}],"answer":["A","B","C","D"],"answerText":"ABCD","explain":"R-CNN 每个候选框跑一次 CNN，Fast R-CNN 整张图跑一次，Faster R-CNN 用 RPN，Mask R- CNN 加分割分支。"},{"id":528,"chapter":"计算机视觉应用","type":"multi","stem":"关于语义分割，下列说法正确的是( )","options":[{"key":"A","text":"给每个像素分类"},{"key":"B","text":"输出和输入空间尺寸对应"},{"key":"C","text":"用全卷积网络保留空间信息"},{"key":"D","text":"用转置卷积上采样"}],"answer":["A","B","C","D"],"answerText":"ABCD","explain":"语义分割给每个像素分类，输出和输入空间尺寸对应，用全卷积网络保留空间信息，用转置卷积上采样。"},{"id":529,"chapter":"计算机视觉应用","type":"multi","stem":"关于全卷积网络(FCN)，下列说法正确的是( )","options":[{"key":"A","text":"去掉全连接层"},{"key":"B","text":"全部用卷积"},{"key":"C","text":"输出保留空间维度"},{"key":"D","text":"适合语义分割"}],"answer":["A","B","C","D"],"answerText":"ABCD","explain":"全卷积网络去掉全连接层，全部用卷积，输出保留空间维度，适合语义分割。"},{"id":530,"chapter":"计算机视觉应用","type":"multi","stem":"关于风格迁移的训练，下列说法正确的是( )","options":[{"key":"A","text":"更新的是合成图像的像素"},{"key":"B","text":"模型参数是冻结的"},{"key":"C","text":"用预训练的 CNN 提取特征"},{"key":"D","text":"和普通模型训练完全一样"}],"answer":["A","B","C"],"answerText":"ABC","explain":"风格迁移更新的是合成图像的像素，模型参数冻结，用预训练 CNN 提取特征。D 错误，和普通模型训练不同。"},{"id":531,"chapter":"计算机视觉应用","type":"multi","stem":"关于不同视觉任务的评估指标，下列说法正确的是( )","options":[{"key":"A","text":"分类用精度"},{"key":"B","text":"检测用 mAP"},{"key":"C","text":"分割用 mIoU"},{"key":"D","text":"风格迁移靠人眼评估"}],"answer":["A","B","C","D"],"answerText":"ABCD","explain":"分类用精度，检测用 mAP，分割用 mIoU，风格迁移靠人眼评估。不同任务评估方式不同。"},{"id":532,"chapter":"计算机视觉应用","type":"multi","stem":"关于图像增广的常见方法，下列说法正确的是( )","options":[{"key":"A","text":"翻转"},{"key":"B","text":"裁剪"},{"key":"C","text":"变色"},{"key":"D","text":"组合多种变换"}],"answer":["A","B","C","D"],"answerText":"ABCD","explain":"图像增广常见方法有翻转、裁剪、变色、组合多种变换。"},{"id":533,"chapter":"计算机视觉应用","type":"multi","stem":"关于微调和图像增广的关系，下列说法正确的是( )","options":[{"key":"A","text":"两者都解决数据不足"},{"key":"B","text":"图像增广从数据入手"},{"key":"C","text":"微调从模型入手"},{"key":"D","text":"两者可以一起用"}],"answer":["A","B","C","D"],"answerText":"ABCD","explain":"微调和图像增广都解决数据不足。图像增广从数据入手，微调从模型入手，两者可以一起用。"},{"id":534,"chapter":"计算机视觉应用","type":"multi","stem":"关于目标检测的正负样本，下列说法正确的是( )","options":[{"key":"A","text":"和真实框 IoU 高的锚框算正样本"},{"key":"B","text":"和真实框 IoU 低的锚框算负样本"},{"key":"C","text":"中间值的锚框可以忽略"},{"key":"D","text":"所有锚框都是正样本"}],"answer":["A","B","C"],"answerText":"ABC","explain":"IoU 高的锚框算正样本，低的算负样本，中间值忽略。D 错误。"},{"id":535,"chapter":"计算机视觉应用","type":"multi","stem":"关于计算机视觉的四类任务，下列说法正确的是( )","options":[{"key":"A","text":"分类输出一个标签"},{"key":"B","text":"检测输出一组框和类别"},{"key":"C","text":"分割输出每个像素的类别"},{"key":"D","text":"生成输出新图像"}],"answer":["A","B","C","D"],"answerText":"ABCD","explain":"分类输出标签，检测输出框和类别，分割输出像素类别，生成输出新图像。任务形式不同，输出形式不同。"},{"id":536,"chapter":"计算机视觉应用","type":"judge","stem":"数字 6 和 9 可以用左右翻转做图像增广。","options":[],"answer":"错误","answerText":"错误","explain":"数字 6 和 9 翻转后会互换，改变标签语义。增广不能改变标签，所以不能用左右翻转。"},{"id":537,"chapter":"计算机视觉应用","type":"judge","stem":"目标检测的输出是一个类别标签。","options":[],"answer":"错误","answerText":"错误","explain":"目标检测输出一组边界框和每个框的类别，不是单个标签。分类才输出单个标签。"},{"id":538,"chapter":"计算机视觉应用","type":"judge","stem":"锚框是预先定义的不同大小和比例的候选框。","options":[],"answer":"正确","answerText":"正确","explain":"锚框是预先定义的候选框，不同大小、不同比例，用来减少候选框数量。"},{"id":539,"chapter":"计算机视觉应用","type":"judge","stem":"IoU 是交集面积除以并集面积。","options":[],"answer":"正确","answerText":"正确","explain":"IoU 是交集面积除以并集面积，是归一化的重合度。"},{"id":540,"chapter":"计算机视觉应用","type":"judge","stem":"NMS 按置信度排序，保留最高的框，去掉重叠框。","options":[],"answer":"正确","answerText":"正确","explain":"NMS 按置信度排序，保留最高的框，去掉与它 IoU 超过阈值的框，重复直到处理完。"},{"id":541,"chapter":"计算机视觉应用","type":"judge","stem":"多尺度检测中，浅层特征图检测大物体。","options":[],"answer":"错误","answerText":"错误","explain":"浅层感受野小，检测小物体。深层感受野大，检测大物体。反过来说就错了。"},{"id":542,"chapter":"计算机视觉应用","type":"judge","stem":"SSD 是一次前向就输出检测结果的单阶段检测模型。","options":[],"answer":"正确","answerText":"正确","explain":"SSD 是单发多框检测，一次前向输出检测结果，不需要两阶段。"},{"id":543,"chapter":"计算机视觉应用","type":"judge","stem":"R-CNN 对每个候选框都跑一次 CNN。","options":[],"answer":"正确","answerText":"正确","explain":"R-CNN 对每个候选框都跑一次 CNN，计算量巨大。Fast R-CNN 改进了这一点。"},{"id":544,"chapter":"计算机视觉应用","type":"judge","stem":"Fast R-CNN 整张图跑一次 CNN，候选框在特征图上取。","options":[],"answer":"正确","answerText":"正确","explain":"Fast R-CNN 整张图跑一次 CNN，候选框在特征图上取对应区域，减少重复计算。"},{"id":545,"chapter":"计算机视觉应用","type":"judge","stem":"Mask R-CNN 在 Faster R-CNN 基础上加了分割分支。","options":[],"answer":"正确","answerText":"正确","explain":"Mask R-CNN 在 Faster R-CNN 基础上加了分割分支，输出边界框、类别和像素级掩码。"},{"id":546,"chapter":"计算机视觉应用","type":"judge","stem":"语义分割是给整张图一个标签。","options":[],"answer":"错误","answerText":"错误","explain":"语义分割是给每个像素分类，不是给整张图一个标签。给整张图一个标签是分类。"},{"id":547,"chapter":"计算机视觉应用","type":"judge","stem":"全卷积网络去掉全连接层，保留空间信息。","options":[],"answer":"正确","answerText":"正确","explain":"全卷积网络去掉全连接层，全部用卷积，输出保留空间维度，每个像素一个预测。"},{"id":548,"chapter":"计算机视觉应用","type":"judge","stem":"转置卷积是卷积的精确逆运算。","options":[],"answer":"错误","answerText":"错误","explain":"转置卷积不是卷积的逆运算。卷积会丢失信息，转置卷积只能恢复形状，不能恢复丢失的细节。"},{"id":549,"chapter":"计算机视觉应用","type":"judge","stem":"转置卷积是可学习的上采样。","options":[],"answer":"正确","answerText":"正确","explain":"转置卷积是可学习的上采样，小特征图变大特征图。和插值上采样比，它能学到更好的上采样方式。"},{"id":550,"chapter":"计算机视觉应用","type":"judge","stem":"风格迁移的损失函数只包含内容损失。","options":[],"answer":"错误","answerText":"错误","explain":"风格迁移的损失包含内容损失和风格损失。只有内容损失会生成和内容图一样的图像，没有风格。"},{"id":551,"chapter":"计算机视觉应用","type":"judge","stem":"风格迁移中 Gram 矩阵用来捕捉风格。","options":[],"answer":"正确","answerText":"正确","explain":"Gram 矩阵是特征图的内积矩阵，捕捉通道之间的相关性，表示风格。"},{"id":552,"chapter":"计算机视觉应用","type":"judge","stem":"图像增广和微调都解决数据不足的问题。","options":[],"answer":"正确","answerText":"正确","explain":"图像增广从数据入手制造多样性，微调从模型入手复用知识，两者都解决数据不足。"},{"id":553,"chapter":"计算机视觉应用","type":"judge","stem":"语义分割用 mIoU 评估。","options":[],"answer":"正确","answerText":"正确","explain":"语义分割用 mIoU 评估，每个类别算 IoU，然后所有类别平均。"},{"id":554,"chapter":"计算机视觉应用","type":"judge","stem":"锚框和真实框的 IoU 用来定义正负样本。","options":[],"answer":"正确","answerText":"正确","explain":"IoU 高的锚框算正样本，低的算负样本，中间值忽略。这就是目标检测训练数据的构造方式。"},{"id":555,"chapter":"计算机视觉应用","type":"judge","stem":"计算机视觉的四类任务输出形式不同，评估方式也不同。","options":[],"answer":"正确","answerText":"正确","explain":"分类输出标签，检测输出框，分割输出像素标签，生成输出图像。任务形式不同，评估方式也不同。"},{"id":556,"chapter":"计算机视觉应用","type":"fill","stem":"图像增广的主要目的是在有限数据上制造多样性，减少____。","options":[],"answer":["过拟合"],"answerText":"过拟合","explain":"图像增广通过随机变换制造更多样的训练样本，让模型见过更多变化，减少过拟合。"},{"id":557,"chapter":"计算机视觉应用","type":"fill","stem":"增广方法必须匹配任务的语义不变性，不能改变标签的____。","options":[],"answer":["语义"],"answerText":"语义","explain":"增广不能改变标签的语义。数字 6 和 9 翻转后会互换，改变标签语义，所以数字识别不能用左右翻转。"},{"id":558,"chapter":"计算机视觉应用","type":"fill","stem":"微调时通常冻结前面的层，原因是前面的层学到的是____特征，对新任务也有用。","options":[],"answer":["通用"],"answerText":"通用","explain":"前面的层学到的是边缘、纹理等通用特征，对新任务也有用。冻结可以防止过拟合、减少计算量。"},{"id":559,"chapter":"计算机视觉应用","type":"fill","stem":"微调的学习率通常比从头训练____，因为预训练权重已经很好。","options":[],"answer":["小"],"answerText":"小","explain":"微调学习率通常比从头训练小，因为预训练权重已经很好，大步长会破坏它们。通常是从头训练的 1/10 到 1/100。"},{"id":560,"chapter":"计算机视觉应用","type":"fill","stem":"目标检测的输出是一组边界框和每个框的____。","options":[],"answer":["类别"],"answerText":"类别","explain":"目标检测输出一组边界框，每个框标注类别。分类输出一个标签，分割输出每个像素的类别。"},{"id":561,"chapter":"计算机视觉应用","type":"fill","stem":"非极大值抑制(NMS)按____排序，保留最高的框，去掉与它 IoU 超过阈值的框。","options":[],"answer":["置信度"],"answerText":"置信度","explain":"NMS 按置信度排序，保留置信度最高的框，去掉与它 IoU 超过阈值的框，重复直到处理完。"},{"id":562,"chapter":"计算机视觉应用","type":"fill","stem":"R-CNN 的主要计算瓶颈是每个____都要跑一次 CNN。","options":[],"answer":["候选框"],"answerText":"候选框","explain":"R-CNN 对每个候选框都跑一次 CNN，候选框之间有很多重叠区域，重复计算严重。"},{"id":563,"chapter":"计算机视觉应用","type":"fill","stem":"Fast R-CNN 相比 R-CNN 的主要改进是整张图跑一次 CNN，候选框在____上取。","options":[],"answer":["特征图"],"answerText":"特征图","explain":"Fast R-CNN 整张图跑一次 CNN，候选框在特征图上取对应区域，减少重复计算。"},{"id":564,"chapter":"计算机视觉应用","type":"fill","stem":"Faster R-CNN 中的 RPN 作用是生成候选框，实现____训练。","options":[],"answer":["端到端"],"answerText":"端到端","explain":"RPN 是区域提议网络，在特征图上预测每个位置有没有物体、框要怎么调整，用来生成候选框，实现端到端训练。"},{"id":565,"chapter":"计算机视觉应用","type":"fill","stem":"Mask R-CNN 在 Faster R-CNN 基础上加了分割分支，做____分割。","options":[],"answer":["实例"],"answerText":"实例","explain":"Mask R-CNN 在 Faster R-CNN 基础上加了分割分支，输出边界框、类别和像素级掩码，做实例分割。"},{"id":566,"chapter":"计算机视觉应用","type":"fill","stem":"转置卷积不是卷积的____运算，因为卷积会丢失信息。","options":[],"answer":["逆"],"answerText":"逆","explain":"转置卷积不是卷积的逆运算。卷积会丢失信息，转置卷积只能恢复形状，不能恢复丢失的细节。"},{"id":567,"chapter":"计算机视觉应用","type":"fill","stem":"风格迁移的损失包含内容损失和____损失。","options":[],"answer":["风格"],"answerText":"风格","explain":"风格迁移的损失包含内容损失和风格损失。内容损失保持内容，风格损失保持风格。"},{"id":568,"chapter":"计算机视觉应用","type":"fill","stem":"风格迁移中，____矩阵用来捕捉特征图之间的相关性，表示风格。","options":[],"answer":["Gram"],"answerText":"Gram","explain":"Gram 矩阵是特征图的内积矩阵，捕捉不同通道之间的相关性，表示风格。风格损失用 Gram 矩阵的差异衡量。"}];
+
+/* ===== 基础 ===== */
+const TYPE_META = {
+  single:{label:'单选', cls:'b-single'},
+  multi:{label:'多选', cls:'b-multi'},
+  judge:{label:'判断', cls:'b-judge'},
+  fill:{label:'填空', cls:'b-fill'}
+};
+const CHAPTERS = ['线性回归','softmax 回归','多层感知机','模型选择与泛化','层和块与参数管理','卷积神经网络','现代卷积神经网络','循环神经网络与序列模型','注意力机制与 Transformer','计算机视觉应用'];
+const byId = new Map(QUESTIONS.map(q => [q.id, q]));
+const CHAPTER_COUNT = {};
+QUESTIONS.forEach(q => CHAPTER_COUNT[q.chapter] = (CHAPTER_COUNT[q.chapter] || 0) + 1);
+const PAGE_SIZE = 25;
+const K_WRONG = 'dlq_wrong_v1', K_HIST = 'dlq_hist_v1', K_SESS = 'dlq_sess_v1';
+
+const $ = (s, r = document) => r.querySelector(s);
+const $$ = (s, r = document) => Array.from(r.querySelectorAll(s));
+const esc = v => String(v == null ? '' : v).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+
+function load(key, fallback){
+  try{ const raw = localStorage.getItem(key); return raw ? JSON.parse(raw) : fallback; }
+  catch(e){ return fallback; }
+}
+function save(key, val){
+  try{ localStorage.setItem(key, JSON.stringify(val)); }catch(e){}
+}
+
+function freshSession(){
+  return {
+    mode:'sequence', chapter:null, queue:QUESTIONS.map(q => q.id), index:0,
+    selected:[], fillValues:[], roundResults:{}, finished:false, view:'practice',
+    bankQuery:'', bankChapter:'all', bankType:'all', bankPage:1
+  };
+}
+
+let wrongBook = load(K_WRONG, {});
+let historyBook = load(K_HIST, {});
+let app = Object.assign(freshSession(), load(K_SESS, {}) || {});
+let chapterOpen = false;
+
+(function validateSession(){
+  if(!Array.isArray(app.queue) || !app.queue.length || app.queue.some(id => !byId.has(id))){
+    const keep = {view:app.view, bankQuery:app.bankQuery || '', bankChapter:app.bankChapter || 'all', bankType:app.bankType || 'all', bankPage:app.bankPage || 1};
+    app = Object.assign(freshSession(), keep);
+  }
+  if(app.index < 0 || app.index >= app.queue.length) app.index = 0;
+  if(!app.roundResults || typeof app.roundResults !== 'object') app.roundResults = {};
+  if(!Array.isArray(app.selected)) app.selected = [];
+  if(!Array.isArray(app.fillValues)) app.fillValues = [];
+  if(!['practice','wrong','bank'].includes(app.view)) app.view = 'practice';
+})();
+
+function saveSession(){
+  save(K_SESS, {
+    mode:app.mode, chapter:app.chapter, queue:app.queue, index:app.index,
+    selected:app.selected, fillValues:app.fillValues, roundResults:app.roundResults,
+    finished:app.finished, view:app.view, bankQuery:app.bankQuery, bankChapter:app.bankChapter,
+    bankType:app.bankType, bankPage:app.bankPage
+  });
+}
+
+let toastTimer = null;
+function toast(msg){
+  const t = $('#toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.classList.remove('show'), 2200);
+}
+
+function shuffle(arr){
+  for(let i = arr.length - 1; i > 0; i--){
+    const j = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+  return arr;
+}
+
+/* ===== 统计 ===== */
+function updateStats(){
+  const attempted = Object.keys(historyBook).length;
+  const mastered = Object.values(historyBook).filter(h => h && h.lastCorrect).length;
+  const wrongCount = Object.keys(wrongBook).length;
+  $('#statDone').textContent = attempted;
+  $('#statRate').textContent = attempted ? Math.round(mastered / attempted * 100) + '%' : '—';
+  $('#statWrong').textContent = wrongCount;
+  const badge = $('#wrongBadge');
+  badge.textContent = wrongCount;
+  badge.style.display = wrongCount ? 'inline-flex' : 'none';
+}
+
+function syncTabs(){
+  $$('#tabs .tab').forEach(b => b.classList.toggle('active', b.dataset.view === app.view));
+}
+
+function syncViews(){
+  $$('.view').forEach(v => v.classList.toggle('hidden', v.id !== 'view-' + app.view));
+}
+
+function renderActive(){
+  updateStats();
+  syncViews();
+  if(app.view === 'practice') renderPractice();
+  else if(app.view === 'wrong') renderWrongView();
+  else renderBankView();
+}
+
+/* ===== 练习主视图 ===== */
+function roundLabel(){
+  if(app.mode === 'random') return '随机练习';
+  if(app.mode === 'chapter') return '按章节 · ' + (app.chapter || '');
+  if(app.mode === 'wrong') return '错题重练';
+  return '顺序练习';
+}
+
+function syncModeUI(){
+  $$('#modeTabs button').forEach(b => b.classList.toggle('active', b.dataset.mode === app.mode));
+  const picker = $('#chapterPicker');
+  if(app.mode === 'chapter'){
+    picker.classList.remove('hidden');
+    if(app.chapter && !chapterOpen){
+      picker.innerHTML = `<div class="chapter-current"><span>章节：<b>${esc(app.chapter)}</b></span><button id="toggleChapter">切换章节</button></div>`;
+    }else{
+      picker.innerHTML = CHAPTERS.map(ch =>
+        `<button class="chip ${app.chapter === ch ? 'active' : ''}" data-ch="${esc(ch)}">${esc(ch)}<em>${CHAPTER_COUNT[ch] || 0}</em></button>`
+      ).join('');
+    }
+  }else{
+    picker.classList.add('hidden');
+    picker.innerHTML = '';
+  }
+}
+
+function renderPractice(){
+  syncModeUI();
+  const body = $('#practiceBody');
+  const bar = $('#roundbar');
+
+  if(app.mode === 'chapter' && !app.chapter){
+    bar.classList.add('hidden');
+    body.innerHTML = `<div class="chapter-hint">从上方章节列表选择一章，开始专项练习</div>`;
+    return;
+  }
+  if(app.mode === 'wrong' && !app.queue.length){
+    bar.classList.add('hidden');
+    body.innerHTML = `<div class="empty"><div class="empty-ico">✓</div><h3>错题集还是空的</h3><p>答错的题会自动收进这里，方便二刷。先去做几题吧。</p><button class="btn primary" id="goPractice">去顺序练习</button></div>`;
+    const b = $('#goPractice');
+    if(b) b.addEventListener('click', () => startRound('sequence', null));
+    return;
+  }
+  if(app.finished){
+    bar.classList.add('hidden');
+    body.innerHTML = summaryHTML();
+    bindSummary();
+    return;
+  }
+  if(!app.queue.length){
+    bar.classList.add('hidden');
+    body.innerHTML = `<div class="empty"><div class="empty-ico">?</div><h3>本轮没有题目</h3><p>换一个模式或章节试试。</p></div>`;
+    return;
+  }
+
+  const q = byId.get(app.queue[app.index]);
+  if(!q){
+    app.index = 0;
+    saveSession();
+    renderPractice();
+    return;
+  }
+  const rec = app.roundResults[q.id] || null;
+  if(rec){
+    if(q.type === 'fill') app.fillValues = Array.isArray(rec.userAnswer) ? rec.userAnswer.slice() : [];
+    else app.selected = Array.isArray(rec.userAnswer) ? rec.userAnswer.slice() : [rec.userAnswer].filter(Boolean);
+  }
+
+  bar.classList.remove('hidden');
+  $('#roundLabel').textContent = roundLabel();
+  $('#roundProgress').textContent = (app.index + 1) + ' / ' + app.queue.length;
+  $('#progressFill').style.width = ((app.index + 1) / app.queue.length * 100) + '%';
+
+  body.innerHTML = cardHTML(q, rec);
+  bindCard(q, rec);
+}
+
+function stemHTML(q, rec){
+  if(q.type !== 'fill') return `<div class="stem">${esc(q.stem)}</div>`;
+  const parts = q.stem.split(/_+/);
+  let html = '';
+  parts.forEach((part, i) => {
+    html += esc(part);
+    if(i < parts.length - 1) html += `<span class="blank-slot">${['①','②','③','④'][i] || (i + 1)}</span>`;
+  });
+  return `<div class="stem stem-fill">${html}</div>`;
+}
+
+function fillFieldsHTML(q, rec){
+  if(q.type !== 'fill') return '';
+  const vals = rec ? (rec.userAnswer || []) : (app.fillValues || []);
+  return `<div class="fill-fields">` + q.answer.map((_, i) => {
+    const v = vals[i] == null ? '' : vals[i];
+    let cls = '';
+    if(rec && rec.matches) cls = rec.matches[i] ? ' ok' : ' bad';
+    return `<label class="fill-field${cls}">
+      <span class="fill-label">空 ${i + 1}</span>
+      <input class="fill-input" data-i="${i}" value="${esc(v)}" placeholder="填写答案" ${rec ? 'disabled' : ''} autocomplete="off" spellcheck="false">
+    </label>`;
+  }).join('') + `</div>`;
+}
+
+function optionDefs(q){
+  return q.type === 'judge'
+    ? [{key:'正确', text:'正确'}, {key:'错误', text:'错误'}]
+    : q.options;
+}
+
+function cardHTML(q, rec){
+  const meta = TYPE_META[q.type];
+  const sel = Array.isArray(app.selected) ? app.selected : [];
+  const submitted = !!rec;
+  const opts = optionDefs(q);
+  const optsHTML = opts.map(o => {
+    const isCorrect = submitted && q.answer.includes(o.key);
+    const isUser = submitted && (Array.isArray(rec.userAnswer) ? rec.userAnswer.includes(o.key) : rec.userAnswer === o.key);
+    const isSel = !submitted && sel.includes(o.key);
+    let cls = 'opt';
+    if(isCorrect) cls += ' is-correct';
+    else if(isUser) cls += ' is-wrong';
+    else if(isSel) cls += ' is-selected';
+    let mark = '';
+    if(isCorrect) mark = '<span class="opt-mark">✓</span>';
+    else if(isUser) mark = '<span class="opt-mark">✕</span>';
+    const keyText = q.type === 'judge' ? (o.key === '正确' ? '对' : '错') : o.key;
+    return `<button class="${cls}" data-key="${esc(o.key)}" ${submitted ? 'aria-disabled="true"' : ''}>
+      <span class="opt-key">${keyText}</span>
+      <span class="opt-txt">${esc(o.text)}</span>
+      ${mark}
+    </button>`;
+  }).join('');
+
+  const result = rec ? resultHTML(q, rec) : '';
+  const isLast = app.index === app.queue.length - 1;
+  let mainBtn;
+  if(rec && rec.selfPending){
+    mainBtn = `<button class="btn ok" id="selfRight">我答对了</button><button class="btn danger" id="selfWrong">我答错了</button>`;
+  }else if(rec){
+    mainBtn = `<button class="btn primary" id="mainBtn">${isLast ? '查看本轮成绩' : '下一题'}</button>`;
+  }else{
+    mainBtn = `<button class="btn primary" id="mainBtn" ${canSubmit(q) ? '' : 'disabled'}>提交答案</button>`;
+  }
+  const hint = rec ? '已作答，可回看解析' : (q.type === 'fill' ? '填完所有空再提交' : '选择答案后提交');
+
+  return `<article class="qcard">
+    <div class="qmeta">
+      <span class="badge b-chapter">${esc(q.chapter)}</span>
+      <span class="badge ${meta.cls}">${meta.label}题</span>
+      <span class="qno">No.${String(q.id).padStart(3,'0')}</span>
+    </div>
+    ${stemHTML(q, rec)}
+    ${fillFieldsHTML(q, rec)}
+    <div class="options ${submitted ? 'locked' : ''}">${optsHTML}</div>
+    <div id="resultSlot">${result}</div>
+    <div class="actions">
+      <button class="btn ghost" id="prevBtn" ${app.index === 0 ? 'disabled' : ''}>上一题</button>
+      <div class="spacer"></div>
+      <span class="hint">${hint}</span>
+      ${mainBtn}
+    </div>
+  </article>`;
+}
+
+function bindCard(q, rec){
+  $$('#practiceBody .opt').forEach(btn => {
+    if(rec) return;
+    btn.addEventListener('click', () => {
+      const key = btn.dataset.key;
+      if(q.type === 'multi'){
+        const i = app.selected.indexOf(key);
+        if(i >= 0) app.selected.splice(i, 1);
+        else app.selected.push(key);
+      }else{
+        app.selected = app.selected[0] === key ? [] : [key];
+      }
+      saveSession();
+      renderPractice();
+    });
+  });
+
+  $$('#practiceBody .fill-input').forEach(inp => {
+    if(rec) return;
+    inp.addEventListener('input', () => {
+      app.fillValues[Number(inp.dataset.i)] = inp.value;
+      const btn = $('#mainBtn');
+      if(btn) btn.disabled = !canSubmit(q);
+      saveSession();
+    });
+  });
+
+  const prev = $('#prevBtn');
+  if(prev) prev.addEventListener('click', goPrev);
+
+  const main = $('#mainBtn');
+  if(main) main.addEventListener('click', () => {
+    if(rec) goNext();
+    else handleSubmit(q);
+  });
+
+  const sr = $('#selfRight');
+  if(sr) sr.addEventListener('click', () => selfEvaluate(q, true));
+  const sw = $('#selfWrong');
+  if(sw) sw.addEventListener('click', () => selfEvaluate(q, false));
+}
+
+/* ===== 作答 ===== */
+function canSubmit(q){
+  if(q.type === 'fill') return app.fillValues.length >= q.answer.length && q.answer.every((_, i) => (app.fillValues[i] || '').trim() !== '');
+  return (app.selected || []).length > 0;
+}
+
+function currentUserAnswer(q){
+  if(q.type === 'fill') return q.answer.map((_, i) => (app.fillValues[i] || '').trim());
+  if(q.type === 'judge') return app.selected[0] || '';
+  return app.selected.slice().sort();
+}
+
+function answerText(q){
+  if(q.type === 'fill') return q.answer.join('；');
+  if(q.type === 'judge') return q.answer;
+  return q.answer.join('');
+}
+function userTextOf(q, user){
+  if(q.type === 'fill') return Array.isArray(user) ? user.join('；') : (user || '');
+  if(q.type === 'judge') return user || '';
+  return Array.isArray(user) ? user.join('') : (user || '');
+}
+
+function normFill(s){
+  return String(s || '').toLowerCase().replace(/[^a-z0-9\u4e00-\u9fff]/g, '');
+}
+function fillMatch(user, ans){
+  const u = normFill(user), a = normFill(ans);
+  if(!u) return false;
+  if(u === a) return true;
+  if(a.length >= 2 && (u.includes(a) || a.includes(u))) return true;
+  return false;
+}
+function gradeFill(q, user){
+  const matches = q.answer.map((ans, i) => fillMatch(user[i], ans));
+  return {correct:matches.every(Boolean), matches};
+}
+function sameSet(a, b){
+  const A = a.slice().sort(), B = b.slice().sort();
+  return A.length === B.length && A.every((x, i) => x === B[i]);
+}
+
+function recordAnswer(q, user, correct, wasWrong){
+  const h = historyBook[q.id] || {attempts:0, correctAttempts:0, lastCorrect:false};
+  h.attempts += 1;
+  if(correct) h.correctAttempts += 1;
+  h.lastCorrect = !!correct;
+  historyBook[q.id] = h;
+
+  if(correct){
+    if(wrongBook[q.id]){
+      delete wrongBook[q.id];
+      toast('已移出错题集');
+    }
+  }else{
+    const w = wrongBook[q.id] || {count:0, last:0, lastAnswer:''};
+    w.count += 1;
+    w.last = Date.now();
+    w.lastAnswer = userTextOf(q, user);
+    wrongBook[q.id] = w;
+    toast('已加入错题集');
+  }
+  save(K_HIST, historyBook);
+  save(K_WRONG, wrongBook);
+  updateStats();
+}
+
+function handleSubmit(q){
+  if(!canSubmit(q)) return;
+  const user = currentUserAnswer(q);
+  const wasWrong = !!wrongBook[q.id];
+
+  if(q.type === 'fill'){
+    const g = gradeFill(q, user);
+    const rec = {userAnswer:user, matches:g.matches, correct:g.correct ? true : null, selfPending:!g.correct, wasWrong};
+    app.roundResults[q.id] = rec;
+    if(g.correct) recordAnswer(q, user, true, wasWrong);
+    saveSession();
+    renderPractice();
+    return;
+  }
+
+  const correct = q.type === 'judge' ? (user === q.answer) : sameSet(user, q.answer);
+  app.roundResults[q.id] = {userAnswer:user, correct, selfPending:false, wasWrong, matches:null};
+  recordAnswer(q, user, correct, wasWrong);
+  saveSession();
+  renderPractice();
+}
+
+function selfEvaluate(q, correct){
+  const rec = app.roundResults[q.id];
+  if(!rec || !rec.selfPending) return;
+  rec.correct = correct;
+  rec.selfPending = false;
+  recordAnswer(q, rec.userAnswer, correct, rec.wasWrong);
+  saveSession();
+  renderPractice();
+}
+
+function loadRecordState(q){
+  const rec = app.roundResults[q.id];
+  if(!rec){
+    app.selected = [];
+    app.fillValues = [];
+    return;
+  }
+  if(q.type === 'fill') app.fillValues = Array.isArray(rec.userAnswer) ? rec.userAnswer.slice() : [];
+  else app.selected = Array.isArray(rec.userAnswer) ? rec.userAnswer.slice() : [rec.userAnswer].filter(Boolean);
+}
+
+function goNext(){
+  if(app.index >= app.queue.length - 1){
+    app.finished = true;
+    saveSession();
+    renderPractice();
+    return;
+  }
+  app.index += 1;
+  loadRecordState(byId.get(app.queue[app.index]));
+  saveSession();
+  renderPractice();
+}
+function goPrev(){
+  if(app.index <= 0) return;
+  app.index -= 1;
+  loadRecordState(byId.get(app.queue[app.index]));
+  saveSession();
+  renderPractice();
+}
+
+function resultHTML(q, rec){
+  if(rec.selfPending){
+    return `<div class="result manual">
+      <div class="result-head"><div class="r-icon">?</div><div>
+        <h3>自动比对未通过</h3><p>你的填写与参考答案不完全一致，请对照后自评。</p>
+      </div></div>
+      <div class="ans-row">
+        <span class="ans-pill bad">你的答案：<b>${esc(userTextOf(q, rec.userAnswer) || '（空）')}</b></span>
+        <span class="ans-pill ok">参考答案：<b>${esc(answerText(q))}</b></span>
+      </div>
+      <div class="explain"><span class="ex-label">解析</span><p>${esc(q.explain)}</p></div>
+    </div>`;
+  }
+  const ok = rec.correct === true;
+  const sub = ok
+    ? (rec.wasWrong ? '答对了，已移出错题集。' : '答对了，继续保持。')
+    : '已自动加入错题集，建议对照解析复盘。';
+  return `<div class="result ${ok ? 'ok' : 'bad'}">
+    <div class="result-head"><div class="r-icon">${ok ? '✓' : '✕'}</div><div>
+      <h3>${ok ? '回答正确' : '回答错误'}</h3><p>${sub}</p>
+    </div></div>
+    <div class="ans-row">
+      ${ok
+        ? `<span class="ans-pill ok">正确答案：<b>${esc(answerText(q))}</b></span>`
+        : `<span class="ans-pill bad">你的答案：<b>${esc(userTextOf(q, rec.userAnswer) || '（空）')}</b></span>
+           <span class="ans-pill ok">正确答案：<b>${esc(answerText(q))}</b></span>`}
+    </div>
+    <div class="explain"><span class="ex-label">解析</span><p>${esc(q.explain)}</p></div>
+  </div>`;
+}
+
+/* ===== 本轮成绩 ===== */
+function summaryHTML(){
+  const results = Object.values(app.roundResults);
+  const total = results.length;
+  const correct = results.filter(r => r.correct === true).length;
+  const wrong = results.filter(r => r.correct === false).length;
+  const pct = total ? Math.round(correct / total * 100) : 0;
+  let title = '本轮完成';
+  let lead = `${roundLabel()} · 共 ${total} 题`;
+  if(app.mode === 'wrong' && !Object.keys(wrongBook).length){
+    title = '错题全部攻克';
+    lead = '这一轮错题都答对了，错题集已清空。';
+  }else if(pct >= 90){
+    lead = `${roundLabel()} · ${total} 题，状态很稳。`;
+  }else if(pct < 60){
+    lead = `${roundLabel()} · ${total} 题，建议回看错题解析。`;
+  }
+  return `<div class="summary">
+    <h2>${title}</h2>
+    <p class="lead">${lead}</p>
+    <div class="ring" style="--p:${pct}"><div class="ring-in"><b>${pct}%</b><span>正确率</span></div></div>
+    <div class="sum-stats">
+      <div class="sum-stat"><b>${total}</b><span>本轮题数</span></div>
+      <div class="sum-stat"><b style="color:var(--green)">${correct}</b><span>答对</span></div>
+      <div class="sum-stat"><b style="color:var(--red)">${wrong}</b><span>答错</span></div>
+    </div>
+    <div class="sum-actions">
+      <button class="btn primary" id="againBtn">再来一轮</button>
+      <button class="btn ghost" id="wrongRoundBtn">只练错题</button>
+    </div>
+  </div>`;
+}
+
+function bindSummary(){
+  const again = $('#againBtn');
+  if(again) again.addEventListener('click', () => {
+    if(app.mode === 'wrong' && !Object.keys(wrongBook).length){
+      toast('错题集是空的，回到顺序练习');
+      startRound('sequence', null);
+      return;
+    }
+    startRound(app.mode, app.chapter);
+  });
+  const wr = $('#wrongRoundBtn');
+  if(wr) wr.addEventListener('click', () => {
+    if(!Object.keys(wrongBook).length){ toast('错题集是空的'); return; }
+    startRound('wrong', null);
+  });
+}
+
+/* ===== 开始一轮 ===== */
+function startRound(mode, chapter){
+  let ids;
+  if(mode === 'sequence') ids = QUESTIONS.map(q => q.id);
+  else if(mode === 'random') ids = shuffle(QUESTIONS.map(q => q.id));
+  else if(mode === 'chapter') ids = QUESTIONS.filter(q => q.chapter === chapter).map(q => q.id);
+  else if(mode === 'wrong') ids = Object.keys(wrongBook).map(Number).filter(id => byId.has(id)).sort((a, b) => a - b);
+  if(!ids || !ids.length){ toast('没有可练习的题目'); return; }
+
+  app.mode = mode;
+  app.chapter = mode === 'chapter' ? chapter : null;
+  chapterOpen = false;
+  app.queue = ids;
+  app.index = 0;
+  app.selected = [];
+  app.fillValues = [];
+  app.roundResults = {};
+  app.finished = false;
+  app.view = 'practice';
+  saveSession();
+  syncTabs();
+  renderActive();
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+
+function startSingle(id){
+  if(!byId.has(id)) return;
+  app.mode = 'wrong';
+  app.chapter = null;
+  app.queue = [id];
+  app.index = 0;
+  app.selected = [];
+  app.fillValues = [];
+  app.roundResults = {};
+  app.finished = false;
+  app.view = 'practice';
+  saveSession();
+  syncTabs();
+  renderActive();
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+
+/* ===== 错题集 ===== */
+const wrongOpen = new Set();
+
+function wrongIds(){
+  return Object.keys(wrongBook).map(Number).filter(id => byId.has(id)).sort((a, b) => (wrongBook[b].last || 0) - (wrongBook[a].last || 0));
+}
+
+function renderWrongView(){
+  const ids = wrongIds();
+  const host = $('#view-wrong');
+  if(!ids.length){
+    host.innerHTML = `<div class="empty"><div class="empty-ico">✓</div><h3>错题集是空的</h3><p>答错的题会自动收进这里，并记录错误次数；重做答对后自动移出。</p><button class="btn primary" id="goPractice2">去顺序练习</button></div>`;
+    const b = $('#goPractice2');
+    if(b) b.addEventListener('click', () => { app.view = 'practice'; saveSession(); syncTabs(); renderActive(); });
+    return;
+  }
+  const items = ids.map(id => {
+    const q = byId.get(id), w = wrongBook[id];
+    const open = wrongOpen.has(id);
+    return `<div class="wrong-item">
+      <div class="wi-head">
+        <span class="wi-no">No.${String(id).padStart(3,'0')}</span>
+        <span class="badge b-chapter">${esc(q.chapter)}</span>
+        <span class="badge ${TYPE_META[q.type].cls}">${TYPE_META[q.type].label}题</span>
+        <span class="wi-count">错 ${w.count} 次</span>
+      </div>
+      <p class="wi-stem">${esc(q.stem)}</p>
+      <div class="wi-ans">
+        <span>你的答案 <b style="color:var(--red)">${esc(w.lastAnswer || '—')}</b></span>
+        <span>正确答案 <b style="color:var(--green)">${esc(answerText(q))}</b></span>
+      </div>
+      <div class="wi-actions">
+        <button class="mini" data-act="redo" data-id="${id}">重做这题</button>
+        <button class="mini" data-act="explain" data-id="${id}">${open ? '收起解析' : '查看解析'}</button>
+        <button class="mini danger" data-act="remove" data-id="${id}">移出错题集</button>
+      </div>
+      <div class="wi-explain ${open ? '' : 'hidden'}">${esc(q.explain)}</div>
+    </div>`;
+  }).join('');
+  host.innerHTML = `<div class="view-head">
+      <div><h2>错题集</h2><p>${ids.length} 题待攻克 · 重做答对后自动移出</p></div>
+      <div class="view-actions">
+        <button class="btn primary" data-top="redoAll" style="padding:9px 16px;font-size:13px">全部重做</button>
+        <button class="btn ghost" data-top="clear" style="padding:9px 16px;font-size:13px">清空错题集</button>
+      </div>
+    </div>
+    <div class="wrong-list">${items}</div>`;
+}
+
+/* ===== 题库总览 ===== */
+const bankOpen = new Set();
+
+function filteredQuestions(){
+  const query = (app.bankQuery || '').trim().toLowerCase();
+  return QUESTIONS.filter(q => {
+    if(app.bankChapter !== 'all' && q.chapter !== app.bankChapter) return false;
+    if(app.bankType !== 'all' && q.type !== app.bankType) return false;
+    if(!query) return true;
+    const hay = [q.stem, q.chapter, q.explain, q.answerText, ...(q.options || []).map(o => o.text)].join(' ').toLowerCase();
+    return hay.includes(query);
+  });
+}
+
+function renderBankView(){
+  const host = $('#view-bank');
+  const chapterOpts = ['<option value="all">全部章节</option>'].concat(
+    CHAPTERS.map(ch => `<option value="${esc(ch)}" ${app.bankChapter === ch ? 'selected' : ''}>${esc(ch)}（${CHAPTER_COUNT[ch] || 0}）</option>`)
+  ).join('');
+  const typeOpts = [
+    ['all','全部题型'],['single','单选题'],['multi','多选题'],['judge','判断题'],['fill','填空题']
+  ].map(([v,label]) => `<option value="${v}" ${app.bankType === v ? 'selected' : ''}>${label}</option>`).join('');
+
+  host.innerHTML = `<div class="view-head">
+      <div><h2>题库总览</h2><p>全部 568 题，按章节和题型检索；答案与解析默认折叠。</p></div>
+    </div>
+    <div class="bank-panel">
+      <label class="search"><span>⌕</span><input id="bankSearch" type="search" placeholder="搜索题干、选项、答案、解析…" value="${esc(app.bankQuery || '')}"></label>
+      <select id="bankChapter">${chapterOpts}</select>
+      <select id="bankType">${typeOpts}</select>
+    </div>
+    <div class="bank-count" id="bankCount"></div>
+    <div class="bank-list" id="bankList"></div>
+    <div class="pager" id="bankPager"></div>`;
+
+  const input = $('#bankSearch');
+  if(input){
+    input.addEventListener('input', () => {
+      app.bankQuery = input.value;
+      app.bankPage = 1;
+      saveSession();
+      renderBankList();
+    });
+  }
+  $('#bankChapter').addEventListener('change', e => {
+    app.bankChapter = e.target.value;
+    app.bankPage = 1;
+    saveSession();
+    renderBankList();
+  });
+  $('#bankType').addEventListener('change', e => {
+    app.bankType = e.target.value;
+    app.bankPage = 1;
+    saveSession();
+    renderBankList();
+  });
+  renderBankList();
+}
+
+function renderBankList(){
+  const all = filteredQuestions();
+  const pages = Math.max(1, Math.ceil(all.length / PAGE_SIZE));
+  if(app.bankPage > pages) app.bankPage = pages;
+  if(app.bankPage < 1) app.bankPage = 1;
+  const start = (app.bankPage - 1) * PAGE_SIZE;
+  const list = all.slice(start, start + PAGE_SIZE);
+
+  const count = $('#bankCount');
+  if(count) count.textContent = all.length
+    ? `筛选出 ${all.length} 题${app.bankQuery ? '（关键词：' + app.bankQuery + '）' : ''}`
+    : '没有匹配的题目';
+
+  const host = $('#bankList');
+  if(!host) return;
+  if(!list.length){
+    host.innerHTML = `<div class="empty"><div class="empty-ico">⌕</div><h3>没有找到题目</h3><p>换一个关键词，或把章节、题型调回“全部”。</p></div>`;
+  }else{
+    host.innerHTML = list.map(q => {
+      const open = bankOpen.has(q.id);
+      const opts = q.options && q.options.length
+        ? q.options.map(o => `<div class="bi-opt"><b>${o.key}.</b> ${esc(o.text)}</div>`).join('')
+        : `<div class="bi-opt" style="color:var(--faint)">判断题 / 填空题，无选项</div>`;
+      return `<div class="bank-item">
+        <div class="bi-head">
+          <span class="wi-no">No.${String(q.id).padStart(3,'0')}</span>
+          <span class="badge b-chapter">${esc(q.chapter)}</span>
+          <span class="badge ${TYPE_META[q.type].cls}">${TYPE_META[q.type].label}题</span>
+        </div>
+        <p class="bi-stem">${esc(q.stem)}</p>
+        <button class="bi-toggle" data-toggle="${q.id}">${open ? '收起答案与解析' : '展开答案与解析'} <span>${open ? '▴' : '▾'}</span></button>
+        <div class="bi-body ${open ? '' : 'hidden'}">
+          ${opts}
+          <div class="bi-ans">答案：<b>${esc(answerText(q))}</b></div>
+          <div class="bi-explain">${esc(q.explain)}</div>
+        </div>
+      </div>`;
+    }).join('');
+  }
+
+  const pager = $('#bankPager');
+  if(!pager) return;
+  if(!all.length){ pager.innerHTML = ''; return; }
+  const nums = [];
+  for(let i = 1; i <= pages; i++){
+    if(i === 1 || i === pages || Math.abs(i - app.bankPage) <= 2) nums.push(i);
+  }
+  let html = `<button data-page="${app.bankPage - 1}" ${app.bankPage === 1 ? 'disabled' : ''}>上一页</button>`;
+  let last = 0;
+  nums.forEach(n => {
+    if(last && n - last > 1) html += `<span class="gap">…</span>`;
+    html += `<button data-page="${n}" class="${n === app.bankPage ? 'active' : ''}">${n}</button>`;
+    last = n;
+  });
+  html += `<button data-page="${app.bankPage + 1}" ${app.bankPage === pages ? 'disabled' : ''}>下一页</button>`;
+  pager.innerHTML = html;
+}
+
+/* ===== 顶部交互 ===== */
+$('#tabs').addEventListener('click', e => {
+  const b = e.target.closest('.tab');
+  if(!b) return;
+  app.view = b.dataset.view;
+  saveSession();
+  syncTabs();
+  renderActive();
+  window.scrollTo({top:0, behavior:'smooth'});
+});
+
+$('#modeTabs').addEventListener('click', e => {
+  const b = e.target.closest('button[data-mode]');
+  if(!b) return;
+  const mode = b.dataset.mode;
+  const answered = Object.keys(app.roundResults).length;
+  if(answered && !confirm(`本轮已作答 ${answered} 题，切换模式会开始新一轮（练习记录和错题集保留）。继续？`)) return;
+
+  if(mode === 'chapter'){
+    app.mode = 'chapter';
+    app.chapter = null;
+    app.queue = [];
+    app.index = 0;
+    app.selected = [];
+    app.fillValues = [];
+    app.roundResults = {};
+    app.finished = false;
+    saveSession();
+    renderActive();
+    return;
+  }
+  if(mode === 'wrong' && !wrongIds().length){
+    app.mode = 'wrong';
+    app.chapter = null;
+    app.queue = [];
+    app.finished = false;
+    app.roundResults = {};
+    saveSession();
+    renderActive();
+    toast('错题集是空的');
+    return;
+  }
+  startRound(mode, null);
+});
+
+$('#chapterPicker').addEventListener('click', e => {
+  if(e.target.closest('#toggleChapter')){
+    chapterOpen = true;
+    syncModeUI();
+    return;
+  }
+  const b = e.target.closest('.chip');
+  if(!b) return;
+  const answered = Object.keys(app.roundResults).length;
+  if(answered && !confirm(`当前章节已作答 ${answered} 题，切换章节会开始新一轮（练习记录和错题集保留）。继续？`)) return;
+  chapterOpen = false;
+  startRound('chapter', b.dataset.ch);
+});
+
+$('#view-wrong').addEventListener('click', e => {
+  const top = e.target.closest('[data-top]');
+  if(top){
+    if(top.dataset.top === 'redoAll'){
+      startRound('wrong', null);
+    }else if(top.dataset.top === 'clear'){
+      if(confirm('确定清空错题集？练习统计不会清空。')){
+        wrongBook = {};
+        save(K_WRONG, wrongBook);
+        wrongOpen.clear();
+        updateStats();
+        renderWrongView();
+        toast('错题集已清空');
+      }
+    }
+    return;
+  }
+  const b = e.target.closest('[data-act]');
+  if(!b) return;
+  const id = Number(b.dataset.id);
+  const act = b.dataset.act;
+  if(act === 'redo') startSingle(id);
+  else if(act === 'remove'){
+    delete wrongBook[id];
+    wrongOpen.delete(id);
+    save(K_WRONG, wrongBook);
+    updateStats();
+    renderWrongView();
+    toast('已移出错题集');
+  }else if(act === 'explain'){
+    if(wrongOpen.has(id)) wrongOpen.delete(id); else wrongOpen.add(id);
+    renderWrongView();
+  }
+});
+
+$('#view-bank').addEventListener('click', e => {
+  const tg = e.target.closest('[data-toggle]');
+  if(tg){
+    const id = Number(tg.dataset.toggle);
+    if(bankOpen.has(id)) bankOpen.delete(id); else bankOpen.add(id);
+    renderBankList();
+    return;
+  }
+  const pg = e.target.closest('[data-page]');
+  if(pg){
+    const p = Number(pg.dataset.page);
+    if(p >= 1){
+      app.bankPage = p;
+      saveSession();
+      renderBankList();
+      window.scrollTo({top:0, behavior:'smooth'});
+    }
+  }
+});
+
+$('#resetBtn').addEventListener('click', () => {
+  if(!confirm('将清空练习记录、错题集和当前进度（题库本身不受影响）。确定重置？')) return;
+  localStorage.removeItem(K_WRONG);
+  localStorage.removeItem(K_HIST);
+  localStorage.removeItem(K_SESS);
+  location.reload();
+});
+
+/* ===== 键盘 ===== */
+document.addEventListener('keydown', e => {
+  if(app.view !== 'practice' || app.finished) return;
+  if(!app.queue.length) return;
+  const q = byId.get(app.queue[app.index]);
+  if(!q) return;
+  const rec = app.roundResults[q.id];
+
+  if(e.target.tagName === 'INPUT'){
+    if(e.key === 'Enter' && !rec && canSubmit(q)){ e.preventDefault(); handleSubmit(q); }
+    return;
+  }
+  if(e.target.tagName === 'BUTTON' || e.target.tagName === 'SELECT') return;
+
+  if(rec){
+    if(e.key === 'Enter' && !rec.selfPending){ e.preventDefault(); goNext(); }
+    return;
+  }
+  if(e.key === 'Enter'){ if(canSubmit(q)){ e.preventDefault(); handleSubmit(q); } return; }
+  if(q.type === 'judge'){
+    if(e.key === '1'){ app.selected = ['正确']; saveSession(); renderPractice(); }
+    if(e.key === '2'){ app.selected = ['错误']; saveSession(); renderPractice(); }
+    return;
+  }
+  if(q.options){
+    const k = e.key.toLowerCase();
+    const idx = 'abcd'.indexOf(k);
+    const num = Number(e.key);
+    let key = null;
+    if(idx >= 0) key = 'ABCD'[idx];
+    else if(num >= 1 && num <= 4) key = ['A','B','C','D'][num - 1];
+    if(key && q.options.some(o => o.key === key)){
+      if(q.type === 'multi'){
+        const i = app.selected.indexOf(key);
+        if(i >= 0) app.selected.splice(i, 1); else app.selected.push(key);
+      }else app.selected = [key];
+      saveSession();
+      renderPractice();
+    }
+  }
+});
+
+/* ===== 启动 ===== */
+syncTabs();
+renderActive();
+</script>
+</body>
+</html>
+<!-- （注：内容由AI生成） -->
